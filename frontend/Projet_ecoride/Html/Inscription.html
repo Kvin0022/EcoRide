@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inscription – EcoRide</title>
+  <!-- Lien vers votre feuille de style CSS -->
+  <link rel="stylesheet" href="../Css/styles-inscription.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- En-tête -->
+  <header>
+    <div class="logo">
+      <img src="../assets/Logo-EcoRide.png" alt="Logo EcoRide">
+      <span>EcoRide</span>
+    </div>
+    <nav>
+      <a href="../Html/Recherche-covoiturage.html">Covoiturages</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="user-menu">👤</div>
+  </header>
+
+  <!-- Contenu principal -->
+  <main class="signup-page">
+    <section class="signup-container">
+      <h1>Inscription</h1>
+      <p class="subtext">
+        déjà membre du club? <a href="../Html/Connexion.html">Connexion</a>
+      </p>
+
+      <form class="signup-form" action="/inscription" method="POST">
+        <!-- Email -->
+        <div class="form-field">
+          <label for="email">
+            <span class="icon">✉️</span>
+            <span class="label-text">Email</span>
+          </label>
+          <input type="email" id="email" name="email" placeholder="Email" required>
+        </div>
+
+        <!-- Pseudo -->
+        <div class="form-field">
+          <label for="username">
+            <span class="icon">👤</span>
+            <span class="label-text">Pseudo</span>
+          </label>
+          <input type="text" id="username" name="username" placeholder="Pseudo" required>
+        </div>
+
+        <!-- Mot de passe -->
+        <div class="form-field">
+          <label for="password">
+            <span class="icon">❓</span>
+            <span class="label-text">Mot de passe</span>
+          </label>
+          <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+        </div>
+
+        <!-- Confirmation mot de passe -->
+        <div class="form-field">
+          <label for="password_confirm">
+            <span class="icon">🔄</span>
+            <span class="label-text">Confirmer le mot de passe</span>
+          </label>
+          <input type="password" id="password_confirm" name="password_confirm" placeholder="Confirmer le mot de passe" required>
+        </div>
+
+        <!-- Conditions générales -->
+        <div class="form-field checkbox-field">
+          <label for="terms">
+            <input type="checkbox" id="terms" name="terms" required>
+            <span>Je suis d’accord avec les <a href="#">Conditions Générales d’Utilisation</a></span>
+          </label>
+        </div>
+
+        <!-- Bouton de validation -->
+        <button type="submit" class="btn-submit">Valider votre inscription</button>
+      </form>
+
+      <p class="help-text">
+        En cas de problème <a href="#">Contactez-nous</a>
+      </p>
+    </section>
+  </main>
+
+  <!-- Pied de page -->
+  <footer>
+    <div class="socials">
+      <a href="#"><img src="../assets/X.png" alt="Twitter"></a>
+      <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
+      <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
+      <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+    </div>
+    <p>Tous droits réservés © EcoRide 2025</p>
+    <nav class="footer-nav">
+      <a href="#">Mentions légales</a> |
+      <a href="#">Politique de confidentialité</a> |
+      <a href="#">CGU</a>
+    </nav>
+  </footer>
+
+</body>
+</html>

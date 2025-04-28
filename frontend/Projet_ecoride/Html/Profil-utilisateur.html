@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profil – EcoRide</title>
+  <!-- Lien vers votre fichier CSS -->
+  <link rel="stylesheet" href="../Css/styles-profil-utilisateur.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- En-tête -->
+  <header>
+    <div class="logo">
+      <img src="../assets/Logo-EcoRide.png" alt="Logo EcoRide">
+      <span>EcoRide</span>
+    </div>
+    <nav>
+      <a href="../Html/Recherche-covoiturage.html">Covoiturages</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="user-menu">👤</div>
+  </header>
+
+  <main class="profile-page">
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+      <div class="user-widget">
+        <img src="avatar-placeholder.svg" alt="Icône utilisateur" class="user-icon">
+        <div class="greeting">
+          <p>Bonjour <strong>Utilisateur</strong></p>
+          <p>Vous êtes enregistré comme <em>passager</em><br>
+              et vous possédez <strong>20 crédits</strong>.</p>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="btn-aside">Vos Informations</button>
+        <button class="btn-aside">Passez Chauffeur</button>
+        <button class="btn-aside">Publiez un trajet</button>
+        <button class="btn-aside">Historique de vos trajets</button>
+      </nav>
+    </aside>
+
+    <!-- Contenu principal Profil -->
+    <section class="profile-content">
+      <h1>Profil</h1>
+
+      <form action="/profil" method="POST" enctype="multipart/form-data" class="profile-form">
+        <!-- Adresse mail & mot de passe -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Adresse mail</label>
+            <input type="email" id="email" name="email" value="votremail@mail.com" required>
+            <small>Identifiant non visible par les autres utilisateurs. Pour modifier, contactez le <a href="#">support</a>.</small>
+          </div>
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <button type="button" class="btn-reset-password">Réinitialisation</button>
+          </div>
+        </div>
+
+        <!-- Pseudo & photo -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pseudo">Pseudo</label>
+            <input type="text" id="pseudo" name="pseudo" value="Pseudo" minlength="5" maxlength="20" pattern="[A-Za-z0-9]+">
+            <small>Nom d’utilisateur visible par tous (5-20 caractères, lettres et chiffres uniquement).</small>
+          </div>
+          <div class="form-group">
+            <label for="photo">Photo Utilisateur</label>
+            <input type="file" id="photo" name="photo" accept="image/*">
+          </div>
+        </div>
+
+        <!-- Informations personnelles -->
+        <fieldset class="personal-info">
+          <legend>Informations personnelles</legend>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="first_name">Prénom</label>
+              <input type="text" id="first_name" name="first_name" placeholder="Prénom">
+            </div>
+            <div class="form-group">
+              <label for="last_name">Nom</label>
+              <input type="text" id="last_name" name="last_name" placeholder="Nom">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Téléphone</label>
+              <input type="tel" id="phone" name="phone" placeholder="Téléphone">
+            </div>
+            <div class="form-group">
+              <label for="address">Adresse</label>
+              <input type="text" id="address" name="address" placeholder="Adresse">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="birthdate">Date de naissance</label>
+              <input type="date" id="birthdate" name="birthdate">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Bouton Enregistrer -->
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Enregistrer</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Pied de page -->
+  <footer>
+    <div class="socials">
+      <a href="#"><img src="../assets/X.png" alt="Twitter"></a>
+      <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
+      <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
+      <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+    </div>
+    <p>Tous droits réservés © EcoRide 2025</p>
+    <nav class="footer-nav">
+      <a href="#">Mentions légales</a> |
+      <a href="#">Politique de confidentialité</a> |
+      <a href="#">CGU</a>
+    </nav>
+  </footer>
+
+</body>
+</html>

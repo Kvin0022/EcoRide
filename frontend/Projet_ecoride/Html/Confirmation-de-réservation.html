@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Détail du covoiturage – EcoRide</title>
+  <!-- Lien vers votre feuille de style CSS -->
+  <link rel="stylesheet" href="../Css/styles-confirmation-de-reservation.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="../assets/Logo-EcoRide.png" alt="Logo EcoRide">
+      <span>EcoRide</span>
+    </div>
+    <nav>
+      <a href="../Html/Recherche-covoiturage.html">Covoiturages</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="user-menu">👤</div>
+  </header>
+
+  <main class="container">
+    <h1>Détail du covoiturage</h1>
+    <p class="confirmation">Réservation confirmée</p>
+
+    <!-- Le trajet -->
+    <section class="trajet">
+      <h2>Le trajet</h2>
+      <div class="flex">
+        <div class="column">
+          <h4>Départ</h4>
+          <p>Rue</p>
+          <p>Ville</p>
+          <p>Date et heure</p>
+        </div>
+        <div class="column">
+          <h4>Temps de trajet</h4>
+          <p>Durée</p>
+        </div>
+        <div class="column">
+          <h4>Arrivée</h4>
+          <p>Rue</p>
+          <p>Ville</p>
+          <p>Date et heure</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chauffeur -->
+    <section class="chauffeur">
+      <h2>Chauffeur</h2>
+      <div class="avatar">
+        <img src="avatar.jpg" alt="Photo du chauffeur">
+      </div>
+      <div class="name">Prénom</div>
+      <div class="stars">★ ★ ★ ☆ ☆</div>
+      <div class="note">Note : 3,9/5 (70 évaluations)</div>
+      <button class="btn-avis">Voir Avis</button>
+
+      <div class="preferences">
+        <h4>Ses préférences</h4>
+        <ul>
+          <li>Possibilité de grignoter</li>
+          <li>Véhicule non fumeur</li>
+          <li>Voyage dans la bonne humeur</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Véhicule -->
+    <section class="vehicule">
+      <h2>Véhicule</h2>
+      <div class="flex">
+        <div class="info">
+          <h4>Renault Zoé <span class="type">électrique</span></h4>
+          <p class="eco">Voyage écologique !</p>
+        </div>
+        <div class="photo">
+          <img src="voiture.jpg" alt="Photo du véhicule">
+        </div>
+      </div>
+    </section>
+
+    <!-- Places disponibles -->
+    <section class="places">
+      <h2>Places disponibles</h2>
+      <div class="infos">
+        <div class="left">
+          <h4>Nombre de places disponibles</h4>
+          <p>? sur ?</p>
+        </div>
+        <div class="right">
+          <h4>Coût en crédit par passager</h4>
+          <p>? crédits</p>
+        </div>
+      </div>
+      <button class="btn-cancel">Annuler la participation</button>
+    </section>
+  </main>
+
+  <footer>
+    <div class="socials">
+      <a href="#"><img src="../assets/X.png" alt="Twitter"></a>
+      <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
+      <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
+      <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+    </div>
+    <p>Tous droits réservés © EcoRide 2025</p>
+    <nav class="footer-nav">
+      <a href="#">Mentions légales</a> |
+      <a href="#">Politique de confidentialité</a> |
+      <a href="#">CGU</a>
+    </nav>
+  </footer>
+
+</body>
+</html>

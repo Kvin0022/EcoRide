@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Réinitialisez votre mot de passe – EcoRide</title>
+  <!-- Lien vers votre feuille de style CSS -->
+  <link rel="stylesheet" href="../Css/styles-mot-de-passe-oublié.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- En-tête -->
+  <header>
+    <div class="logo">
+      <img src="../assets/Logo-EcoRide.png" alt="Logo EcoRide">
+      <span>EcoRide</span>
+    </div>
+    <nav>
+      <a href="../Html/Recherche-covoiturage.html">Covoiturages</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="user-menu">👤</div>
+  </header>
+
+  <!-- Contenu principal Réinitialisation -->
+  <main class="reset-password-page">
+    <section class="reset-container">
+      <h1>Réinitialisez votre mot de passe</h1>
+
+      <form action="/reset-password" method="POST" class="reset-form">
+        <div class="form-field">
+          <label for="email">
+            <span class="icon">✉️</span>
+            <span class="label-text">Email</span>
+          </label>
+          <input type="email" id="email" name="email" placeholder="Email" required>
+        </div>
+
+        <p class="timeout-info">
+          Un lien valable 1 heure vous sera envoyé.
+        </p>
+
+        <button type="submit" class="btn-submit">
+          Envoyer un email de Réinitialisation
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Pied de page -->
+  <footer>
+    <p class="follow-us">Suivez-nous</p>
+    <div class="socials">
+      <a href="#"><img src="../assets/X.png" alt="Twitter"></a>
+      <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
+      <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
+      <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+    </div>
+    <p class="contact-email">contact@ecoride.site</p>
+    <nav class="footer-nav">
+      <a href="#">Mentions légales</a> |
+      <a href="#">Politique de confidentialité</a> |
+      <a href="#">CGU</a>
+    </nav>
+  </footer>
+
+</body>
+</html>
+
