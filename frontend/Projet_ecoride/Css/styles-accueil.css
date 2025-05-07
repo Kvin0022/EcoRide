@@ -1,342 +1,358 @@
-/* Font Jua */
-.jua-regular {
-    font-family: "Jua", serif;
-    font-weight: 400;
-    font-style: normal;
-} 
+/*==================================
+  =            Global               =
+  ==================================*/
 
-/* Reset général */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
 }
 
 body {
-    background-color: #607744;
+    font-family: 'Jua', sans-serif;
+    background: #ADD4A7;
+    color: #2F3A36;
+    line-height: 1.5;
 }
 
-main {
-    background-color: white;
+/*==================================
+=            Header               =
+==================================*/
+
+header {
+    height: 150px;
+    width: 100vw;
 }
 
-.imageeco img{
-    display: block;
-    margin: auto;
-    width: 1415px;
-    padding-bottom: 95px;
-}
+/*==================================
+=            Navbar               =
+==================================*/
 
-/* NAVBAR */
 .navbar {
+    position: absolute;
+    padding: 30px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: #607744;
-    padding: 15px 40px;
-    margin-top: 40px;
-    color: white;
-    font-family: "Jua", "serif";
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 5px;
-}
-
-.nav-links li a {
-    padding: 177px;
-    text-decoration: none;
-    color: white;
-    font-size: 20px;
-}
-
-.titre1 {
-    text-align: center;
-    font-size: 375px;
-    font-family: "Jua", serif;
-}
-
-h1.titre1 {
-    background-color: #607744;
-    color: white;
-} 
-
-h1.titre2 {
-    background-color: #1E2F23;
-    font-size: 70px;
-    font-family: "Jua", serif;
-    margin-top: 35px;
-    margin-bottom: 35px;
-}
-
-ul.titre3 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 490px;
-    margin-top: -30px;
-    margin-right: -60px;
-    margin-left: -40px;
-    background-color: #607744;
-    padding:  5px 40px 50px;
-    color: white;
-}
-
-.titre3 li h3 {
-    text-decoration: none;
-    color: white;
-    font-family: "Jua", serif;
-    justify-content: space-between;
-    align-items: center;
-}
-
-h3 {
-    background-color: #607744;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* HERO SECTION */
-.hero {
-    text-align: center;
-    padding: 50px;
-    background-color: #1E2F23;
-    color: white;
-}
-
-.hero h1 {
-    font-family: "Jua", serif;
-    font-size: 50px;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.hero p {
-    font-family: "Jua", serif;
-    font-size: 20px;
-    line-height: 1.3;
-    text-align: center;
-}
-
-.content-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin: 0 auto;
-    max-width: 1200px;
     width: 100%;
-    margin-bottom: 40px;
+    box-sizing: border-box;
 }
 
-.text-container {
-    text-align: left;
-    max-width: 700px;
+.navbar .nav-links {
+    margin: 0 auto;
 }
 
-/* Conteneur global du formulaire */
+.navbar .nav-links ul li a {
+    color: #615959;
+    justify-content: center;
+}
+
+.navbar .logo-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-left: 100px;
+}
+
+.navbar .nav-links ul {
+    display: flex;
+}
+
+.navbar .nav-links ul li {
+    margin: 0 45px;
+}
+
+.navbar .nav-links ul li.active a {
+    text-decoration: underline;
+}
+
+.navbar .menu-hamburger {
+    display: none;
+    position: absolute;
+    top: 65px;
+    right: 50px;
+    width: 35px;
+}
+
+@media screen and (max-width: 1199px) {
+    .navbar {
+        padding: 0;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.97);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateX(-100%);
+        transition: transform 0.5s ease;
+        z-index: 9999;
+    }
+
+    .nav-links.mobile-menu {
+        transform: translateX(0);
+    }
+
+    .nav-links ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .nav-links ul li a {
+        font-size: 1.3em;
+        color: #615959;
+        font-weight: bold;
+    }
+
+    .navbar .nav-links {
+        margin: 0;
+    }
+
+    .navbar .menu-hamburger {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 35px;
+        cursor: pointer;
+        z-index: 10000;
+    }
+
+    .navbar .nav-links ul li {
+        margin: 25px 0;
+        font-size: 1.2em;
+    }
+
+}
+
+/*==================================
+  =         Section Recherche       =
+  ==================================*/
+.search-section {
+    background: #ADD4A7;
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.search-section h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #077A13;
+}
+
 .search-form {
-    width: 325px;
-    background-color: #1E2F23;
-    border-radius: 8px;
     display: flex;
     flex-direction: column;
-    gap: 35px;                  
+    align-items: center;
+    gap: 1rem;
 }
 
-/* Chaque groupe (input + icône) */
 .form-group {
     position: relative;
-}
-
-/* Styles de base pour les champs de saisie */
-.search-form input {
-    font-family: "Jua", serif;
     width: 100%;
-    padding: 12px 40px 12px 12px; 
-    border: none;
-    font-size: 18px;
-    outline: none;            
+    max-width: 400px;
 }
 
-/* Bouton "Rechercher" */
-.search-form button {
-    font-family: "Jua", serif;
-    font-size: 22px;
+.form-group input {
     width: 100%;
-    padding: 16px;
+    padding: 0.75rem 1rem;
+    padding-right: 3rem;
     border: none;
-    border-radius: 25px;
-    background-color: #607744;  
-    color: black;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-radius: 1.5rem;
+    font-size: 1rem;
 }
 
-.search-form button:hover {
-    background-color: #1e914e;   /* Couleur au survol */
-}
-
-/* Icônes (position absolue) */
-.icon {
+.form-group .icon {
     position: absolute;
-    right: 10px;
+    right: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-}
-
-  /* Icône de localisation (pour départ et destination) */
-.icon-location {
-    background-image: url('./assets/location.png');
-}
-
-/* Icône de calendrier (pour date/heure) */
-.icon-calendar {
-    background-image: url('./calendar.png');
-}
-
-/* FEATURES SECTION */
-
-.features {
-    display: flex;
-    align-items: center;        /* Centre verticalement les éléments dans la ligne */
-    justify-content: space-between; /* Sépare l’image et le texte */
-    max-width: 1200px;
-    margin: 0 auto;
-    gap: 30px;
-    padding: 40px;
-}
-
-.features-reverse {
-    flex-direction: row-reverse;
-}
-
-.image-container {
-    flex: 1;               
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-}
-
-.image-container img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-.text-feature-container {
-    flex: 1;                /* Le texte occupe l’autre partie de l’espace */
-    text-align: left;
-}
-
-.text-feature-container h2 {
-    font-family: "Jua", serif;
-    font-size: 35px;
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.text-feature-container p {
-    font-family: "Schibsted Grotesk", sans-serif;
-    font-size: 20px;
-    margin: 0;
-    line-height: 1.5;
-    text-align: center;
-}
-
-.text-feature-container-reverse {
-    flex: 1;                /* Le texte occupe l’autre partie de l’espace */
-    text-align: left;
-}
-
-.text-feature-container-reverse h2 {
-    font-family: "Jua", serif;
-    font-size: 35px;
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.text-feature-container-reverse p {
-    font-family: "Schibsted Grotesk", sans-serif;
-    font-size: 20px;
-    margin: 0;
-    line-height: 1.5;
-    text-align: center;
-}
-
-/* PREFOOTER */
-
-.préfooter {
-    text-align: center;
-    margin: 40px auto;
-    max-width: 1200px;
-    padding: 10px;
-}
-
-.préfooter h1 {
-    font-family: "Jua", serif;
-    max-width: 1200px;
-    font-size: 50px;
-    margin: 20px auto;
-    padding: 70px 20px;
-    text-align: left;
-}
-
-.préfooter .buttons {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-left: 17px;
-    margin-top: -50px;
 }
 
 .btn {
-    font-family: "Jua", serif;
-    font-size: 23px;
-    display: inline-block;
-    margin-top: 20px;
-    padding: 11px 21px;
-    background-color: #607744;
+    background: #077A13;
     color: white;
-    text-decoration: none;
-    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
 }
 
-.btn2 {
-    font-family: "Jua", serif;
-    font-size: 23px;
-    display: inline-block;
-    margin-top: 20px;
-    padding: 11px 21px;
-    background-color: #1E2F23;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
+.btn:hover {
+    background: #065f10;
 }
 
-/* FOOTER */
-footer {
-    background-color: #333;
-    color: white;
+/*==================================
+  =         Section Bienvenue       =
+  ==================================*/
+.welcome-section {
+    background: #A2DB9A;
+    padding: 4rem 1rem;
     text-align: center;
-    padding: 20px;
-    margin-top: 0px;
 }
 
-@media (max-width: 768px) {
+.welcome-card {
+    background: #DEFCDF;
+    border: 2px solid #B7D6BF;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
 
-.features {
+.welcome-card h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #077A13;
+}
+
+/*==================================
+  =      Section Cartes Écologiques  =
+  ==================================*/
+.eco-cards-section {
+    background: #93C798;
+    padding: 4rem 1rem;
+}
+
+.eco-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #077A13;
+}
+
+.eco-cards-container {
+    display: flex;
     flex-direction: column;
-    text-align: center; /* ou left, selon préférence */
-    
+    gap: 2rem;
 }
+
+@media (min-width: 768px) {
+    .eco-cards-container {
+        flex-direction: row;
+    }
+}
+
+.eco-card {
+    display: flex;
+    background: #DEFCDF;
+    border-radius: 1rem;
+    overflow: hidden;
+    flex: 1;
+}
+
+.eco-card:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.card-text {
+    padding: 2rem;
+    flex: 1;
+}
+
+.card-text h3 {
+    margin-bottom: 1rem;
+    color: #077A13;
+}
+
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    max-width: 300px;
+}
+
+/*==================================
+  =        Section Équipe           =
+  ==================================*/
+.team-section {
+    background: #ADD4A7;
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.team-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #077A13;
+}
+
+.team-card {
+    display: inline-block;
+    background: #DEFCDF;
+    border-radius: 1rem;
+    overflow: hidden;
+    max-width: 600px;
+}
+
+.team-img {
+    width: 100%;
+    display: block;
+}
+
+.team-caption {
+    padding: 1rem 2rem;
+}
+
+/*==================================
+  =            Footer               =
+  ==================================*/
+.footer {
+    background: #FFFFFF;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.footer-separator {
+    width: 80%;
+    height: 1px;
+    background: #B7D6BF;
+    border: none;
+    margin: 0 auto 1.5rem;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.social-icons img {
+    width: 24px;
+    height: 24px;
+}
+
+.footer-copy,
+.footer-email {
+    margin-bottom: 0.5rem;
+    color: #2F3A36;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.footer-nav a {
+    text-decoration: none;
+    color: #077A13;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.footer-nav a:hover {
+    color: #065f10;
 }
