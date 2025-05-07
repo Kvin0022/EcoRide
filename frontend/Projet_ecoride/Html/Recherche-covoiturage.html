@@ -12,41 +12,42 @@
 </head>
 <body>
 
-      <!-- NAVBAR -->
-    <header class="navbar">
-      <a href="/Html/Accueil.html" class="logo">
-      <img src="../assets/Logo-EcoRide.png" alt="EcoRide Logo" class="logo-img">
-      </a>
-      <h1>EcoRide</h1>
-      <nav>
-          <ul class="nav-links">
-              <li><a href="/Html/Recherche-covoiturage.html">Covoiturages</a></li>
+<!-- NAVBAR -->
+<header>
+  <nav class="navbar">
+          <img src="../assets/Logo-EcoRide.png" alt="EcoRide Logo" class="logo-img">
+          <img src="../assets/menu-btn.png" alt="Menu hamburger" class="menu-hamburger">
+      <div class="nav-links">
+          <ul>
+              <li><a href="/Html/Accueil.html">Accueil</a></li>
+              <li><a href="/Html/S'inscrire.html">S'inscrire</a></li>
+              <li><a href="/Html/Connexion.html">Connexion</a></li>
+              <li class="active"><a href="/Html/Recherche-covoiturage.html">Covoiturages</a></li>
               <li><a href="#">Contact</a></li>
           </ul>
-      </nav>
-      <div class="user-icon">👤</div>
-    </header>
+      </div>
+  </nav>
+  </header>
 
-  <main class="search-page">
-    <!-- Hero / Recherche -->
-    <section class="search-hero">
+    <!-- SECTION RECHERCHE -->
+    <section class="search-section">
       <h1>L'écologie ensemble !</h1>
-      <form class="search-form">
-        <div class="field">
-          <input type="text" name="depart" placeholder="Départ (Ville ou adresse)">
-          <span class="icon">📍</span>
-        </div>
-        <div class="field">
-          <input type="text" name="destination" placeholder="Destination (Ville ou adresse)">
-          <span class="icon">📍</span>
-        </div>
-        <div class="field">
-          <input type="datetime-local" name="date-heure">
-          <span class="icon">📅</span>
-        </div>
-        <button type="submit" class="btn-search">Rechercher</button>
-      </form>
-    </section>
+          <form class="search-form">
+              <div class="form-group">
+                  <input type="text" placeholder="Départ (Ville ou adresse)" required>
+                  <span class="icon">📍</span>
+              </div>
+              <div class="form-group">
+                  <input type="text" placeholder="Destination (Ville ou adresse)" required>
+                  <span class="icon">📍</span>
+              </div>
+              <div class="form-group">
+                  <input type="datetime-local" required>
+                  <span class="icon">📅</span>
+              </div>
+              <button type="submit" class="btn">Rechercher</button>
+          </form>
+  </section>
 
     <!-- Filtres -->
     <section class="filters">
@@ -140,8 +141,6 @@
         </div>
       </div>
     </section>
-  </main>
-
   <footer>
     <div class="socials">
       <a href="#"><img src="../assets/twitter.svg" alt="Twitter"></a>
@@ -156,6 +155,6 @@
       <a href="#">CGU</a>
     </nav>
   </footer>
-
+<script src="../Js/Recherche-covoiturage.js"></script>
 </body>
 </html>
