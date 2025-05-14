@@ -135,70 +135,265 @@ header {
 
 }
 
-/*==================================
-  =         Section Recherche       =
-  ==================================*/
-.search-section {
-    background: #ADD4A7;
+/* ========= CONTENEUR PRINCIPAL ========== */
+
+.detail-covoiturage {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 3rem 6rem;
+    background: #93C798;
+    border-radius: 1.5rem;
+    box-sizing: border-box;
+}
+
+/* ===== Titres ===== */
+
+.detail-covoiturage h1 {
+    font-size: 2.5rem;
+    color: #615959;
     text-align: center;
-    padding: 3rem 1rem;
-}
-
-.search-section h1 {
-    font-size: 2rem;
     margin-bottom: 2rem;
-    color: #077A13;
 }
 
-.search-form {
+.detail-covoiturage h2 {
+    font-size: 2rem;
+    color: #615959;
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* ========= SECTION “Le trajet” ========== */
+
+.trajet {
+    margin-bottom: 3rem;
+}
+
+.trajet .trajet-grid {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.trajet .trajet-col {
+    flex: 1;
+}
+
+.trajet-col:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.trajet-col.depart   { text-align: left;  }
+.trajet-col.duree    { text-align: center;}
+.trajet-col.arrivee  { text-align: right; }
+
+.trajet-col h3 {
+    text-decoration: underline;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #2F3A36;
+}
+
+.trajet-col p {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+    color: #2F3A36;
+}
+
+/* ========= SECTION “Chauffeur” ========== */
+
+.chauffeur {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
-.form-group {
-    position: relative;
+.chauffeur h2 {
     width: 100%;
-    max-width: 400px;
+    text-align: center;
+    margin: 3rem 0 2rem;
 }
 
-.form-group input {
+.chauffeur-info {
+    display: flex;
+    gap: 6rem;
+    justify-content: space-evenly;
+    align-items: flex-start;
     width: 100%;
-    padding: 0.75rem 1rem;
-    padding-right: 3rem;
-    border: none;
-    border-radius: 1.5rem;
-    font-size: 1rem;
+    box-sizing: border-box;
+    margin-bottom: 3rem;
 }
 
-.form-group .icon {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
+.chauffeur-info .avatar {
+    margin-right: 0;
 }
 
-.btn {
-    background: #077A13;
-    color: white;
-    padding: 0.75rem 2rem;
+.chauffeur-preferences {
+    margin-left: 0;
+    max-width: 240px;
+}
+
+.chauffeur-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.chauffeur-info .avatar img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.chauffeur-nom {
+    font-size: 1.5rem;
+    color: #2F3A36;
+}
+
+.chauffeur-notes {
+    color: #607744;
+    font-size: 1.1rem;
+}
+
+.chauffeur-note-texte {
+    font-size: 0.9rem;
+    color: #2F3A36;
+}
+
+.btn-avis {
+    background: #607744;
+    color: #000000;
     border: none;
-    border-radius: 1.5rem;
-    font-size: 1rem;
+    margin: 1rem auto 0;
+    padding: 0.5rem 2rem;
+    border-radius: 1rem;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.2s;
 }
 
-.btn:hover {
-    background: #065f10;
+.btn-avis:hover {
+    background: #5a6629;
+}
+
+/* préférences */
+
+.chauffeur-preferences h4 {
+    margin-bottom: 0.5rem;
+    text-decoration: underline;
+    color: #2F3A36;
+}
+
+.chauffeur-preferences ul {
+    list-style: none;
+    color: #2F3A36;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* ========= SECTION “Véhicule” ========== */
+
+.vehicule .vehicule-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 4rem;
+}
+
+.vehicule-texte h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #2F3A36;
+}
+
+.vehicule-type {
+    text-decoration: underline;
+}
+
+.vehicule-eco {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    color: #2F3A36;
+}
+
+.vehicule-photo img {
+    max-width: 240px;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* ========= SECTION “Places disponibles” ========== */
+
+.places {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.places-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 2.5rem auto;
+    flex-wrap: wrap;
+    gap: 5rem;
+}
+
+.places-gauche, .places-droite {
+    flex: 1;
+}
+
+.places-gauche h3,
+.places-droite h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    text-decoration: underline;
+    color: #2F3A36;
+}
+
+.places-texte,
+.places-cout {
+    font-size: 0.9rem;
+    color: #2F3A36;
+}
+
+/* encadré “coût en crédit” */
+
+.places-droite .places-cout {
+    display: inline-block;
+    background: #ADD4A7;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+/* bouton “Participer” */
+
+.btn-participer {
+    display: inline-block;
+    margin: 1.5rem auto 0;
+    background: #607744;
+    color: #000000;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-participer:hover {
+    background: #5a6629;
 }
 
 
 /*==================================
-  =            Footer               =
-  ==================================*/
-  .footer {
+=            Footer               =
+==================================*/
+.footer {
     background: #FFFFFF;
     padding: 2rem 1rem;
     text-align: center;
@@ -215,13 +410,15 @@ header {
 .social-icons {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
 }
 
 .social-icons img {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
 
 .footer-copy,
@@ -238,11 +435,245 @@ header {
 
 .footer-nav a {
     text-decoration: none;
-    color: #077A13;
-    font-weight: bold;
+    color: black;
     transition: color 0.3s;
 }
 
 .footer-nav a:hover {
     color: #065f10;
+}
+
+
+/*Ajustements des blocs de la section “Chauffeur” */
+
+/*Force les 3 blocs (avatar / meta / préférences) à prendre chacun 1/3 de la largeur */
+.chauffeur-info > * {
+    flex: 1;
+}
+
+/* Centre complètement le bloc “meta” */
+.chauffeur-info > .chauffeur-meta {
+    text-align: center;
+}
+
+/* Aligne à gauche l’avatar, à droite les préférences */
+.chauffeur-info > .avatar {
+    text-align: left;
+}
+
+.chauffeur-info > .chauffeur-preferences {
+    text-align: right;
+}
+
+/* Resserre un peu l’écart global pour coller aux titres et au reste */
+.chauffeur h2 {
+  margin-bottom: 3.5rem; /* espace sous “Chauffeur” */
+}
+
+.chauffeur-info {
+  gap: 2rem;            /* espace entre chaque colonne */
+  margin-bottom: 3rem;  /* distance avant la section suivante */
+}
+
+/* media queries */
+
+@media (max-width: 810px) {
+
+  /* === Le trajet === */
+
+    .detail-covoiturage {
+        margin: 1rem 2rem 3rem 2rem;
+        padding: 2rem;
+        max-width: none;
+    }
+
+    .chauffeur h2 {
+        margin: 2rem 0 1.5rem;
+    }
+
+    .trajet .trajet-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        text-align: left; /* on gère individuellement */
+    }
+
+    .trajet-col.depart,
+    .trajet-col.arrivee {
+        flex: 0 0 48%;
+        order: 1;
+        margin-top: 3rem;
+    }
+
+    .trajet-col.depart   { text-align: left; }
+    .trajet-col.arrivee  { text-align: right; }
+    .trajet-col.duree {
+        flex: 0 0 100%;
+        order: 2;
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+  /* === Chauffeur === */
+    .chauffeur-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .chauffeur-info .avatar {
+        order: 1;
+    }
+
+    .chauffeur-info .chauffeur-meta {
+        order: 2;
+    }
+
+    .chauffeur-preferences {
+        order: 3;
+        text-align: center;
+        margin-top: 2rem;
+        align-self: center;
+    }
+
+    .chauffeur-preferences h4 {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .chauffeur-preferences ul {
+        padding-left: 0;
+        margin: 0 auto;
+        list-style: none;
+        text-align: center
+    }
+
+  /* === Véhicule === */
+    .vehicule .vehicule-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .vehicule-texte {
+        text-align: center;
+    }
+
+  /* === Places disponibles === */
+    .places-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .places-gauche,
+    .places-droite {
+        width: 100%;
+        text-align: center;
+    }
+
+  /* Ajustements finaux */
+    .chauffeur h2,
+    .vehicule h2,
+    .places h2 {
+        margin-bottom: 2rem;
+    }
+}
+
+/* ---- Overlay ---- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: none;           /* cachée par défaut */
+    justify-content: center; /* centre la modale */
+    align-items: center;
+    z-index: 1000;
+}
+
+/* ---- Boîte de dialogue ---- */
+.modal {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal p {
+    text-align: center;
+}
+
+.modal h2 {
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.modal-trajet {
+    display: flex;
+    justify-content: space-between;
+    margin: 1.5rem 0;
+}
+
+.modal-trajet h3 {
+    text-decoration: underline;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.modal-trajet p {
+    margin: 0.25rem 0;
+    text-align: center;
+}
+
+/* Actions */
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 3rem;
+    margin-left: 1.8rem;
+}
+
+.btn-cancel:hover,
+.btn-confirm:hover {
+    background-color: #5a6629;
+}
+
+.btn-cancel,
+.btn-confirm {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-cancel {
+    background: #aaa;
+    color: #000000;
+}
+
+.btn-confirm {
+    background: #607744;
+    color: #000000;
 }

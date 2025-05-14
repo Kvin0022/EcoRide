@@ -140,21 +140,29 @@ header {
   ==================================*/
 .search-section {
     background: #ADD4A7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     padding: 3rem 1rem;
+    gap: 1rem;
 }
 
 .search-section h1 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #077A13;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #615959;
+    align-self: center;
+    margin-left: 25px;
 }
 
 .search-form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 400px;
 }
 
 .form-group {
@@ -166,26 +174,61 @@ header {
 .form-group input {
     width: 100%;
     padding: 0.75rem 1rem;
-    padding-right: 3rem;
+    padding-right: 1rem;
     border: none;
     border-radius: 1.5rem;
     font-size: 1rem;
 }
 
-.form-group .icon {
+.form-group .icon,
+.form-group img {
     position: absolute;
-    right: 1rem;
     top: 50%;
+    right: 0;
     transform: translateY(-50%);
+    font-size: 1.2rem;
+    width: 22px;
+    height: auto;
+    pointer-events: none;
+}
+
+/* On conserve l’apparence du champ comme avant */
+.form-group input[type="datetime-local"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    padding-right: 1rem;
+    border: none;
+    border-radius: 1.5rem;
+    font-size: 1rem;
+    /* On garde la zone d’icône actif */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* On rend l’indicateur natif invisible mais toujours cliquable */
+.form-group input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    opacity: 0;                  /* complètement transparent */
+    cursor: pointer;             /* pointeur quand on survole */
+    position: absolute;          /* on le repointe */
+    right: 0; top: 0;            /* coin supérieur droit */
+    width: 3rem;                 /* prends toute la zone d’icône */
+    height: 100%;                /* toute la hauteur du champ */
+}
+
+/* Firefox : on laisse la zone d’icône visible, il s’affichera quand on cliquera sur le champ */
+.form-group input[type="datetime-local"]::-moz-focus-inner {
+    border: 0;
 }
 
 .btn {
     background: #077A13;
     color: white;
     padding: 0.75rem 2rem;
+    margin-top: 2rem;
     border: none;
     border-radius: 1.5rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     cursor: pointer;
     transition: background 0.3s;
 }
@@ -194,11 +237,454 @@ header {
     background: #065f10;
 }
 
+/*======== FILTRES ========*/
+
+/* overlay full-page */
+#filter-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 999; /* au-dessus du contenu */
+}
+
+/* panneau latéral */
+#filter-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;         /* ou la largeur que tu veux */
+    height: 100%;
+    background: #fff;
+    transform: translateX(100%); /* caché à droite */
+    box-shadow: -4px 0 16px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+    z-index: 1000; /* devant l'overlay */
+    display: flex;
+    flex-direction: column;
+}
+
+/* header du panneau */
+#filter-panel header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+#filter-panel header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+#filter-close {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+/* contenu scrollable */
+.filter-content {
+    padding: 1rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* états “ouverts” */
+#filter-panel.open {
+    transform: translateX(0);
+}
+
+#filter-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.filters {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: #2F3A36;
+}
+
+.filters img {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+}
+
+/* déclencheur du panneau de filtres */
+#filter-open {     /* pour que le conteneur prenne la taille de son contenu */
+    align-items: center;       /* centrer verticalement roue + texte */
+    gap: 0.5rem;               /* espace entre l’icône et le texte */
+    cursor: pointer;           /* pointeur au survol */
+}
+
+#filter-open:hover {
+    opacity: 0.8;
+}
+
+/*======== RÉSULTATS & CARTES ========*/
+
+.results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem 2rem;
+}
+
+/* carte de chaque covoiturage */
+.ride-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #FFFFFF;
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+/* côté gauche : avatar + infos */
+.card-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    flex: 1;
+    margin-left: 1rem;
+}
+
+/* avatar rond */
+.avatar img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* texte à droite de l’avatar */
+.details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.driver-name {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #2F3A36;
+}
+
+.rating {
+    color: #77A13A;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.route,
+.datetime {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555555;
+}
+
+/* côté droit : infos prix, places, voiture, lien et bouton */
+.card-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+    margin-right: 1rem;
+}
+
+.price {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: bold;
+    color: #077A13;
+}
+
+.seats,
+.vehicle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555555;
+}
+
+.details-link {
+    font-size: 0.9rem;
+    color: #077A13;
+    text-decoration: none;
+    transition: color 0.2s;
+    padding-left: 1rem;
+}
+.details-link:hover {
+    color: #055e0e;
+}
+
+/* bouton Réserver */
+.btn-reserve {
+    margin-top: 0.25rem;
+    padding: 0.5rem 1rem;
+    background: #607744;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-reserve:hover {
+    background: #055e0e;
+}
+
+/* ==================================
+Adaptations mobile (<850px)
+================================== */
+@media (max-width: 850px) {
+  /* 1) Carte en colonne sur tout le width */
+    .ride-card {
+        flex-direction: column;
+        padding: 1.5rem 1rem;
+        box-sizing: border-box;
+    }
+
+  /* 2) Bloc avatar+infos centré, espacement uniforme */
+    .card-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;           /* espace régulier entre avatar/nom/étoiles/trajet */
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    .avatar img {
+        margin-bottom: 0.5rem;
+    }
+
+  /* 3) Détails (nom, étoiles, trajet) : colonne centrée + gap */
+    .details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;        /* même espacement pour chaque ligne */
+    }
+
+    .details > * {
+        margin: 0;
+        text-align: center;
+    }
+
+  /* 4) Espacer un peu les étoiles */
+    .rating {
+        display: inline-flex;
+        gap: 0.25rem;       /* espace entre chaque étoile */
+    }
+
+  /* 5) Bloc “prix / places / voiture” centré + gap identique */
+    .card-right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 1rem 0 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    .card-right p {
+        margin: 0;
+        text-align: center;
+    }
+
+  /* 6) Bouton + lien côte à côte, centrés */
+    .action-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .btn-reserve,
+    .details-link {
+        margin: 0;
+    }
+
+    .btn-reserve { order: 0; }
+    .details-link { order: 1; }
+
+}
+    /* ====== Style global du panneau ====== */
+#filter-panel {
+    width: 320px;
+    background: #FFFFFF;
+    border-radius: 0 0 0 8px;
+    box-shadow: -4px 0 16px rgba(0,0,0,0.1);
+    font-size: 0.95rem;
+    color: #2F3A36;
+}
+
+/* Header du volet */
+#filter-panel header {
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+#filter-panel header h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+#filter-close {
+    font-size: 1.2rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s;
+}
+
+#filter-close:hover {
+    color: #555;
+}
+
+/* Contenu défilable */
+.filter-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    overflow-y: auto;
+}
+
+/* Bouton “écologique” */
+.btn-eco {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    background: #E6F9E8;
+    border: 2px solid #077A13;
+    border-radius: 1.5rem;
+    color: #077A13;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-eco:hover {
+    background: #077A13;
+    color: #FFF;
+}
+
+/* Chaque groupe de filtres (label + contrôle) */
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+/* Texte des labels */
+.filter-group label {
+    font-weight: 500;
+    color: #555;
+}
+
+/* Slider générique */
+.filter-group input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+    outline: none;
+    margin-top: 0.25rem;
+}
+
+/* Thumb */
+.filter-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #077A13;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+.filter-group input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #077A13;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+/* Affichage de la valeur */
+.filter-value {
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 0.4rem;
+    text-align: right;
+}
+
+/* Bouton réinitialiser */
+#filter-reset {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border: 2px solid #077A13;
+    border-radius: 1.5rem;
+    background: #FFF;
+    color: #077A13;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+#filter-reset:hover {
+    background: #077A13;
+    color: #FFF;
+}
+
+/* Scrollbar custom (Chrome / Edge) */
+.filter-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.filter-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.filter-content::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
 
 /*==================================
-  =            Footer               =
-  ==================================*/
-  .footer {
+=            Footer               =
+==================================*/
+.footer {
     background: #FFFFFF;
     padding: 2rem 1rem;
     text-align: center;
@@ -215,13 +701,15 @@ header {
 .social-icons {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
 }
 
 .social-icons img {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
 
 .footer-copy,
@@ -238,8 +726,7 @@ header {
 
 .footer-nav a {
     text-decoration: none;
-    color: #077A13;
-    font-weight: bold;
+    color: black;
     transition: color 0.3s;
 }
 

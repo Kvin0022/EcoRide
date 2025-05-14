@@ -140,15 +140,20 @@ header {
   ==================================*/
 .search-section {
     background: #ADD4A7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     padding: 3rem 1rem;
+    gap: 1rem;
 }
 
 .search-section h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 3rem;
     color: #615959;
-
+    align-self: center;
+    margin-left: 25px;
 }
 
 .search-form {
@@ -156,6 +161,8 @@ header {
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
+    width: 100%;
+    max-width: 400px;
 }
 
 .form-group {
@@ -171,12 +178,6 @@ header {
     border: none;
     border-radius: 1.5rem;
     font-size: 1rem;
-}
-
-.form-group {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
 }
 
 .form-group .icon,
@@ -278,8 +279,8 @@ header {
 }
 
 /*==================================
-  =      Section Cartes Écologiques  =
-  ==================================*/
+=      Section Cartes Écologiques  =
+==================================*/
 .eco-cards-section {
     background: #93C798;
     padding: 4rem 1rem;
@@ -287,50 +288,119 @@ header {
 
 .eco-title {
     text-align: center;
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #077A13;
+    font-size: 3rem;
+    margin-bottom: 3rem;
+    color: #615959;
 }
 
+/* on force une seule colonne, une carte par ligne */
 .eco-cards-container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-}
-
-@media (min-width: 768px) {
-    .eco-cards-container {
-        flex-direction: row;
-    }
+    gap: 6rem;
+    align-items: center;
+    padding: 0 1rem;
 }
 
 .eco-card {
+    background: #DEFCDF;        
     display: flex;
-    background: #DEFCDF;
-    border-radius: 1rem;
+    border-radius: 6rem;
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
     overflow: hidden;
-    flex: 1;
 }
 
+/* on inverse l’ordre sur les cartes */
 .eco-card:nth-child(even) {
     flex-direction: row-reverse;
 }
 
-.card-text {
-    padding: 2rem;
+.eco-card .card-text {
     flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .card-text h3 {
     margin-bottom: 1rem;
-    color: #077A13;
+    color: #1E2F23;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.card-text p {
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+    color: #1E2F23;
+    font-size: 20px;
+    text-align: center;
 }
 
 .card-img img {
+    transition: transform 0.3s;
+}
+
+.eco-card .card-img {
+    flex: 0 0 50%;
+    overflow: hidden;
+}
+
+.eco-card .card-img img {
+    border-radius: 0 6rem 6rem 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    max-width: 300px;
+    display: block;
+}
+
+@media (max-width: 810px) {
+/* Chaque carte prend toute la largeur */
+.eco-cards-container {
+    padding: 0;          /* enlève les paddings latéraux */
+}
+
+.eco-card {
+    flex-direction: column !important; /* colonne : image au-dessus du texte */
+    width: 100%;
+    border-radius: 6rem; /* coins arrondis plus doux en mobile */
+    max-width: none;
+}
+
+/* L’image fait 100% de la largeur du conteneur */
+.eco-card .card-img {
+    flex: none;
+    width: 100%;
+    height: auto;
+    border-radius: 6rem;
+}
+
+.eco-card .card-img img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: inherit;       /* hérite des coins */
+}
+
+/* Le bloc texte juste en dessous */
+.eco-card .card-text {
+    flex: none;
+    padding: 1.5rem;
+    border-radius: 0 0 2rem 2rem; /* arrondit uniquement le bas */
+}
+
+/* Ajustements typographiques si besoin */
+.card-text h3 {
+    font-size: 1.3rem;
+    }
+.card-text p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    }
 }
 
 /*==================================
@@ -343,9 +413,9 @@ header {
 }
 
 .team-title {
-    font-size: 2rem;
+    font-size: 3rem;
     margin-bottom: 2rem;
-    color: #077A13;
+    color: #615959;
 }
 
 .team-card {
@@ -362,12 +432,15 @@ header {
 }
 
 .team-caption {
+    font-size: 1.5rem;
     padding: 1rem 2rem;
+    color: #615959;
+    background-color: #ADD4A7;
 }
 
 /*==================================
-  =            Footer               =
-  ==================================*/
+=            Footer               =
+==================================*/
 .footer {
     background: #FFFFFF;
     padding: 2rem 1rem;
@@ -385,13 +458,15 @@ header {
 .social-icons {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
 }
 
 .social-icons img {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
 
 .footer-copy,
@@ -408,8 +483,7 @@ header {
 
 .footer-nav a {
     text-decoration: none;
-    color: #077A13;
-    font-weight: bold;
+    color: black;
     transition: color 0.3s;
 }
 
