@@ -1,6 +1,6 @@
 /*==================================
-  =            Global               =
-  ==================================*/
+=            Global               =
+==================================*/
 
   * {
     margin: 0;
@@ -135,93 +135,165 @@ header {
 
 }
 
-/*==================================
-  =         Section Recherche       =
-  ==================================*/
-.search-section {
-    background: #ADD4A7;
-    text-align: center;
-    padding: 3rem 1rem;
+/* ==================================
+Main Signup Container
+================================== */
+
+.signup-page {
+    padding-top: 180px;
+    padding-bottom: 180px;
 }
 
-.search-section h1 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #077A13;
-}
-
-.search-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.form-group {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    padding-right: 3rem;
-    border: none;
+.signup-container {
+    max-width: 700px;
+    margin: 2rem auto 3rem;
+    background: #93C798;
     border-radius: 1.5rem;
-    font-size: 1rem;
+    padding:  3rem 5rem;
+    text-align: center;
 }
 
-.form-group .icon {
+/* Section Header */
+.signup-container h1 {
+    font-size: 2.5rem;
+    color: #615959;
+    margin-bottom: 0.5rem;
+}
+
+.signup-container .subtext {
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+.signup-container .subtext a {
+    color: #2F3A36;
+    text-decoration: underline;
+}
+
+/* ==================================
+Form Fields
+================================== */
+
+.signup-form {
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.signup-form .form-field {
+    position: relative;
+    margin: 2.5rem;
+    padding-right: 2rem;
+    transform: translateX(-20px);
+}
+
+.signup-form .form-field .icon {
     position: absolute;
-    right: 1rem;
+    left: 1.5rem;
     top: 50%;
     transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #607744;
 }
 
-.btn {
-    background: #077A13;
-    color: white;
-    padding: 0.75rem 2rem;
+.signup-form .form-field .label-text {
+    display: block;
+    margin-left: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.signup-form .form-field input[type="email"],
+.signup-form .form-field input[type="text"],
+.signup-form .form-field input[type="password"] {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
     border: none;
-    border-radius: 1.5rem;
+    border-radius: 2rem;
     font-size: 1rem;
+    padding-left: 3.5rem;
+}
+
+.signup-form .form-field input:focus {
+    outline: 2px solid #607744;
+}
+
+/* Checkbox Field */
+
+.checkbox-field {
+    margin: 2rem 0 1rem;
+}
+
+.checkbox-field label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #2F3A36;
+}
+
+.checkbox-field input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: #607744;
+}
+
+/* ==================================
+Submit Button
+================================== */
+
+.btn-submit {
+    display: inline-block;
+    background: #607744;
+    color: #000000;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 2rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.2s;
 }
 
-.btn:hover {
-    background: #065f10;
+.btn-submit:hover {
+    background: #5a6629;
 }
 
+/* ==================================
+Help Text
+================================== */
+
+.help-text {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+
+.help-text a {
+    color: #2F3A36;
+    text-decoration: underline;
+}
 
 /*==================================
-  =            Footer               =
-  ==================================*/
-  .footer {
+=            Footer               =
+==================================*/
+.footer {
     background: #FFFFFF;
     padding: 2rem 1rem;
     text-align: center;
 }
 
-.footer-separator {
-    width: 80%;
-    height: 1px;
-    background: #B7D6BF;
-    border: none;
-    margin: 0 auto 1.5rem;
-}
-
 .social-icons {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
 }
 
 .social-icons img {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
 
 .footer-copy,
@@ -238,11 +310,34 @@ header {
 
 .footer-nav a {
     text-decoration: none;
-    color: #077A13;
-    font-weight: bold;
+    color: black;
     transition: color 0.3s;
 }
 
 .footer-nav a:hover {
     color: #065f10;
+}
+
+
+/* ==================================
+Responsive Ajustements
+================================== */
+
+@media (max-width: 810px) {
+    .signup-container {
+        margin: 0 1rem 2rem;
+        padding: 1.5rem 2rem;
+    }
+
+    .signup-form {
+        max-width: none;
+    }
+
+    .signup-form .form-field .label-text {
+        display: none;
+    }
+
+    .signup-form .form-field input {
+        padding-left: 2.5rem;
+    }
 }

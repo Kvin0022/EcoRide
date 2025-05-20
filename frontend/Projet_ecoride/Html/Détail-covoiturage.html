@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Détail du covoiturage – EcoRide</title>
   <!-- Liez ici votre fichier CSS externe -->
-  <link rel="stylesheet" href="/Css/styles-detail-covoiturage.css">
+  <link rel="stylesheet" href="../Css/styles-detail-covoiturage.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
@@ -19,12 +19,12 @@
           <img src="../assets/menu-btn.png" alt="Menu hamburger" class="menu-hamburger">
       <div class="nav-links">
           <ul>
-              <li><a href="/Html/Accueil.html">Accueil</a></li>
-              <li><a href="/Html/Profil-utilisateur.html">Profil</a></li>
-              <li><a href="/Html/Profil-utilisateur.html">Historique</a></li>
-              <li class="active"><a href="/Html/Recherche-covoiturage.html">Covoiturages</a></li>
+              <li><a href="../Html/Accueil.html">Accueil</a></li>
+              <li><a href="../Html/Profil-utilisateur.html">Profil</a></li>
+              <li><a href="../Html/Profil-utilisateur.html">Historique</a></li>
+              <li class="active"><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
               <li><a href="#">Contact</a></li>
-              <li><a href="/Html/Connexion.html">Se déconnecter</a></li>
+              <li><a href="../Html/Connexion.html">Se déconnecter</a></li>
           </ul>
       </div>
   </nav>
@@ -138,7 +138,37 @@
 
       <div class="modal-actions">
         <button id="btn-cancel" class="btn-cancel">Annuler</button>
-        <a href="Confirmation-de-réservation.html"><button class="btn-confirm">Réserver pour 8 crédits</button></a>
+        <a href="../Html/Confirmation-de-réservation.html"><button class="btn-confirm">Réserver pour 8 crédits</button></a>
+      </div>
+    </div>
+  </div>
+
+    <!-- ===== MODALE AVIS ===== -->
+  <div id="reviews-overlay" class="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" aria-label="Fermer">&times;</button>
+      <h2>Avis sur Natasha</h2>
+      <div class="review-list">
+        <div class="review">
+          <p class="reviewer"><strong>Jean Dupont</strong> — 10/05/2025</p>
+          <div class="rating">★ ★ ★ ★ ☆</div>
+          <p>Chauffeur très ponctuelle et sympathique, voyage confortable.</p>
+        </div>
+        <hr>
+        <div class="review">
+          <p class="reviewer"><strong>Marie L.</strong> — 02/04/2025</p>
+          <div class="rating">★ ★ ★ ★ ★</div>
+          <p>Voiture propre et conduite souple, je recommande !</p>
+        </div>
+        <hr>
+        <div class="review">
+          <p class="reviewer"><strong>Paul G.</strong> — 28/03/2025</p>
+          <div class="rating">★ ★ ★ ☆ ☆</div>
+          <p>Bon trajet dans l’ensemble, légèrement en retard mais bien prévenu.</p>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="btn-reviews-close" class="btn-cancel">Fermer</button>
       </div>
     </div>
   </div>
