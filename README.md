@@ -78,48 +78,69 @@ Voici quelques captures d’écran des vues desktop clés :
 
 Accueil
 
-![index (8)](https://github.com/user-attachments/assets/0b8021fd-3cfc-4fb1-9d71-3a74a211671f)
-![index (7)](https://github.com/user-attachments/assets/f80206d2-2aff-4288-a61e-ba6e7edd5c9a)
-![index (6)](https://github.com/user-attachments/assets/67d2c7ad-b3fd-475a-9b0a-4323e88b5495)
-![index (5)](https://github.com/user-attachments/assets/d2f9d5d2-855a-4ef1-8f35-226e593d8ce4)
+Page de présentation de l'entreprise
+
+![index (5)](https://github.com/user-attachments/assets/748cb410-c726-4f48-87fa-84c0cd9627a3)
+![index (6)](https://github.com/user-attachments/assets/3cb56d42-19e4-4af7-bdb0-db62f67a9320)
+![index (7)](https://github.com/user-attachments/assets/6f19e098-5ccf-41c0-8f30-e5e2bdc8c710)
+![index (8)](https://github.com/user-attachments/assets/5cc8bebb-22d2-445b-be07-d69ed75bb1df)
+
 
 Recherche covoiturage
 
-![recherche-covoiturage (9)](https://github.com/user-attachments/assets/4ae0dc50-2838-45ce-bb03-b8c85b1b1f24)
-![recherche-covoiturage (3)](https://github.com/user-attachments/assets/d9dd21c3-10d0-4b97-8431-2d2dce294506)
+Page pour la recherche de covoiturage avec application de filtres
+
+![recherche-covoiturage (9)](https://github.com/user-attachments/assets/b201d866-4eba-49f8-9887-9433857026e0)
+![recherche-covoiturage (3)](https://github.com/user-attachments/assets/dbd8416d-4e28-44bd-bd5a-c2c7c2bc1329)
 
 détail covoiturage
 
-![détail-avis (2)](https://github.com/user-attachments/assets/beb71cf2-10ee-4f9c-8419-e5b312c63c52)
-![détail-réservation (2)](https://github.com/user-attachments/assets/ca7feda4-0d20-4532-876b-9a5f665d5f0b)
-![détail-covoiturage (4)](https://github.com/user-attachments/assets/3f2c03e3-5614-4c3c-b4c7-48eefd9b6cc3)
-![détail-covoiturage (3)](https://github.com/user-attachments/assets/8b47925b-d705-49be-ad70-f54832b4f0e1)
+Page de détail des informations d'un covoiturage avec accès aux avis du conducteur et possibilité de réserver
+
+![détail-covoiturage (3)](https://github.com/user-attachments/assets/51715e61-7dfa-434f-918e-dbb3de949b15)
+![détail-covoiturage (4)](https://github.com/user-attachments/assets/59bcaad8-9649-421a-9eee-3a2f7d412580)
+![détail-avis (2)](https://github.com/user-attachments/assets/6acfd977-2100-4dae-88f3-56be9dcbd9d4)
+![détail-réservation (2)](https://github.com/user-attachments/assets/df5915e0-c113-4583-8743-690676b71108)
+
 
 Profil
 
-![profil-informations](https://github.com/user-attachments/assets/408f65df-3746-4192-be69-4699ec9f4afc)
-![profil-historique](https://github.com/user-attachments/assets/1f3ac7a6-ca16-403c-b8c7-c380aab785a1)
-![profil-chauffeur](https://github.com/user-attachments/assets/9bd66dfe-fb23-47b8-866c-657ba88060d5)
-![profil-publiez-un-trajet](https://github.com/user-attachments/assets/4bded9f5-dc94-4196-90d6-49f6e94ce7a0)
+Page du profil utilisateur avec 4 onglets
+
+![profil-informations](https://github.com/user-attachments/assets/8989f0d5-1282-45bc-9bd9-82f3c652b770)
+![profil-chauffeur](https://github.com/user-attachments/assets/43f777e7-1e48-46fd-abc7-ba32569a94de)
+![profil-publiez-un-trajet](https://github.com/user-attachments/assets/1bace7fa-3e16-4cf5-a6bc-ec72f9e9f34d)
+![profil-historique](https://github.com/user-attachments/assets/1e163719-c861-415c-befa-c1739a801b6b)
 
 Profil-mobile
 
-![profil-mobile (2)](https://github.com/user-attachments/assets/9205dfc0-f4f2-4162-9d83-060b727663f2)
-![profil-mobile](https://github.com/user-attachments/assets/2ae7b33b-02c2-487d-bb8d-426c4132158b)
+Page profil version mobile
+
+![profil-mobile](https://github.com/user-attachments/assets/3ebeb5df-2576-466f-9c14-1b8d8a2bc551)
+![profil-mobile (2)](https://github.com/user-attachments/assets/89ba3b87-94cd-4eb0-a57f-d0abc259e6ac)
 
 Connexion
 
-![connexion](https://github.com/user-attachments/assets/160b822e-657b-4da8-8a6a-0e2102a6a976)
+Page de connexion 
+
+![connexion](https://github.com/user-attachments/assets/3206d184-4f0f-4844-ae9d-e0e157bc767b)
+
 
 espace employé
+
+Page espace employé avec action sur avis avant publication
 
 ![espace-employé](https://github.com/user-attachments/assets/60561b57-b91b-4c48-b7dd-341ce79318da)
 
 espace administrateur
 
+Page administrateur avec possibilité d'ajouter et supprimer employé et graphique statistique
+
 ![espace-administrateur](https://github.com/user-attachments/assets/30c061e0-13d2-4d35-a884-da729e40e885)
 
 modal navbar
+
+Page avec modal de la navbar
 
 ![modal-navbar-mobile](https://github.com/user-attachments/assets/49a97432-5d35-4d3d-a872-dd81eef6361f)
 
