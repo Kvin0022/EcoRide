@@ -64,13 +64,6 @@ git push origin main
 
 3. Sur Netlify, « New site from Git » → sélectionnez `Kvin0022/EcoRide@main`.
 
-### b) Vercel
-
-1. Connectez votre repo sur Vercel.
-2. Choisissez `frontend/Projet_ecoride/Html` comme root.
-3. Déployez sans build command.
-
----
 
 ## 6. Captures d’écran
 
@@ -144,17 +137,30 @@ Page avec modal de la navbar
 
 ![modal-navbar-mobile](https://github.com/user-attachments/assets/49a97432-5d35-4d3d-a872-dd81eef6361f)
 
+modal filtres
+
+Page ouverture du modal "filtres"
+
+![modal-filtres](https://github.com/user-attachments/assets/57b5590c-827f-4370-b95e-694e171766d8)
+
 
 ---
 
 ## 7. Charte graphique
 
-La charte graphique est disponible : [Charte graphique A4 (PDF)](docs/charte-graphique.pdf)
+
+La charte graphique est disponible :
+
+[Charte graphique ecoride.pdf](https://github.com/user-attachments/files/20399217/Charte.graphique.ecoride.pdf)
+
 
 Elle documente :
 - Palette de couleurs (HEX/RGB + exemples)
 - Typographies (police Jua : h1/h2/p/marges)
 - Aperçu de boutons et formulaires stylisés
+- Cartes
+- Footer et liens
+- Liens mockups Framer et wireframe Balsamiq
 
 ---
 
@@ -164,14 +170,20 @@ Elle documente :
 ecoride/
 ├─ backend/                # API PHP, dépendances
 └─ frontend/               # Front-end statique
-└─ Projet_ecoride/
+  └─ Projet_ecoride/
    ├─ Css/              # Feuilles de style
    ├─ Html/             # Pages HTML et `_redirects` si utilisé
    ├─ Js/               # Scripts JavaScript
    ├─ assets/           # Images, icônes
-   └─ docs/
       └─ screenshots/   # Captures d’écran
-      └─ charte-graphique.pdf
+      └─ charte-graphique-ecoride.pdf
+      └─ documentation technique
+      └─ gestion_projet
+      └─  manuel_d'utilisation
+└─ Document wireframe et mockup/
+└─ netlify
+└─ README
+
 
 9. Licence
 
