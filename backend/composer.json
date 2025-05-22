@@ -1,11 +1,19 @@
 {
     "require": {
         "vlucas/phpdotenv": "^5.6",
-        "slim/slim": "^4.14",
+        "slim/slim": "4.14",
         "slim/psr7": "^1.7",
         "php-di/php-di": "^7.0",
         "laminas/laminas-db": "^2.20",
         "mongodb/mongodb": "^1.20",
-        "ext-mongodb": "*"
+        "ext-mongodb": "*",
+        "illuminate/database": "^12.15",
+        "firebase/php-jwt": "^6.11"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
     }
 }
