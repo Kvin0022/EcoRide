@@ -1,6 +1,12 @@
+
 [build]
   command = ""
-  publish = "frontend/Projet_ecoride/Html"
+  publish = "frontend/Projet_ecoride"
 
-[context.production.environment]
-GIT_SUBMODULE_STRATEGY = "none"
+[build.environment]
+  GIT_SUBMODULE_STRATEGY = "none"
+
+[[redirects]]
+  from = "/"
+  to   = "/Html/index.html"
+  status = 200
