@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rechercher un covoiturage – EcoRide</title>
   <!-- Liez votre CSS externe ici -->
-  <link rel="stylesheet" href="/Css/styles-recherche-covoiturage.css">
+  <link rel="stylesheet" href="../Css/styles-recherche-covoiturage.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
@@ -19,132 +19,178 @@
           <img src="../assets/menu-btn.png" alt="Menu hamburger" class="menu-hamburger">
       <div class="nav-links">
           <ul>
-              <li><a href="/Html/Accueil.html">Accueil</a></li>
-              <li><a href="/Html/S'inscrire.html">S'inscrire</a></li>
-              <li><a href="/Html/Connexion.html">Connexion</a></li>
-              <li class="active"><a href="/Html/Recherche-covoiturage.html">Covoiturages</a></li>
+              <li><a href="../Html/Accueil.html">Accueil</a></li>
+              <li><a href="../Html/inscription.html">S'inscrire</a></li>
+              <li><a href="../Html/Connexion.html">Connexion</a></li>
+              <li class="active"><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
               <li><a href="#">Contact</a></li>
           </ul>
       </div>
   </nav>
-  </header>
+</header>
 
-    <!-- SECTION RECHERCHE -->
-    <section class="search-section">
-      <h1>L'écologie ensemble !</h1>
-          <form class="search-form">
-              <div class="form-group">
-                  <input type="text" placeholder="Départ (Ville ou adresse)" required>
-                  <span class="icon">📍</span>
-              </div>
-              <div class="form-group">
-                  <input type="text" placeholder="Destination (Ville ou adresse)" required>
-                  <span class="icon">📍</span>
-              </div>
-              <div class="form-group">
-                  <input type="datetime-local" required>
-                  <span class="icon">📅</span>
-              </div>
-              <button type="submit" class="btn">Rechercher</button>
-          </form>
-  </section>
-
-    <!-- Filtres -->
-    <section class="filters">
-      <span class="icon">⚙️</span>
-      <strong>Filtres</strong>
-    </section>
-
-    <!-- Résultats -->
-    <section class="results">
-      <div class="ride-card">
-        <div class="card-left">
-          <div class="avatar">
-            <img src="../assets/Natasha.webp" alt="Avatar de Natasha">
+<!-- SECTION RECHERCHE -->
+<section class="search-section">
+  <h1>L'écologie ensemble !</h1>
+      <form class="search-form">
+          <div class="form-group">
+              <input type="text" placeholder="Départ (Ville ou adresse)" required>
+              <img src="../assets/Localisation.png" alt="Localisation">
           </div>
-          <div class="details">
-            <h2 class="driver-name">Natasha</h2>
-            <div class="rating">★ ★ ★ ★ ☆</div>
-            <p class="route">Départ → Destination</p>
-            <p class="datetime">Heure et date du trajet</p>
+          <div class="form-group">
+              <input type="text" placeholder="Destination (Ville ou adresse)" required>
+              <img src="../assets/Localisation.png" alt="Localisation">
           </div>
+          <div class="form-group">
+              <input type="datetime-local" required>
+              <img src="../assets/calendar.png" alt="Calendrier">
+          </div>
+          <button type="submit" class="btn">Rechercher</button>
+      </form>
+</section>
+
+<!-- Filtres -->
+<section class="filters" id="filter-open">
+  <img src="../assets/roue-dentée.png" alt="Filtres">
+  <strong>Filtres</strong>
+</section>
+
+  <!-- OVERLAY gris semi-transparent -->
+  <div id="filter-overlay"></div>
+
+  <!-- PANNEAU de filtres (caché par défaut) -->
+  <aside id="filter-panel">
+    <header>
+      <h2>Critères de filtrage :</h2>
+      <button id="filter-close">✕</button>
+    </header>
+    <div class="filter-content">
+      <button class="btn-eco">Seulement les trajets écologiques</button>
+
+      <!-- slider : prix max -->
+      <label for="price-range">Prix maximum du voyage : 
+        <span id="price-value">0</span> crédits
+      </label>
+      <input type="range" id="price-range" min="0" max="100" value="0">
+
+      <!-- slider : durée max -->
+      <label for="duration-range">Durée maximale du trajet : 
+        <span id="duration-value">0</span> minutes
+      </label>
+      <input type="range" id="duration-range" min="0" max="300" value="0">
+
+      <!-- slider : note minimum -->
+      <label for="rating-range">Note minimale du conducteur : 
+        <span id="rating-value">0</span> ★
+      </label>
+      <input type="range" id="rating-range" min="0" max="5" value="0">
+
+      <button id="filter-reset">Réinitialiser les filtres</button>
+    </div>
+  </aside>
+
+<!-- Résultats -->
+<section class="results">
+    <div class="ride-card">
+      <div class="card-left">
+        <div class="avatar">
+          <img src="../assets/Natasha.webp" alt="Avatar de Natasha">
         </div>
-        <div class="card-right">
-          <p class="price">Prix (Crédits)</p>
-          <p class="seats">Places disponible</p>
-          <p class="vehicle">Voiture (écologique !)</p>
-          <a href="/Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
-          <button class="btn-reserve">Réserver</button>
+        <div class="details">
+          <h2 class="driver-name">Natasha</h2>
+          <div class="rating">★ ★ ★ ★ ☆</div>
+          <p class="route">Départ → Destination</p>
+          <p class="datetime">Heure et date du trajet</p>
         </div>
       </div>
+      <div class="card-right">
+        <p class="price">Prix (Crédits)</p>
+        <p class="seats">Places disponible</p>
+        <p class="vehicle">Voiture (écologique !)</p>
 
-      <div class="ride-card">
-        <div class="card-left">
-          <div class="avatar">
-            <img src="../assets/Pierre.webp" alt="Avatar de Pierre">
-          </div>
-          <div class="details">
-            <h2 class="driver-name">Pierre</h2>
-            <div class="rating">★ ★ ★ ★ ☆</div>
-            <p class="route">Départ → Destination</p>
-            <p class="datetime">Heure et date du trajet</p>
-          </div>
-        </div>
-        <div class="card-right">
-          <p class="price">Prix (Crédits)</p>
-          <p class="seats">Places disponible</p>
-          <p class="vehicle">Voiture (non écologique)</p>
-          <a href="/Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
+        <!-- wrapper pour le lien et le bouton -->
+        <div class="action-row">
           <button class="btn-reserve">Réserver</button>
+          <a href="../Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
         </div>
       </div>
+    </div>
 
-      <div class="ride-card">
-        <div class="card-left">
-          <div class="avatar">
-            <img src="../assets/Nadia.webp" alt="Avatar de Nadia">
-          </div>
-          <div class="details">
-            <h2 class="driver-name">Nadia</h2>
-            <div class="rating">★ ★ ★ ☆ ☆</div>
-            <p class="route">Départ → Destination</p>
-            <p class="datetime">Heure et date du trajet</p>
-          </div>
+    <div class="ride-card">
+      <div class="card-left">
+        <div class="avatar">
+          <img src="../assets/Pierre.webp" alt="Avatar de Pierre">
         </div>
-        <div class="card-right">
-          <p class="price">Prix (Crédits)</p>
-          <p class="seats">Places disponible</p>
-          <p class="vehicle">Voiture (non écologique)</p>
-          <a href="/Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
-          <button class="btn-reserve">Réserver</button>
+        <div class="details">
+          <h2 class="driver-name">Pierre</h2>
+          <div class="rating">★ ★ ★ ★ ☆</div>
+          <p class="route">Départ → Destination</p>
+          <p class="datetime">Heure et date du trajet</p>
         </div>
       </div>
+      <div class="card-right">
+        <p class="price">Prix (Crédits)</p>
+        <p class="seats">Places disponible</p>
+        <p class="vehicle">Voiture (non écologique)</p>
 
-      <div class="ride-card">
-        <div class="card-left">
-          <div class="avatar">
-            <img src="../assets/benjamin.webp" alt="Avatar de Benjamin">
-          </div>
-          <div class="details">
-            <h2 class="driver-name">Benjamin</h2>
-            <div class="rating">★ ★ ★ ★ ☆</div>
-            <p class="route">Départ → Destination</p>
-            <p class="datetime">Heure et date du trajet</p>
-          </div>
-        </div>
-        <div class="card-right">
-          <p class="price">Prix (Crédits)</p>
-          <p class="seats">Places disponible</p>
-          <p class="vehicle">Voiture (écologique !)</p>
-          <a href="/Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
+        <div class="action-row">
           <button class="btn-reserve">Réserver</button>
+          <a href="../Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
         </div>
       </div>
-    </section>
+    </div>
+
+    <div class="ride-card">
+      <div class="card-left">
+        <div class="avatar">
+          <img src="../assets/Nadia.webp" alt="Avatar de Nadia">
+        </div>
+        <div class="details">
+          <h2 class="driver-name">Nadia</h2>
+          <div class="rating">★ ★ ★ ☆ ☆</div>
+          <p class="route">Départ → Destination</p>
+          <p class="datetime">Heure et date du trajet</p>
+        </div>
+      </div>
+      <div class="card-right">
+        <p class="price">Prix (Crédits)</p>
+        <p class="seats">Places disponible</p>
+        <p class="vehicle">Voiture (non écologique)</p>
+
+        <div class="action-row">
+          <button class="btn-reserve">Réserver</button>
+          <a href="../Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ride-card">
+      <div class="card-left">
+        <div class="avatar">
+          <img src="../assets/benjamin.webp" alt="Avatar de Benjamin">
+        </div>
+        <div class="details">
+          <h2 class="driver-name">Benjamin</h2>
+          <div class="rating">★ ★ ★ ★ ☆</div>
+          <p class="route">Départ → Destination</p>
+          <p class="datetime">Heure et date du trajet</p>
+        </div>
+      </div>
+      <div class="card-right">
+        <p class="price">Prix (Crédits)</p>
+        <p class="seats">Places disponible</p>
+        <p class="vehicle">Voiture (écologique !)</p>
+        
+        <div class="action-row">
+          <button class="btn-reserve">Réserver</button>
+          <a href="../Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
+        </div>
+      </div>
+    </div>
+</section>
 
 <!-- FOOTER -->
 <footer class="footer">
-  <hr class="footer-separator">
       <div class="social-icons">
           <a href="#"><img src="../assets/X.png" alt="X"></a>
           <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>

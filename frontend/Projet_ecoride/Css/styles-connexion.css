@@ -1,10 +1,11 @@
 /*==================================
-  =            Global               =
-  ==================================*/
+=            Global               =
+==================================*/
 
   * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     text-decoration: none;
     list-style: none;
 }
@@ -136,190 +137,105 @@ header {
 }
 
 /*==================================
-  =         Section Recherche       =
-  ==================================*/
-.search-section {
-    background: #ADD4A7;
+=         Page “Connexion”        =
+==================================*/
+
+main.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 1rem;
+    min-height: calc(100vh - 150px); /* hors header */
+}
+
+.login-container {
+    background: #93C798;
+    border-radius: 1.5rem;
+    padding: 3rem 2rem;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     text-align: center;
-    padding: 3rem 1rem;
 }
 
-.search-section h1 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+.login-container .form-field .icon {
+    position: absolute;
+    left: 0.5rem;
+    top: 60%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #607744;
+}
+
+.login-container h1 {
+    font-size: 2.5rem;
+    color: #615959;
+    margin-bottom: 1rem;
+}
+
+.login-container .subtext,
+.login-container .help-text {
+    font-size: 0.9rem;
+    margin: 0.5rem 0 1.5rem;
+    color: #2F3A36;
+}
+
+.login-container .subtext a,
+.login-container .help-text a {
     color: #077A13;
+    font-weight: bold;
 }
 
-.search-form {
+.login-form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
-.form-group {
+.form-field {
     position: relative;
-    width: 100%;
-    max-width: 400px;
+    text-align: left;
 }
 
-.form-group input {
+.form-field .icon {
+    font-size: 1.2rem;
+}
+
+.form-field input {
     width: 100%;
     padding: 0.75rem 1rem;
-    padding-right: 3rem;
+    padding-left: 2.5rem;
     border: none;
     border-radius: 1.5rem;
     font-size: 1rem;
+    background: #FFFFFF;
+    color: #615959;
 }
 
-.form-group .icon {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.btn {
-    background: #077A13;
-    color: white;
+.btn-submit {
+    background: #607744;
+    color: #FFF;
+    border: none;
     padding: 0.75rem 2rem;
-    border: none;
     border-radius: 1.5rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.2s;
+    margin-top: 1rem;
 }
 
-.btn:hover {
-    background: #065f10;
-}
-
-/*==================================
-  =         Section Bienvenue       =
-  ==================================*/
-.welcome-section {
-    background: #A2DB9A;
-    padding: 4rem 1rem;
-    text-align: center;
-}
-
-.welcome-card {
-    background: #DEFCDF;
-    border: 2px solid #B7D6BF;
-    padding: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.welcome-card h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #077A13;
+.btn-submit:hover {
+    background: #5a6629;
 }
 
 /*==================================
-  =      Section Cartes Écologiques  =
-  ==================================*/
-.eco-cards-section {
-    background: #93C798;
-    padding: 4rem 1rem;
-}
+=            Footer               =
+==================================*/
 
-.eco-title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #077A13;
-}
-
-.eco-cards-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-@media (min-width: 768px) {
-    .eco-cards-container {
-        flex-direction: row;
-    }
-}
-
-.eco-card {
-    display: flex;
-    background: #DEFCDF;
-    border-radius: 1rem;
-    overflow: hidden;
-    flex: 1;
-}
-
-.eco-card:nth-child(even) {
-    flex-direction: row-reverse;
-}
-
-.card-text {
-    padding: 2rem;
-    flex: 1;
-}
-
-.card-text h3 {
-    margin-bottom: 1rem;
-    color: #077A13;
-}
-
-.card-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    max-width: 300px;
-}
-
-/*==================================
-  =        Section Équipe           =
-  ==================================*/
-.team-section {
-    background: #ADD4A7;
-    padding: 4rem 1rem;
-    text-align: center;
-}
-
-.team-title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #077A13;
-}
-
-.team-card {
-    display: inline-block;
-    background: #DEFCDF;
-    border-radius: 1rem;
-    overflow: hidden;
-    max-width: 600px;
-}
-
-.team-img {
-    width: 100%;
-    display: block;
-}
-
-.team-caption {
-    padding: 1rem 2rem;
-}
-
-/*==================================
-  =            Footer               =
-  ==================================*/
 .footer {
     background: #FFFFFF;
     padding: 2rem 1rem;
     text-align: center;
-}
-
-.footer-separator {
-    width: 80%;
-    height: 1px;
-    background: #B7D6BF;
-    border: none;
-    margin: 0 auto 1.5rem;
 }
 
 .social-icons {
