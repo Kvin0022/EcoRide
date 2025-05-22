@@ -12,40 +12,44 @@
 </head>
 <body>
 
-  <!-- En-tête -->
-  <header>
-    <div class="logo">
-      <img src="../assets/Logo-EcoRide.png" alt="Logo EcoRide">
-      <span>EcoRide</span>
-    </div>
-    <nav>
-      <a href="../Html/Recherche-covoiturage.html">Covoiturages</a>
-      <a href="#">Contact</a>
-    </nav>
-    <div class="user-menu">👤</div>
-  </header>
+    <!-- NAVBAR -->
+    <header>
+      <nav class="navbar">
+              <img src="../assets/Logo-EcoRide.png" alt="EcoRide Logo" class="logo-img">
+              <img src="../assets/menu-btn.png" alt="Menu hamburger" class="menu-hamburger">
+          <div class="nav-links">
+              <ul>
+                  <li><a href="../Html/Accueil.html">Accueil</a></li>
+                  <li class="active"><a href="../Html/Profil-utilisateur.html">Profil</a></li>
+                  <li><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
+                  <li><a href="#">Contact</a></li>
+                  <li><a href="../Html/Connexion.html">Se déconnecter</a></li>
+              </ul>
+          </div>
+      </nav>
+      </header>
 
   <main class="profile-page">
     <!-- Barre latérale -->
     <aside class="sidebar">
       <div class="user-widget">
-        <img src="avatar-placeholder.svg" alt="Icône utilisateur" class="user-icon">
+        <img src="../assets/Natasha.webp" alt="Icône utilisateur" class="user-icon">
         <div class="greeting">
-          <p>Bonjour <strong>Utilisateur</strong></p>
-          <p>Vous êtes enregistré comme <em>passager</em><br>
+          <h3>Bonjour <strong>Natasha</strong></h3>
+          <p>Vous êtes enregistré comme <em>passager</em>
               et vous possédez <strong>20 crédits</strong>.</p>
         </div>
       </div>
       <nav class="sidebar-nav">
-        <button class="btn-aside">Vos Informations</button>
-        <button class="btn-aside">Passez Chauffeur</button>
-        <button class="btn-aside">Publiez un trajet</button>
-        <button class="btn-aside">Historique de vos trajets</button>
+        <button class="btn-aside active" data-target="tab-info">Vos Informations</button>
+        <button class="btn-aside" data-target="tab-driver">Passez Chauffeur</button>
+        <button class="btn-aside" data-target="tab-publish">Publiez un trajet</button>
+        <button class="btn-aside" data-target="tab-history">Historique de vos trajets</button>
       </nav>
     </aside>
 
-    <!-- Contenu principal Profil -->
-    <section class="profile-content">
+    <!-- Section onglet1 : Informations -->
+    <section id="tab-info" class="tab-content active">
       <h1>Profil</h1>
 
       <form action="/profil" method="POST" enctype="multipart/form-data" class="profile-form">
@@ -53,7 +57,7 @@
         <div class="form-row">
           <div class="form-group">
             <label for="email">Adresse mail</label>
-            <input type="email" id="email" name="email" value="votremail@mail.com" required>
+            <input type="email" id="email" name="email" placeholder="votremail@mail.com" required>
             <small>Identifiant non visible par les autres utilisateurs. Pour modifier, contactez le <a href="#">support</a>.</small>
           </div>
           <div class="form-group">
@@ -66,7 +70,7 @@
         <div class="form-row">
           <div class="form-group">
             <label for="pseudo">Pseudo</label>
-            <input type="text" id="pseudo" name="pseudo" value="Pseudo" minlength="5" maxlength="20" pattern="[A-Za-z0-9]+">
+            <input type="text" id="pseudo" name="pseudo" placeholder="Pseudo" minlength="5" maxlength="20" pattern="[A-Za-z0-9]+">
             <small>Nom d’utilisateur visible par tous (5-20 caractères, lettres et chiffres uniquement).</small>
           </div>
           <div class="form-group">
@@ -77,30 +81,25 @@
 
         <!-- Informations personnelles -->
         <fieldset class="personal-info">
-          <legend>Informations personnelles</legend>
+          <legend>Informations<br>personnelles</legend>
           <div class="form-row">
             <div class="form-group">
-              <label for="first_name">Prénom</label>
               <input type="text" id="first_name" name="first_name" placeholder="Prénom">
             </div>
             <div class="form-group">
-              <label for="last_name">Nom</label>
               <input type="text" id="last_name" name="last_name" placeholder="Nom">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="phone">Téléphone</label>
               <input type="tel" id="phone" name="phone" placeholder="Téléphone">
             </div>
             <div class="form-group">
-              <label for="address">Adresse</label>
               <input type="text" id="address" name="address" placeholder="Adresse">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="birthdate">Date de naissance</label>
               <input type="date" id="birthdate" name="birthdate">
             </div>
           </div>
@@ -112,23 +111,248 @@
         </div>
       </form>
     </section>
+
+    <!-- SECTION onglet 2 : Chauffeur -->
+    <section id="tab-driver" class="tab-content">
+      <h1>Chauffeur</h1>
+
+      <!-- Véhicules -->
+      <div class="tab-block">
+        <h2>Véhicules</h2>
+        <button id="open-vehicle-modal" class="btn-secondary">Ajouter un véhicule</button>
+        <!-- Fenêtre modale -->
+        <div id="vehicle-modal" class="modal-overlay">
+          <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Ajouter un véhicule</h2>
+            <form id="vehicle-form">
+              <div class="modal-row">
+                <select id="brand" name="brand" required>
+                  <option value="" disabled selected>Marque du véhicule</option>
+                  <option value="seat">Seat</option>
+                  <option value="mercedes">Mercedes</option>
+                  <option value="bmw">BMW</option>
+                  <option value="citroen">Citroën</option>
+                  <option value="renault">Renault</option>
+                  <option value="peugeot">Peugeot</option>
+                </select>
+
+                <select id="model" name="model" required>
+                  <option value="" disabled selected>Modèle</option>
+                </select>
+              </div>
+
+              <div class="modal-row">
+                <select id="fuel" name="fuel" required>
+                  <option value="" disabled selected>Motorisation</option>
+                  <option value="essence">Essence</option>
+                  <option value="diesel">Diesel</option>
+                  <option value="electrique">Electrique</option>
+                </select>
+
+                <input type="text" id="plate" name="plate" placeholder="Immatriculation" required pattern="[A-Z]{2}[0-9]{3}[A-Z]{2}">
+              </div>
+
+              <div class="modal-row">
+                <input type="date" id="circulation_date" name="circulation_date" required>
+
+                <select id="seats" name="seats" required>
+                  <option value="" disabled selected>Nombre de passagers</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </div>
+
+              <div class="modal-actions">
+                <button type="submit" class="btn-save">Enregistrer</button>
+              </div>
+            </form>
+          </div>
+        </div>  
+      </div>
+
+      <!-- Préférences -->
+      <div class="tab-block tab-preferences">
+        <h2>Préférences</h2>
+        <div class="preferences">
+          <label class="toggle">
+            <input type="checkbox" name="pref_smoker" />
+            <span class="slider"></span>
+          </label>
+          <span>Fumeurs</span>
+        </div>
+        <div class="preferences">
+          <label class="toggle">
+            <input type="checkbox" name="pref_pets" />
+            <span class="slider"></span>
+          </label>
+          <span>Animaux</span>
+        </div>
+        <button id="open-pref-modal" type="button" class="btn-secondary">Ajouter une préférence</button>
+
+        <!-- La fenêtre modale “Ajouter une préférence” -->
+
+        <div id="pref-modal" class="modal-overlay">
+          <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Ajouter une préférence</h2>
+            <form id="pref-form">
+              <div class="modal-row">
+                <input type="text" id="pref_name" name="pref_name" placeholder="Votre nouvelle préférence" required/>
+                <button type="submit" class="btn-secondary">
+                  ✚
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statut -->
+      <div class="tab-block">
+        <h2>Statut</h2>
+        <p class="status-text">
+          Après avoir complété votre profil <strong>EcoRide</strong> dans l’onglet “Vos informations”  
+          et enregistré un véhicule, vous pouvez devenir Chauffeur.
+        </p>
+        <div class="preferences">
+          <label class="toggle">
+            <input type="checkbox" name="ready_driver" />
+            <span class="slider"></span>
+          </label>
+          <span>Prêt à devenir “Chauffeur” ?</span>
+        </div>
+        <button type="submit" class="btn-save">Enregistrer</button>
+      </div>
+    </section>
+
+    <!-- SECTION onglet 3 : Publiez un trajet -->
+    <section id="tab-publish" class="tab-content">
+      <h1>Publiez un trajet</h1>
+
+      <form action="/publish" method="POST" class="publish-form">
+        <!-- Date & durée -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="departure_datetime">Date et heure de départ</label>
+            <input type="datetime-local" id="departure_datetime" name="departure_datetime" placeholder="Date et heure de départ" required />
+          </div>
+          <div class="form-group">
+            <label for="duration">Durée du trajet</label>
+            <input type="number" id="duration" name="duration" placeholder="Durée du trajet" required />
+          </div>
+        </div>
+
+        <!-- Adresses de départ & d'arrivée -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="departure_address">Ville et adresse de départ</label>
+            <input type="text" id="departure_address" name="departure_address" placeholder="Ville et adress de départ" required />
+          </div>
+          <div class="form-group">
+            <label for="arrival_address">Ville et adresse d’arrivée</label>
+            <input type="text" id="arrival_address" name="arrival_address" placeholder="Ville et adresse d’arrivée" required />
+          </div>
+        </div>
+
+        <!-- Sélection du véhicule & crédits -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="vehicle_select">Véhicule</label>
+            <select id="vehicle_select" name="vehicle_id" required>
+              <option value="" disabled selected>Véhicule</option>
+              <!-- Remplir dynamiquement avec les véhicules de l’utilisateur -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="credits_per_passenger">Crédits par passager</label>
+            <select id="credits_per_passenger" name="credits_per_passenger" required>
+              <option value="" disabled selected>Crédits par passager</option>
+              <option value="1">2</option>
+              <option value="2">4</option>
+              <option value="3">6</option>
+              <option value="4">8</option>
+              <option value="5">10</option>
+              <option value="6">12</option>
+              <option value="7">13</option>
+              <option value="8">14</option>
+              <option value="9">15</option>
+              <option value="10">16</option>
+              <option value="11">18</option>
+              <option value="12">20</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Note sur les crédits plateforme -->
+        <div class="form-group info-text">
+          2 crédits seront prélevés par la plateforme pour assurer son fonctionnement.
+        </div>
+
+        <!-- Bouton d’envoi -->
+        <div class="form-actions">
+          <button type="submit" class="btn-secondary">Ajouter un covoiturage</button>
+        </div>
+      </form>
+    </section>
+
+<!-- SECTION onglet 4 : Historique des trajets -->
+    <section id="tab-history" class="tab-content">
+      <h1>Historique des trajets</h1>
+
+      <!-- Si l'utilisateur n'a pas encore de trajet -->
+      <p class="empty-history">
+        Vous n'avez encore publié ou participé à aucun trajet.
+      </p>
+
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Départ</th>
+              <th>Arrivée</th>
+              <th>Rôle</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Date">12/05/2025 08:30</td>
+              <td data-label="Départ">Paris</td>
+              <td data-label="Arrivée">Lyon</td>
+              <td data-label="Rôle">Chauffeur</td>
+              <td data-label="Statut">Terminé</td>
+              <td data-label="Actions" class="actions">
+                <button type="button" class="btn-secondary btn-sm">Voir</button>
+                <button type="button" class="btn-secondary btn-sm cancel">Annuler</button>
+              </td>
+            </tr>
+            <!-- Autres lignes… -->
+          </tbody>
+        </table>
+    </section>
+
   </main>
 
-  <!-- Pied de page -->
-  <footer>
-    <div class="socials">
-      <a href="#"><img src="../assets/X.png" alt="Twitter"></a>
-      <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
-      <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
-      <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="social-icons">
+        <a href="#"><img src="../assets/X.png" alt="X"></a>
+        <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
+        <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
+        <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
     </div>
-    <p>Tous droits réservés © EcoRide 2025</p>
-    <nav class="footer-nav">
-      <a href="#">Mentions légales</a> |
-      <a href="#">Politique de confidentialité</a> |
-      <a href="#">CGU</a>
-    </nav>
-  </footer>
-
+  <p class="footer-copy">Tous droits réservés © EcoRide 2025</p>
+  <p class="footer-email">Ecoride@mail.com</p>
+<nav class="footer-nav">
+  <a href="#">Mentions légales</a>
+  <a href="#">Politique de confidentialité</a>
+  <a href="#">CGU</a>
+</nav>
+</footer>
+<script src="../Js/Profil-utilisateur.js"></script>
 </body>
 </html>

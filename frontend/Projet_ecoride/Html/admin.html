@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Espace Admin – EcoRide</title>
+    <link rel="stylesheet" href="../Css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <!-- Chart.js (optionnel) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header>
+    <nav class="navbar">
+            <img src="../assets/Logo-EcoRide.png" alt="EcoRide Logo" class="logo-img">
+            <img src="../assets/menu-btn.png" alt="Menu hamburger" class="menu-hamburger">
+        <div class="nav-links">
+            <ul>
+                <li><a href="../Html/Accueil.html">Accueil</a></li>
+                <li><a href="../Html/inscription.html">S'inscrire</a></li>
+                <li><a href="../Html/Connexion.html">Connexion</a></li>
+                <li><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+    <main class="admin-dashboard">
+        <h1>Espace Administrateur</h1>
+
+        <!-- Section Comptes Employés -->
+        <section class="users-management">
+        <h2>Gestion des comptes employés</h2>
+        <button id="add-employee" class="btn-secondary">Créer un employé</button>
+        <table>
+            <thead>
+            <tr><th>Nom</th><th>Email</th><th>Statut</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+            <!-- Boucle back-end -->
+            <tr>
+                <td>Paul G.</td>
+                <td>paul@exemple.com</td>
+                <td>Actif</td>
+                <td>
+                <button class="btn-suspend">Suspendre</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </section>
+
+        <!-- Section Statistiques -->
+        <section class="stats">
+        <h2>Statistiques de la plateforme</h2>
+        <div class="totals">
+            <p>Total crédits gagnés : <strong>1 234</strong></p>
+        </div>
+        <div class="charts">
+            <div class="chart-container">
+            <canvas id="rides-chart"></canvas>
+            </div>
+            <div class="chart-container">
+            <canvas id="credits-chart"></canvas>
+            </div>
+        </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="social-icons">
+            <a href="#"><img src="../assets/X.png" alt="X"></a>
+            <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
+            <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
+            <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+        </div>
+        <p class="footer-copy">Tous droits réservés © EcoRide 2025</p>
+        <p class="footer-email">Ecoride@mail.com</p>
+        <nav class="footer-nav">
+            <a href="#">Mentions légales</a>
+            <a href="#">Politique de confidentialité</a>
+            <a href="#">CGU</a>
+        </nav>
+    </footer>
+    <script src="../Js/admin.js"></script>
+</body>
+</html>

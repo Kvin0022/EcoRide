@@ -12,111 +12,185 @@
 </head>
 <body>
 
-  <header>
-    <div class="logo">
-      <img src="../assets/Logo-EcoRide.png" alt="Logo EcoRide">
-      <span>EcoRide</span>
-    </div>
-    <nav>
-      <a href="../Html/Recherche-covoiturage.html">Covoiturages</a>
-      <a href="#">Contact</a>
-    </nav>
-    <div class="user-menu">👤</div>
-  </header>
+    <!-- NAVBAR -->
+    <header>
+      <nav class="navbar">
+              <img src="../assets/Logo-EcoRide.png" alt="EcoRide Logo" class="logo-img">
+              <img src="../assets/menu-btn.png" alt="Menu hamburger" class="menu-hamburger">
+          <div class="nav-links">
+              <ul>
+                  <li><a href="../Html/Accueil.html">Accueil</a></li>
+                  <li><a href="../Html/Profil-utilisateur.html">Profil</a></li>
+                  <li><a href="../Html/Profil-utilisateur.html">Historique</a></li>
+                  <li class="active"><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
+                  <li><a href="#">Contact</a></li>
+                  <li><a href="../Html/Connexion.html">Se déconnecter</a></li>
+              </ul>
+          </div>
+      </nav>
+      </header>
 
-  <main class="container">
+  <!-- CONTENU PRINCIPAL -->
+  <main class="detail-covoiturage">
+
     <h1>Détail du covoiturage</h1>
-    <p class="confirmation">Réservation confirmée</p>
 
-    <!-- Le trajet -->
+    <h2>Réservation confirmée</h2>
+
+    <!-- Section : Le trajet -->
     <section class="trajet">
       <h2>Le trajet</h2>
-      <div class="flex">
-        <div class="column">
-          <h4>Départ</h4>
-          <p>Rue</p>
-          <p>Ville</p>
-          <p>Date et heure</p>
+      <div class="trajet-grid">
+        <div class="trajet-col depart">
+          <h3>Départ</h3>
+          <p class="trajet-rue">123 rue de l’Écologie</p>
+          <p class="trajet-ville">Paris</p>
+          <p class="trajet-date">12/06/2025 – 08:30</p>
         </div>
-        <div class="column">
-          <h4>Temps de trajet</h4>
-          <p>Durée</p>
+        <div class="trajet-col duree">
+          <h3>Temps de trajet</h3>
+          <p class="trajet-duree">1 h 45</p>
         </div>
-        <div class="column">
-          <h4>Arrivée</h4>
-          <p>Rue</p>
-          <p>Ville</p>
-          <p>Date et heure</p>
+        <div class="trajet-col arrivee">
+          <h3>Arrivée</h3>
+          <p class="trajet-rue">45 avenue Verte</p>
+          <p class="trajet-ville">Lyon</p>
+          <p class="trajet-date">12/06/2025 – 10:15</p>
         </div>
       </div>
     </section>
 
-    <!-- Chauffeur -->
+    <!-- Section : Chauffeur -->
     <section class="chauffeur">
       <h2>Chauffeur</h2>
-      <div class="avatar">
-        <img src="avatar.jpg" alt="Photo du chauffeur">
-      </div>
-      <div class="name">Prénom</div>
-      <div class="stars">★ ★ ★ ☆ ☆</div>
-      <div class="note">Note : 3,9/5 (70 évaluations)</div>
-      <button class="btn-avis">Voir Avis</button>
 
-      <div class="preferences">
-        <h4>Ses préférences</h4>
-        <ul>
-          <li>Possibilité de grignoter</li>
-          <li>Véhicule non fumeur</li>
-          <li>Voyage dans la bonne humeur</li>
-        </ul>
+      <div class="chauffeur-info">
+        <div class="avatar">
+          <img src="../assets/Natasha.webp" alt="Photo de Natasha">
+        </div>
+
+        <div class="chauffeur-meta">
+          <h3 class="chauffeur-nom">Natasha</h3>
+          <div class="chauffeur-notes">★ ★ ★ ★ ☆</div>
+          <p class="chauffeur-note-texte">Note : 3,9/5 (70 évaluations)</p>
+          <button class="btn-avis">Voir Avis</button>
+        </div>
+
+        <div class="chauffeur-preferences">
+          <h4>Ses préférences</h4>
+          <ul>
+            <li>Possibilité de grignoter</li>
+            <li>Véhicule non fumeur</li>
+            <li>Voyage dans la bonne humeur</li>
+          </ul>
+        </div>
       </div>
     </section>
 
-    <!-- Véhicule -->
+    <!-- Section : Véhicule -->
     <section class="vehicule">
       <h2>Véhicule</h2>
-      <div class="flex">
-        <div class="info">
-          <h4>Renault Zoé <span class="type">électrique</span></h4>
-          <p class="eco">Voyage écologique !</p>
+      <div class="vehicule-info">
+        <div class="vehicule-texte">
+          <h3>Renault Zoé <span class="vehicule-type">électrique</span></h3>
+          <p class="vehicule-eco">Voyage écologique !</p>
         </div>
-        <div class="photo">
-          <img src="voiture.jpg" alt="Photo du véhicule">
+        <div class="vehicule-photo">
+          <img src="../assets/Zoe.png" alt="Photo de la Renault Zoé">
         </div>
       </div>
     </section>
 
-    <!-- Places disponibles -->
+    <!-- Section : Places disponibles -->
     <section class="places">
       <h2>Places disponibles</h2>
-      <div class="infos">
-        <div class="left">
-          <h4>Nombre de places disponibles</h4>
-          <p>? sur ?</p>
+      <div class="places-info">
+        <div class="places-gauche">
+          <h3>Nombre de places disponibles</h3>
+          <p class="places-texte">2 sur 4</p>
         </div>
-        <div class="right">
-          <h4>Coût en crédit par passager</h4>
-          <p>? crédits</p>
+        <div class="places-droite">
+          <p class="places-cout">Coût 8 crédits par passager</p>
         </div>
       </div>
-      <button class="btn-cancel">Annuler la participation</button>
+      <button class="btn-annuler">Annuler la participation</button>
     </section>
-  </main>
 
-  <footer>
-    <div class="socials">
-      <a href="#"><img src="../assets/X.png" alt="Twitter"></a>
-      <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
-      <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
-      <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+<!-- MODALE -->
+    <div id="modal-overlay" class="modal-overlay">
+      <div class="modal">
+        <button class="modal-close" aria-label="Fermer">&times;</button>
+        <h2>Annuler votre participation</h2>
+        <p>Voyage organisé par Natasha, voulez-vous annuler ?</p>
+
+      <div class="modal-trajet">
+        <div>
+          <h3>Départ</h3>
+          <p>123 rue de l’Écologie</p>
+          <p>Paris</p>
+          <p>12/06/2025 – 08:30</p>
+        </div>
+        <div>
+          <h3>Arrivée</h3>
+          <p>45 avenue Verte</p>
+          <p>Lyon</p>
+          <p>12/06/2025 – 10:15</p>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btn-cancel" class="btn-cancel">Annuler</button>
+        <a href="../Html/profil-utilisateur.html"><button class="btn-annuler">Annuler et récuperer 8 crédits</button></a>
+      </div>
     </div>
-    <p>Tous droits réservés © EcoRide 2025</p>
-    <nav class="footer-nav">
-      <a href="#">Mentions légales</a> |
-      <a href="#">Politique de confidentialité</a> |
-      <a href="#">CGU</a>
-    </nav>
-  </footer>
+  </div>
 
+      <!-- ===== MODALE AVIS ===== -->
+  <div id="reviews-overlay" class="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" aria-label="Fermer">&times;</button>
+      <h2>Avis sur Natasha</h2>
+      <div class="review-list">
+        <div class="review">
+          <p class="reviewer"><strong>Jean Dupont</strong> — 10/05/2025</p>
+          <div class="rating">★ ★ ★ ★ ☆</div>
+          <p>Chauffeur très ponctuelle et sympathique, voyage confortable.</p>
+        </div>
+        <hr>
+        <div class="review">
+          <p class="reviewer"><strong>Marie L.</strong> — 02/04/2025</p>
+          <div class="rating">★ ★ ★ ★ ★</div>
+          <p>Voiture propre et conduite souple, je recommande !</p>
+        </div>
+        <hr>
+        <div class="review">
+          <p class="reviewer"><strong>Paul G.</strong> — 28/03/2025</p>
+          <div class="rating">★ ★ ★ ☆ ☆</div>
+          <p>Bon trajet dans l’ensemble, légèrement en retard mais bien prévenu.</p>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="btn-reviews-close" class="btn-cancel">Fermer</button>
+      </div>
+    </div>
+  </div>
+</main>
+<!-- FOOTER -->
+<footer class="footer">
+      <div class="social-icons">
+          <a href="#"><img src="../assets/X.png" alt="X"></a>
+          <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
+          <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
+          <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+      </div>
+  <p class="footer-copy">Tous droits réservés © EcoRide 2025</p>
+  <p class="footer-email">Ecoride@mail.com</p>
+<nav class="footer-nav">
+  <a href="#">Mentions légales</a>
+  <a href="#">Politique de confidentialité</a>
+  <a href="#">CGU</a>
+</nav>
+</footer>
+<script src="../Js/Confirmation-de-réservation.js"></script>
 </body>
 </html>

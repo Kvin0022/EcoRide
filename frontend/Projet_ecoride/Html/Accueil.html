@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoRide - Accueil</title>
-    <link rel="stylesheet" href="/Css/styles-accueil.css">
+    <link rel="stylesheet" href="../Css/styles-accueil.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
@@ -17,10 +17,10 @@
             <img src="../assets/menu-btn.png" alt="Menu hamburger" class="menu-hamburger">
         <div class="nav-links">
             <ul>
-                <li class="active"><a href="/Html/Accueil.html">Accueil</a></li>
-                <li><a href="/Html/S'inscrire.html">S'inscrire</a></li>
-                <li><a href="/Html/Connexion.html">Connexion</a></li>
-                <li><a href="/Html/Recherche-covoiturage.html">Covoiturages</a></li>
+                <li class="active"><a href="../Html/Accueil.html">Accueil</a></li>
+                <li><a href="../Html/inscription.html">S'inscrire</a></li>
+                <li><a href="../Html/Connexion.html">Connexion</a></li>
+                <li><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
         </div>
@@ -33,15 +33,15 @@
             <form class="search-form">
                 <div class="form-group">
                     <input type="text" placeholder="Départ (Ville ou adresse)" required>
-                    <span class="icon">📍</span>
+                    <img src="../assets/Localisation.png" alt="Localisation">
                 </div>
                 <div class="form-group">
                     <input type="text" placeholder="Destination (Ville ou adresse)" required>
-                    <span class="icon">📍</span>
+                    <img src="../assets/Localisation.png" alt="Localisation">
                 </div>
                 <div class="form-group">
                     <input type="datetime-local" required>
-                    <span class="icon">📅</span>
+                    <img src="../assets/calendar.png" alt="Calendrier">
                 </div>
                 <button type="submit" class="btn">Rechercher</button>
             </form>
@@ -66,18 +66,18 @@
                     <h3>Covoiturage: l'aventure économique</h3>
                     <p>Réduisez vos dépenses de transport tout en aidant l'environnement. Le covoiturage est une solution économique qui fait une vraie différence. Joignez-vous à notre communauté et découvrez une nouvelle façon de voyager.</p>
                 </div>
-            <div class="card-img">
-                <img src="../assets/Vélo.png" alt="Covoiturage économique">
+                <div class="card-img">
+                    <img src="../assets/Vélo.png" alt="Covoiturage économique">
+                </div>
             </div>
-        </div>
-        <div class="eco-card">
-            <div class="card-img">
-                <img src="../assets/Trousse.png" alt="Covoiturage écologique">
-            </div>
-            <div class="card-text">
-                <h3>Covoiturage axé sur l'écologie</h3>
-                <p>Chez Ecoride, nous misons sur l’écologie. Nos voitures sont sélectionnées pour leur efficacité énergétique et leurs faibles émissions. Embarquez pour une ride qui respecte la planète.</p>
-            </div>
+            <div class="eco-card">
+                <div class="card-text">
+                    <h3>Covoiturage axé sur l'écologie</h3>
+                    <p>Chez Ecoride, nous misons sur l’écologie. Nos voitures sont sélectionnées pour leur efficacité énergétique et leurs faibles émissions. Embarquez pour une ride qui respecte la planète.</p>
+                </div>
+                <div class="card-img">
+                    <img src="../assets/Trousse.png" alt="Covoiturage écologique">
+                </div>
             </div>
         </div>
     </section>
@@ -87,24 +87,23 @@
         <h2 class="team-title">Qui sommes-nous ?</h2>
         <div class="team-card">
             <img src="../assets/Equipe-EcoRide.png" alt="Équipe EcoRide" class="team-img">
-                <div class="team-caption">
-                    <p>Voici l'équipe de la mobilité verte.</p>
-                    <p>Nous avons de gauche à droite: Fabrice, Justine, John et Mathilde.</p>
-                </div>
+        </div>
+        <div class="team-caption">
+            <p>Voici l'équipe de la mobilité verte.</p>
+            <p>Nous avons de gauche à droite: Fabrice, Justine, John et Mathilde.</p>
         </div>
     </section>
 
     <!-- FOOTER -->
         <footer class="footer">
-            <hr class="footer-separator">
-                <div class="social-icons">
-                    <a href="#"><img src="../assets/X.png" alt="X"></a>
-                    <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
-                    <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
-                    <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
-                </div>
-            <p class="footer-copy">Tous droits réservés © EcoRide 2025</p>
-            <p class="footer-email">Ecoride@mail.com</p>
+            <div class="social-icons">
+                <a href="#"><img src="../assets/X.png" alt="X"></a>
+                <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
+                <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
+                <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+            </div>
+        <p class="footer-copy">Tous droits réservés © EcoRide 2025</p>
+        <p class="footer-email">Ecoride@mail.com</p>
         <nav class="footer-nav">
             <a href="#">Mentions légales</a>
             <a href="#">Politique de confidentialité</a>

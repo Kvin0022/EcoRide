@@ -1,0 +1,343 @@
+/*==================================
+=            Global               =
+==================================*/
+
+  * {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+}
+
+body {
+    font-family: 'Jua', sans-serif;
+    background: #ADD4A7;
+    color: #2F3A36;
+    line-height: 1.5;
+}
+
+/*==================================
+=            Header               =
+==================================*/
+
+header {
+    height: 150px;
+    width: 100vw;
+}
+
+/*==================================
+=            Navbar               =
+==================================*/
+
+.navbar {
+    position: absolute;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.navbar .nav-links {
+    margin: 0 auto;
+}
+
+.navbar .nav-links ul li a {
+    color: #615959;
+    justify-content: center;
+}
+
+.navbar .logo-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-left: 100px;
+}
+
+.navbar .nav-links ul {
+    display: flex;
+}
+
+.navbar .nav-links ul li {
+    margin: 0 45px;
+}
+
+.navbar .nav-links ul li.active a {
+    text-decoration: underline;
+}
+
+.navbar .menu-hamburger {
+    display: none;
+    position: absolute;
+    top: 65px;
+    right: 50px;
+    width: 35px;
+}
+
+@media screen and (max-width: 1199px) {
+    .navbar {
+        padding: 0;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.97);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateX(-100%);
+        transition: transform 0.5s ease;
+        z-index: 9999;
+    }
+
+    .nav-links.mobile-menu {
+        transform: translateX(0);
+    }
+
+    .nav-links ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .nav-links ul li a {
+        font-size: 1.3em;
+        color: #615959;
+        font-weight: bold;
+    }
+
+    .navbar .nav-links {
+        margin: 0;
+    }
+
+    .navbar .menu-hamburger {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 35px;
+        cursor: pointer;
+        z-index: 10000;
+    }
+
+    .navbar .nav-links ul li {
+        margin: 25px 0;
+        font-size: 1.2em;
+    }
+
+}
+
+/* ==================================
+Main Signup Container
+================================== */
+
+.signup-page {
+    padding-top: 180px;
+    padding-bottom: 180px;
+}
+
+.signup-container {
+    max-width: 700px;
+    margin: 2rem auto 3rem;
+    background: #93C798;
+    border-radius: 1.5rem;
+    padding:  3rem 5rem;
+    text-align: center;
+}
+
+/* Section Header */
+.signup-container h1 {
+    font-size: 2.5rem;
+    color: #615959;
+    margin-bottom: 0.5rem;
+}
+
+.signup-container .subtext {
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+.signup-container .subtext a {
+    color: #2F3A36;
+    text-decoration: underline;
+}
+
+/* ==================================
+Form Fields
+================================== */
+
+.signup-form {
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.signup-form .form-field {
+    position: relative;
+    margin: 2.5rem;
+    padding-right: 2rem;
+    transform: translateX(-20px);
+}
+
+.signup-form .form-field .icon {
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #607744;
+}
+
+.signup-form .form-field .label-text {
+    display: block;
+    margin-left: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.signup-form .form-field input[type="email"],
+.signup-form .form-field input[type="text"],
+.signup-form .form-field input[type="password"] {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    padding-left: 3.5rem;
+}
+
+.signup-form .form-field input:focus {
+    outline: 2px solid #607744;
+}
+
+/* Checkbox Field */
+
+.checkbox-field {
+    margin: 2rem 0 1rem;
+}
+
+.checkbox-field label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #2F3A36;
+}
+
+.checkbox-field input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: #607744;
+}
+
+/* ==================================
+Submit Button
+================================== */
+
+.btn-submit {
+    display: inline-block;
+    background: #607744;
+    color: #000000;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-submit:hover {
+    background: #5a6629;
+}
+
+/* ==================================
+Help Text
+================================== */
+
+.help-text {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+
+.help-text a {
+    color: #2F3A36;
+    text-decoration: underline;
+}
+
+/*==================================
+=            Footer               =
+==================================*/
+.footer {
+    background: #FFFFFF;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.social-icons img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.footer-copy,
+.footer-email {
+    margin-bottom: 0.5rem;
+    color: #2F3A36;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.footer-nav a {
+    text-decoration: none;
+    color: black;
+    transition: color 0.3s;
+}
+
+.footer-nav a:hover {
+    color: #065f10;
+}
+
+
+/* ==================================
+Responsive Ajustements
+================================== */
+
+@media (max-width: 810px) {
+    .signup-container {
+        margin: 0 1rem 2rem;
+        padding: 1.5rem 2rem;
+    }
+
+    .signup-form {
+        max-width: none;
+    }
+
+    .signup-form .form-field .label-text {
+        display: none;
+    }
+
+    .signup-form .form-field input {
+        padding-left: 2.5rem;
+    }
+}
