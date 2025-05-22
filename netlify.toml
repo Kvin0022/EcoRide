@@ -1,0 +1,3 @@
+[build]
+  command = ""
+  publish = "frontend/Projet_ecoride/Html"
