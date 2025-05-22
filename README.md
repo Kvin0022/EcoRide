@@ -144,6 +144,11 @@ Page avec modal de la navbar
 
 ![modal-navbar-mobile](https://github.com/user-attachments/assets/49a97432-5d35-4d3d-a872-dd81eef6361f)
 
+modal filtres
+
+Page ouverture du modal "filtres"
+
+
 
 ---
 
