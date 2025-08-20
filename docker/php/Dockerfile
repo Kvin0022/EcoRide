@@ -1,0 +1,5 @@
+FROM php:8.2-apache
+RUN a2enmod rewrite
+COPY ./vhost.conf /etc/apache2/sites-available/000-default.conf
+RUN docker-php-ext-install pdo pdo_mysql
+WORKDIR /var/www/html
