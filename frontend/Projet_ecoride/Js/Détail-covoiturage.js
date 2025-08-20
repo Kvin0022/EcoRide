@@ -30,3 +30,25 @@ btnCancel.addEventListener('click', closeModal);
 overlay.addEventListener('click', e => {
     if (e.target === overlay) closeModal();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  // participation modal existant…
+    const btnAvis      = document.querySelector('.btn-avis');
+    const revOverlay  = document.getElementById('reviews-overlay');
+    const revCloses   = revOverlay.querySelectorAll('.modal-close, #btn-reviews-close');
+
+    btnAvis.addEventListener('click', () => {
+        revOverlay.classList.add('active');
+    });
+
+    revCloses.forEach(btn => {
+        btn.addEventListener('click', () => {
+        revOverlay.classList.remove('active');
+        });
+
+        // ferme la modale “reviews” au clic en dehors de la boîte
+    revOverlay.addEventListener('click', e => {
+    if (e.target === revOverlay) revOverlay.classList.remove('active');
+    });
+    });
+});

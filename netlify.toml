@@ -1,0 +1,12 @@
+
+[build]
+  command = ""
+  publish = "frontend/Projet_ecoride"
+
+[build.environment]
+  GIT_SUBMODULE_STRATEGY = "none"
+
+[[redirects]]
+  from = "/"
+  to   = "/Html/index.html"
+  status = 200

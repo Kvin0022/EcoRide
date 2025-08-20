@@ -1,6 +1,6 @@
 /*==================================
-  =            Global               =
-  ==================================*/
+=            Global               =
+==================================*/
 
   * {
     margin: 0;
@@ -144,6 +144,10 @@ header {
     background: #93C798;
     border-radius: 1.5rem;
     box-sizing: border-box;
+}
+
+.detail-covoiturage .trajet h2 {
+    margin-bottom: 3rem;
 }
 
 /* ===== Titres ===== */
@@ -397,14 +401,7 @@ header {
     background: #FFFFFF;
     padding: 2rem 1rem;
     text-align: center;
-}
-
-.footer-separator {
-    width: 80%;
-    height: 1px;
-    background: #B7D6BF;
-    border: none;
-    margin: 0 auto 1.5rem;
+    margin-top: 4rem;
 }
 
 .social-icons {
@@ -467,12 +464,12 @@ header {
 
 /* Resserre un peu l’écart global pour coller aux titres et au reste */
 .chauffeur h2 {
-  margin-bottom: 3.5rem; /* espace sous “Chauffeur” */
+    margin-bottom: 3.5rem; /* espace sous “Chauffeur” */
 }
 
 .chauffeur-info {
-  gap: 2rem;            /* espace entre chaque colonne */
-  margin-bottom: 3rem;  /* distance avant la section suivante */
+    gap: 2rem;            /* espace entre chaque colonne */
+    margin-bottom: 3rem;  /* distance avant la section suivante */
 }
 
 /* media queries */
@@ -592,9 +589,15 @@ header {
     width: 100vw; height: 100vh;
     background: rgba(0,0,0,0.5);
     display: none;           /* cachée par défaut */
-    justify-content: center; /* centre la modale */
+    justify-content: center;
     align-items: center;
     z-index: 1000;
+}
+
+.modal-overlay.active {
+    display: flex;
+  /* facultatif : pour être sûr que rien ne traîne dessous */
+    pointer-events: auto;
 }
 
 /* ---- Boîte de dialogue ---- */
@@ -677,3 +680,67 @@ header {
     background: #607744;
     color: #000000;
 }
+
+/* Spécifique à la modale “reviews” */
+#reviews-overlay .modal {
+    max-width: 500px;
+    width: 90%;
+    padding: 1.5rem;
+}
+
+#reviews-overlay h2 {
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+}
+
+/* Conteneur des avis */
+#reviews-overlay .review-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 1rem 0;
+    padding-right: 0.5rem; /* pour le scroll */
+}
+
+/* Chaque avis */
+#reviews-overlay .review {
+    margin-bottom: 1rem;
+}
+
+#reviews-overlay .review:last-child {
+    margin-bottom: 0;
+}
+
+/* Auteur et date */
+#reviews-overlay .reviewer {
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+    text-align: left;
+}
+
+/* Étoiles */
+#reviews-overlay .review .rating {
+    color: #607744;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+/* Séparateur */
+#reviews-overlay .review-list hr {
+    border: none;
+    border-bottom: 1px solid #eee;
+    margin: 0.75rem 0;
+}
+
+/* Actions (fermer) */
+#reviews-overlay .modal-actions {
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+#reviews-overlay .modal-actions .btn-cancel {
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+}
+

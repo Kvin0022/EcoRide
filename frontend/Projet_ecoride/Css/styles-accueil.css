@@ -1,6 +1,6 @@
 /*==================================
-  =            Global               =
-  ==================================*/
+=            Global               =
+==================================*/
 
   * {
     margin: 0;
@@ -44,7 +44,6 @@ header {
 
 .navbar .nav-links ul li a {
     color: #615959;
-    justify-content: center;
 }
 
 .navbar .logo-img {
@@ -55,7 +54,7 @@ header {
 }
 
 .navbar .nav-links ul {
-    display: flex;
+    display: flex
 }
 
 .navbar .nav-links ul li {
@@ -136,8 +135,8 @@ header {
 }
 
 /*==================================
-  =         Section Recherche       =
-  ==================================*/
+=         Section Recherche       =
+==================================*/
 .search-section {
     background: #ADD4A7;
     display: flex;
@@ -192,31 +191,27 @@ header {
     pointer-events: none;
 }
 
-/* On conserve l’apparence du champ comme avant */
 .form-group input[type="datetime-local"] {
     width: 100%;
     padding: 0.75rem 1rem;
     padding-right: 1rem;
     border: none;
     border-radius: 1.5rem;
-    font-size: 1rem;
-    /* On garde la zone d’icône actif */
+    font-size: 1rem; 
     appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
 }
 
-/* On rend l’indicateur natif invisible mais toujours cliquable */
+/* indicateur natif invisible mais toujours cliquable */
 .form-group input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-    opacity: 0;                  /* complètement transparent */
-    cursor: pointer;             /* pointeur quand on survole */
-    position: absolute;          /* on le repointe */
-    right: 0; top: 0;            /* coin supérieur droit */
-    width: 3rem;                 /* prends toute la zone d’icône */
-    height: 100%;                /* toute la hauteur du champ */
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+    right: 0; top: 0;
+    width: 3rem;
+    height: 100%;
 }
 
-/* Firefox : on laisse la zone d’icône visible, il s’affichera quand on cliquera sur le champ */
+/* Firefox :  laisse la zone d’icône visible, il s’affichera quand on cliquera sur le champ */
 .form-group input[type="datetime-local"]::-moz-focus-inner {
     border: 0;
 }
@@ -240,6 +235,7 @@ header {
 /*==================================
 =         Section Bienvenue       =
 ==================================*/
+
 .welcome-section {
     background: #ADD4A7;
     padding-bottom: 2rem;
@@ -256,7 +252,7 @@ header {
     border-radius: 2rem;
     padding: 3rem 2rem;
     width: calc(100% - 4rem);      /* prend toute la largeur moins 2rem de chaque côté */
-    max-width: 1200px;             /* largeur max, à ajuster selon design */
+    max-width: 1200px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     text-align: center;
 }
@@ -281,6 +277,7 @@ header {
 /*==================================
 =      Section Cartes Écologiques  =
 ==================================*/
+
 .eco-cards-section {
     background: #93C798;
     padding: 4rem 1rem;
@@ -293,7 +290,7 @@ header {
     color: #615959;
 }
 
-/* on force une seule colonne, une carte par ligne */
+/*  force une seule colonne, une carte par ligne */
 .eco-cards-container {
     display: flex;
     flex-direction: column;
@@ -312,7 +309,7 @@ header {
     overflow: hidden;
 }
 
-/* on inverse l’ordre sur les cartes */
+/* inverse l’ordre sur les cartes */
 .eco-card:nth-child(even) {
     flex-direction: row-reverse;
 }
@@ -361,13 +358,13 @@ header {
 @media (max-width: 810px) {
 /* Chaque carte prend toute la largeur */
 .eco-cards-container {
-    padding: 0;          /* enlève les paddings latéraux */
+    padding: 0;
 }
 
 .eco-card {
     flex-direction: column !important; /* colonne : image au-dessus du texte */
     width: 100%;
-    border-radius: 6rem; /* coins arrondis plus doux en mobile */
+    border-radius: 6rem;
     max-width: none;
 }
 
@@ -390,13 +387,13 @@ header {
 .eco-card .card-text {
     flex: none;
     padding: 1.5rem;
-    border-radius: 0 0 2rem 2rem; /* arrondit uniquement le bas */
+    border-radius: 0 0 2rem 2rem;
 }
 
-/* Ajustements typographiques si besoin */
 .card-text h3 {
     font-size: 1.3rem;
     }
+
 .card-text p {
     font-size: 0.95rem;
     line-height: 1.5;
@@ -404,8 +401,9 @@ header {
 }
 
 /*==================================
-  =        Section Équipe           =
-  ==================================*/
+=        Section Équipe           =
+==================================*/
+
 .team-section {
     background: #ADD4A7;
     padding: 4rem 1rem;
@@ -441,18 +439,11 @@ header {
 /*==================================
 =            Footer               =
 ==================================*/
+
 .footer {
     background: #FFFFFF;
     padding: 2rem 1rem;
     text-align: center;
-}
-
-.footer-separator {
-    width: 80%;
-    height: 1px;
-    background: #B7D6BF;
-    border: none;
-    margin: 0 auto 1.5rem;
 }
 
 .social-icons {

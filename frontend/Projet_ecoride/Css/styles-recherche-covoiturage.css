@@ -1,6 +1,6 @@
 /*==================================
-  =            Global               =
-  ==================================*/
+=            Global               =
+==================================*/
 
   * {
     margin: 0;
@@ -43,8 +43,7 @@ header {
 }
 
 .navbar .nav-links ul li a {
-    color: #615959;
-    justify-content: center;
+    color: #615959;    
 }
 
 .navbar .logo-img {
@@ -136,8 +135,9 @@ header {
 }
 
 /*==================================
-  =         Section Recherche       =
-  ==================================*/
+=         Section Recherche       =
+==================================*/
+
 .search-section {
     background: #ADD4A7;
     display: flex;
@@ -192,7 +192,6 @@ header {
     pointer-events: none;
 }
 
-/* On conserve l’apparence du champ comme avant */
 .form-group input[type="datetime-local"] {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -200,20 +199,18 @@ header {
     border: none;
     border-radius: 1.5rem;
     font-size: 1rem;
-    /* On garde la zone d’icône actif */
+    /* garde la zone d’icône actif */
     appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
 }
 
 /* On rend l’indicateur natif invisible mais toujours cliquable */
 .form-group input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-    opacity: 0;                  /* complètement transparent */
-    cursor: pointer;             /* pointeur quand on survole */
-    position: absolute;          /* on le repointe */
-    right: 0; top: 0;            /* coin supérieur droit */
-    width: 3rem;                 /* prends toute la zone d’icône */
-    height: 100%;                /* toute la hauteur du champ */
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+    right: 0; top: 0;
+    width: 3rem;
+    height: 100%;
 }
 
 /* Firefox : on laisse la zone d’icône visible, il s’affichera quand on cliquera sur le champ */
@@ -255,7 +252,7 @@ header {
     position: fixed;
     top: 0;
     right: 0;
-    width: 320px;         /* ou la largeur que tu veux */
+    width: 320px;
     height: 100%;
     background: #fff;
     transform: translateX(100%); /* caché à droite */
@@ -266,7 +263,6 @@ header {
     flex-direction: column;
 }
 
-/* header du panneau */
 #filter-panel header {
     padding: 1rem;
     display: flex;
@@ -321,10 +317,10 @@ header {
 }
 
 /* déclencheur du panneau de filtres */
-#filter-open {     /* pour que le conteneur prenne la taille de son contenu */
-    align-items: center;       /* centrer verticalement roue + texte */
-    gap: 0.5rem;               /* espace entre l’icône et le texte */
-    cursor: pointer;           /* pointeur au survol */
+#filter-open {
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
 }
 
 #filter-open:hover {
@@ -454,20 +450,21 @@ header {
 /* ==================================
 Adaptations mobile (<850px)
 ================================== */
+
 @media (max-width: 850px) {
-  /* 1) Carte en colonne sur tout le width */
+  /* Carte en colonne sur tout le width */
     .ride-card {
         flex-direction: column;
         padding: 1.5rem 1rem;
         box-sizing: border-box;
     }
 
-  /* 2) Bloc avatar+infos centré, espacement uniforme */
+  /* Bloc avatar+infos centré, espacement uniforme */
     .card-left {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1rem;           /* espace régulier entre avatar/nom/étoiles/trajet */
+        gap: 1rem;
         padding: 0;
         margin: 0;
         width: 100%;
@@ -477,12 +474,12 @@ Adaptations mobile (<850px)
         margin-bottom: 0.5rem;
     }
 
-  /* 3) Détails (nom, étoiles, trajet) : colonne centrée + gap */
+  /* Détails (nom, étoiles, trajet) : colonne centrée + gap */
     .details {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.75rem;        /* même espacement pour chaque ligne */
+        gap: 0.75rem;
     }
 
     .details > * {
@@ -490,13 +487,13 @@ Adaptations mobile (<850px)
         text-align: center;
     }
 
-  /* 4) Espacer un peu les étoiles */
+  /* Espace un peu les étoiles */
     .rating {
         display: inline-flex;
-        gap: 0.25rem;       /* espace entre chaque étoile */
+        gap: 0.25rem;
     }
 
-  /* 5) Bloc “prix / places / voiture” centré + gap identique */
+  /* Bloc “prix / places / voiture” centré + gap identique */
     .card-right {
         display: flex;
         flex-direction: column;
@@ -512,7 +509,7 @@ Adaptations mobile (<850px)
         text-align: center;
     }
 
-  /* 6) Bouton + lien côte à côte, centrés */
+  /* Bouton + lien côte à côte, centrés */
     .action-row {
         display: flex;
         justify-content: center;
@@ -531,7 +528,9 @@ Adaptations mobile (<850px)
     .details-link { order: 1; }
 
 }
-    /* ====== Style global du panneau ====== */
+
+/* ====== Style global du panneau ====== */
+
 #filter-panel {
     width: 320px;
     background: #FFFFFF;
@@ -619,7 +618,6 @@ Adaptations mobile (<850px)
     margin-top: 0.25rem;
 }
 
-/* Thumb */
 .filter-group input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 14px;

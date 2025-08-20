@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Espace Employé – EcoRide</title>
+    <link rel="stylesheet" href="../Css/employe.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+            <img src="../assets/Logo-EcoRide.png" alt="EcoRide Logo" class="logo-img">
+            <img src="../assets/menu-btn.png" alt="Menu hamburger" class="menu-hamburger">
+        <div class="nav-links">
+            <ul>
+                <li><a href="../Html/index.html">Accueil</a></li>
+                <li><a href="../Html/inscription.html">S'inscrire</a></li>
+                <li><a href="../Html/Connexion.html">Connexion</a></li>
+                <li><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+    <main class="dashboard">
+        <h1>Espace Employé</h1>
+
+        <!-- Section 1 : Avis à modérer -->
+        <section class="moderation">
+        <h2>Avis en attente de validation</h2>
+        <table>
+            <thead>
+            <tr><th>Trajet</th><th>Passager</th><th>Date</th><th>Avis</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+            <!-- Boucle back-end -->
+            <tr>
+                <td>#1234 (Paris → Lyon)</td>
+                <td>Jean Dupont</td>
+                <td>10/05/2025</td>
+                <td>★ ★ ★ ★ ☆ – Trajet propre et agréable.</td>
+                <td>
+                <button class="btn-validate">Valider</button>
+                <button class="btn-reject">Refuser</button>
+                </td>
+            </tr>
+            <!-- … -->
+            </tbody>
+        </table>
+        </section>
+
+        <!-- Section 2 : Trajets “mal passés” -->
+        <section class="incidents">
+        <h2>Trajets signalés “mal passés”</h2>
+        <table>
+            <thead>
+            <tr><th># Covoiturage</th><th>Chauffeur</th><th>Passager</th><th>Email(s)</th><th>Dates et Lieux</th></tr>
+            </thead>
+            <tbody>
+            <!-- Boucle back-end -->
+            <tr>
+                <td>5678</td>
+                <td>Natasha (nat@exemple.com)</td>
+                <td>Paul G.</td>
+                <td>paul@exemple.com</td>
+                <td>12/06/2025 – Paris → Lyon</td>
+            </tr>
+            <!-- … -->
+            </tbody>
+        </table>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="social-icons">
+            <a href="#"><img src="../assets/X.png" alt="X"></a>
+            <a href="#"><img src="../assets/Instagram.jpg" alt="Instagram"></a>
+            <a href="#"><img src="../assets/facebook.png" alt="Facebook"></a>
+            <a href="#"><img src="../assets/Twitch.png" alt="Twitch"></a>
+        </div>
+        <p class="footer-copy">Tous droits réservés © EcoRide 2025</p>
+        <p class="footer-email">Ecoride@mail.com</p>
+        <nav class="footer-nav">
+            <a href="#">Mentions légales</a>
+            <a href="#">Politique de confidentialité</a>
+            <a href="#">CGU</a>
+        </nav>
+    </footer>
+    <script src="../Js/employe.js"></script>
+</body>
+</html>
