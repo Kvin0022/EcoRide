@@ -679,6 +679,86 @@ Adaptations mobile (<850px)
     border-radius: 3px;
 }
 
+.rides-list { 
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    display: grid;
+    gap: 12px;
+}
+
+.rides-list .ride {
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+}
+
+.rides-list .meta {
+    opacity: .8;
+    font-size: .95rem;
+}
+
+/* Section centrée comme tes cartes */
+.rides {
+    padding: 1rem;
+}
+
+.rides-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Liste = grille de cartes */
+.rides-list { 
+  list-style: none; 
+  padding: 0; 
+  margin: 1rem 0; 
+  display: grid; 
+  gap: 14px; 
+}
+
+.rides-list .ride {
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.rides-list .route { 
+    font-weight: 700;
+}
+
+.rides-list .meta  {
+    opacity: .85;
+    font-size: .95rem;
+}
+
+/* (Optionnel) une pastille prix + bouton comme tes CTA */
+.rides-list .right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rides-list .price {
+    font-weight: 700;
+}
+
+.rides-list .btn {
+  background: #607744; color:#fff; border:0;
+  padding: .45rem .9rem; border-radius: 999px; cursor: pointer;
+}
+
+.rides-list .btn:hover {
+    background: #5a6629;
+}
+
+
 /*==================================
 =            Footer               =
 ==================================*/

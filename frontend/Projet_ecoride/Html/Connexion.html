@@ -29,33 +29,48 @@
       </nav>
       </header>
 
-  <!-- Contenu principal Connexion -->
-  <main class="login-page">
-    <section class="login-container">
-      <h1>Se connecter</h1>
-      <p class="subtext">
-        Pas encore membre du club ? <a href="../Html/Inscription.html">Inscrivez-vous</a>
-      </p>
-      <form action="/connexion" method="POST" class="login-form">
-        <div class="form-field">
-          <label for="email">
-            <span class="icon">✉️</span>
-          </label>
-          <input type="email" id="email" name="email" placeholder="Email" required>
-        </div>
-        <div class="form-field">
-          <label for="password">
-            <span class="icon">❓</span>
-          </label>
-          <input type="password" id="password" name="password" placeholder="Mot de passe" required>
-        </div>
-        <button type="submit" class="btn-submit">Connexion</button>
-      </form>
-      <p class="help-text">
-        Mot de passe oublié ? <a href="../Html/Mot-de-passe-oublié.html">Cliquez ici</a>
-      </p>
-    </section>
-  </main>
+<!-- Contenu principal Connexion -->
+<main class="login-page">
+  <section class="login-container" aria-labelledby="login-title">
+    <h1 id="login-title">Se connecter</h1>
+
+    <!-- Messages mis à jour par le JS -->
+    <p id="login-status" class="status" aria-live="polite"></p>
+
+    <p class="subtext">
+      Pas encore membre du club ? <a href="../Html/Inscription.html">Inscrivez-vous</a>
+    </p>
+
+    <!-- JS intercepte le submit pour faire un fetch -->
+    <form id="login-form" action="/connexion" method="POST" class="login-form" novalidate autocomplete="on">
+      <div class="form-field">
+        <label for="email">
+          <span class="icon" aria-hidden="true">✉️</span>
+          <span class="label-text">Email</span>
+        </label>
+        <input type="email" id="email" name="email" placeholder="Email" required autocomplete="email">
+      </div>
+
+      <div class="form-field">
+        <label for="password">
+          <span class="icon" aria-hidden="true">❓</span>
+          <span class="label-text">Mot de passe</span>
+        </label>
+        <input type="password" id="password" name="password" placeholder="Mot de passe" required autocomplete="current-password" minlength="6">
+      </div>
+
+      <button type="submit" class="btn-submit" id="login-submit">Connexion</button>
+
+      <!-- Zone d'erreur alimentée par le JS -->
+      <p id="login-error" class="error" role="alert" aria-live="assertive"></p>
+    </form>
+
+    <p class="help-text">
+      Mot de passe oublié ? <a href="../Html/Mot-de-passe-oublié.html">Cliquez ici</a>
+    </p>
+  </section>
+</main>
+
 
 <!-- FOOTER -->
 <footer class="footer">

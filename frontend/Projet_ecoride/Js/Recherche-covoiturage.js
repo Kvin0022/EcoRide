@@ -37,3 +37,49 @@ btnReset.addEventListener('click', () => {
   // ici tu remets à zéro tes inputs/radios/sliders…
     closeFilter();
 });
+
+(() => {
+  const API_BASE_URL = window.API_BASE_URL ?? 'http://localhost:8080';
+
+  const list   = document.querySelector('#rides-list');
+  const status = document.querySelector('#rides-status');
+  if (!list) return;
+
+  const esc = s => String(s).replace(/[&<>"']/g, m =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])
+  );
+
+  async function loadRides() {
+    if (status) status.textContent = 'Chargement...';
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/rides`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const rides = await res.json();
+
+      if (!Array.isArray(rides) || rides.length === 0) {
+        list.innerHTML = '<li>Aucun trajet pour le moment.</li>';
+      } else {
+        list.innerHTML = rides.map(r => `
+          <li class="ride">
+            <div class="left">
+              <div class="route"><strong>${esc(r.origin)} → ${esc(r.destination)}</strong></div>
+              <div class="meta">${esc(r.date_time)} • ${r.seats} place${r.seats > 1 ? 's' : ''}</div>
+            </div>
+            <div class="right">
+              <div class="price">${Number(r.price).toFixed(2)} €</div>
+              <button class="btn" data-ride="${r.id}">Réserver</button>
+            </div>
+          </li>
+        `).join('');
+      }
+    } catch (err) {
+      console.error('GET /api/rides failed', err);
+      list.innerHTML = '<li>Impossible de charger les trajets.</li>';
+    } finally {
+      if (status) status.textContent = '';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadRides);
+})();
+
