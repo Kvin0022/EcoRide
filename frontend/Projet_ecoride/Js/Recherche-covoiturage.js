@@ -83,3 +83,27 @@ btnReset.addEventListener('click', () => {
   document.addEventListener('DOMContentLoaded', loadRides);
 })();
 
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.btn[data-ride]');
+  if (!btn) return;
+
+  const rideId = Number(btn.dataset.ride);
+  const name  = prompt("Votre nom ?");
+  const email = prompt("Votre email ?");
+  if (!name || !email) return;
+
+  try {
+    const res = await fetch(`${(window.API_BASE_URL ?? 'http://localhost:8080')}/api/bookings`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({ ride_id: rideId, name, email })
+    });
+    const data = await res.json();
+    if (res.ok) alert('Réservation enregistrée ✅');
+    else alert(data.error || 'Erreur de réservation');
+  } catch (err) {
+    alert('Serveur indisponible');
+  }
+});
+
+
