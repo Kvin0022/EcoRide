@@ -85,6 +85,25 @@
       </label>
       <input type="range" id="rating-range" min="0" max="5" value="0">
 
+      <!-- Départ / Arrivée -->
+      <label for="filter-origin">Départ</label>
+      <input id="filter-origin" type="text" placeholder="Ville de départ">
+
+      <label for="filter-destination">Arrivée</label>
+      <input id="filter-destination" type="text" placeholder="Ville d'arrivée">
+
+      <!-- Date à partir de -->
+      <label for="filter-date">Date (à partir de)</label>
+      <input id="filter-date" type="date">
+
+      <!-- Places mini -->
+      <label for="filter-seats-min">Places minimales</label>
+      <input id="filter-seats-min" type="number" min="1" step="1" placeholder="ex: 2">
+
+      <!-- Bouton Appliquer -->
+      <button id="filter-apply" class="btn">Appliquer</button>
+
+
       <button id="filter-reset">Réinitialiser les filtres</button>
     </div>
   </aside>
@@ -191,9 +210,31 @@
 
 <section class="rides">
   <h1>Trajets disponibles</h1>
+
+  <div class="sort-bar">
+    <label for="sort-by">Trier par</label>
+    <select id="sort-by">
+      <option value="date" selected>Date</option>
+      <option value="price">Crédits</option>
+      <option value="seats">Places</option>
+      <option value="duration">Durée</option>
+    </select>
+
+    <select id="sort-order" aria-label="Ordre">
+      <option value="ASC" selected>Croissant</option>
+      <option value="DESC">Décroissant</option>
+    </select>
+  </div>
+  <!-- /BARRE DE TRI -->
+
   <p id="rides-status" class="status" aria-live="polite"></p>
   <ul id="rides-list" class="rides-list"></ul>
 </section>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="loader" class="loader hidden" aria-hidden="true"></div>
+
+
 
 <!-- FOOTER -->
 <footer class="footer">

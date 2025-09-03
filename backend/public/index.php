@@ -4,28 +4,61 @@ require __DIR__ . '/../src/Db.php';
 
 use Slim\Factory\AppFactory;
 use App\Db;
+use Slim\Exception\HttpNotFoundException;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app = AppFactory::create();
 
-/* CORS DEV */
+/* ------------ Middlewares globaux ------------ */
+
+// Body parsing (JSON, form, etc.)
+$app->addBodyParsingMiddleware();
+
+// CORS DEV/PROD
 $app->add(function ($req, $handler) {
+  $allowedProd = getenv('CORS_ALLOW_ORIGIN') ?: 'https://golden-medovik-8f81e4.netlify.app';
+  $origin = $req->getHeaderLine('Origin');
+  $isLocal = !$origin || preg_match('#^https?://(localhost|127\.0\.0\.1)(:\d+)?$#i', $origin);
+
   $res = $handler->handle($req);
+  $allowOrigin = $isLocal ? ($origin ?: '*') : $allowedProd;
+
   return $res
-    ->withHeader('Access-Control-Allow-Origin', '*')
+    ->withHeader('Access-Control-Allow-Origin', $allowOrigin)
+    ->withHeader('Vary', 'Origin')
     ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 });
 $app->options('/{routes:.+}', fn($req, $res) => $res);
 
-$app->addBodyParsingMiddleware();
+// Error middleware (affiche les détails en dev)
+$displayErrorDetails = true;  // passe à false en prod
+$logErrors = true;
+$logErrorDetails = true;
+$errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, $logErrors, $logErrorDetails);
 
-/* Ping */
+// 404 JSON propre
+$errorMiddleware->setErrorHandler(HttpNotFoundException::class, function (Request $request, Throwable $e) use ($app) {
+  $response = $app->getResponseFactory()->createResponse(404);
+  $response->getBody()->write(json_encode([
+    'error' => 'Not found',
+    'path'  => (string)$request->getUri()->getPath()
+  ]));
+  return $response->withHeader('Content-Type', 'application/json');
+});
+
+/* ------------ Routes utilitaires ------------ */
+
+// Ping racine
 $app->get('/', function ($req, $res) {
   $res->getBody()->write('🚀 API EcoRide en ligne !');
   return $res->withHeader('Content-Type','text/plain');
 });
 
-/* -------- AUTH -------- */
+// Evite le 404 sur /favicon.ico
+$app->get('/favicon.ico', fn($req, $res) => $res->withStatus(204));
+
+/* ===================== AUTH ===================== */
 
 /* POST /api/register  {email,password} */
 $app->post('/api/register', function ($req, $res) {
@@ -40,7 +73,6 @@ $app->post('/api/register', function ($req, $res) {
 
   try {
     $pdo = Db::pdo();
-    // email unique ?
     $st = $pdo->prepare('SELECT id FROM users WHERE email = ?');
     $st->execute([$email]);
     if ($st->fetch()) {
@@ -76,10 +108,9 @@ $app->post('/api/login', function ($req, $res) {
       return $res->withHeader('Content-Type','application/json');
     }
   } catch (\Throwable $e) {
-    // si la DB est down, on laisse tomber sur le fallback démo ci-dessous
+    // fallback démo si DB down
   }
 
-  // Fallback démo (utile pendant la mise en place de la DB)
   if ($email === 'admin@example.com' && $password === 'motdepasse') {
     $payload = ['token'=>bin2hex(random_bytes(16)), 'role'=>'admin'];
     $res->getBody()->write(json_encode($payload));
@@ -100,118 +131,55 @@ $app->post('/api/password/forgot', function ($req, $res) {
     return $res->withHeader('Content-Type','application/json')->withStatus(422);
   }
 
-  // Optionnel : vérifier l'existence du compte sans rien révéler
   try {
-    $pdo = \App\Db::pdo();
+    $pdo = Db::pdo();
     $st = $pdo->prepare('SELECT id FROM users WHERE email = ?');
     $st->execute([$email]);
-    // ne pas révéler si l'email existe (bonne pratique)
-  } catch (\Throwable $e) {
-    // si la DB est down on renvoie quand même le même message
-  }
+  } catch (\Throwable $e) {}
 
-  // Mock : on "enverrait" un lien par email ici
   $res->getBody()->write(json_encode(['message'=>'Si un compte existe, un email a été envoyé']));
   return $res->withHeader('Content-Type','application/json');
 });
 
+/* ===================== VEHICLES ===================== */
 
-/* -------- RIDES -------- */
-
-/* GET /api/rides */
-$app->get('/api/rides', function ($req, $res) {
-  $q = $req->getQueryParams();
-
-  $where  = [];
-  $params = [];
-
-  if (!empty($q['origin'])) {
-    $where[]  = 'origin LIKE ?';
-    $params[] = $q['origin'] . '%';
+/* GET /api/vehicles?email=... */
+$app->get('/api/vehicles', function ($req, $res) {
+  $email = strtolower(trim($req->getQueryParams()['email'] ?? ''));
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $res->getBody()->write(json_encode([]));
+    return $res->withHeader('Content-Type','application/json');
   }
-  if (!empty($q['destination'])) {
-    $where[]  = 'destination LIKE ?';
-    $params[] = $q['destination'] . '%';
-  }
-  if (!empty($q['date_from'])) {
-    // attendu: "YYYY-MM-DD" ou "YYYY-MM-DD HH:MM"
-    $where[]  = 'date_time >= ?';
-    $params[] = $q['date_from'];
-  }
-  if (!empty($q['seats_min'])) {
-    $where[]  = 'seats >= ?';
-    $params[] = (int)$q['seats_min'];
-  }
-  if (!empty($q['credits_max'])) {
-    // price = crédits par trajet (chez toi on affiche déjà "crédits")
-    $where[]  = 'price <= ?';
-    $params[] = (int)$q['credits_max'];
-  }
-
-  $sql = 'SELECT id, origin, destination,
-                 DATE_FORMAT(date_time, "%Y-%m-%d %H:%i") AS date_time,
-                 seats, price
-          FROM rides';
-  if ($where) {
-    $sql .= ' WHERE ' . implode(' AND ', $where);
-  }
-  $sql .= ' ORDER BY date_time ASC LIMIT 200';
-
   try {
-    $pdo  = \App\Db::pdo();
-    $st   = $pdo->prepare($sql);
-    $st->execute($params);
+    $pdo = Db::pdo();
+    $st  = $pdo->prepare('SELECT id, brand, model, seats, plate FROM vehicles WHERE owner_email = ? ORDER BY created_at DESC');
+    $st->execute([$email]);
     $rows = $st->fetchAll();
-    // alias "credits" pour l’affichage
-    foreach ($rows as &$r) { $r['credits'] = (int)$r['price']; }
     $res->getBody()->write(json_encode($rows));
     return $res->withHeader('Content-Type','application/json');
   } catch (\Throwable $e) {
-    // fallback (optionnel)
-    $rides = [
-      ['id'=>1,'origin'=>'Metz','destination'=>'Luxembourg','date_time'=>'2025-09-01 08:00','seats'=>3,'price'=>8],
-      ['id'=>2,'origin'=>'Metz','destination'=>'Nancy','date_time'=>'2025-09-01 09:30','seats'=>2,'price'=>5],
-    ];
-    $res->getBody()->write(json_encode($rides));
+    $res->getBody()->write(json_encode([]));
     return $res->withHeader('Content-Type','application/json');
   }
 });
 
-
-
-/* POST /api/rides  {origin,destination,date_time,seats,price} */
-$app->post('/api/rides', function ($req, $res) {
+/* POST /api/vehicles  {owner_email,brand,model,seats,plate?} */
+$app->post('/api/vehicles', function ($req, $res) {
   $d = (array)($req->getParsedBody() ?? []);
+  $email = strtolower(trim($d['owner_email'] ?? ''));
+  $brand = trim($d['brand'] ?? '');
+  $model = trim($d['model'] ?? '');
+  $seats = (int)($d['seats'] ?? 0);
+  $plate = trim($d['plate'] ?? '');
 
-  /* --- validation champs obligatoires --- */
-  foreach (['origin','destination','date_time','seats'] as $k) {
-    if (!isset($d[$k]) || $d[$k] === '') {
-      $res->getBody()->write(json_encode(['error'=>"Missing $k"]));
-      return $res->withHeader('Content-Type','application/json')->withStatus(422);
-    }
-  }
-  // on accepte soit price (€), soit credits
-  $price = isset($d['price']) ? (float)$d['price']
-          : (isset($d['credits']) ? (float)$d['credits'] : null);
-
-  if ($price === null) {
-    $res->getBody()->write(json_encode(['error'=>"Missing price/credits"]));
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $brand === '' || $model === '' || $seats < 1 || $seats > 7) {
+    $res->getBody()->write(json_encode(['error'=>'Invalid input']));
     return $res->withHeader('Content-Type','application/json')->withStatus(422);
   }
-
   try {
     $pdo = Db::pdo();
-    $st = $pdo->prepare(
-      'INSERT INTO rides (driver_id, origin, destination, date_time, seats, price)
-       VALUES (NULL, ?, ?, ?, ?, ?)'
-    );
-    $st->execute([
-      trim($d['origin']),
-      trim($d['destination']),
-      $d['date_time'],
-      (int)$d['seats'],
-      $price            // ← stocké dans la colonne price, interprété comme crédits
-    ]);
+    $st  = $pdo->prepare('INSERT INTO vehicles(owner_email,brand,model,seats,plate) VALUES(?,?,?,?,?)');
+    $st->execute([$email,$brand,$model,$seats,$plate ?: null]);
     $res->getBody()->write(json_encode(['id'=>$pdo->lastInsertId()]));
     return $res->withHeader('Content-Type','application/json')->withStatus(201);
   } catch (\Throwable $e) {
@@ -220,10 +188,172 @@ $app->post('/api/rides', function ($req, $res) {
   }
 });
 
+/* ===================== RIDES ===================== */
 
-/* -------- BOOKINGS -------- */
+/* GET /api/rides  (filtres + tri) */
+$app->get('/api/rides', function ($req, $res) {
+  $q = $req->getQueryParams();
 
-/* POST /api/bookings  {ride_id, name, email}  (décrémente seats en transaction) */
+  $where  = [];
+  $params = [];
+
+  if (!empty($q['origin']))      { $where[] = 'r.origin LIKE ?';            $params[] = $q['origin'] . '%'; }
+  if (!empty($q['destination'])) { $where[] = 'r.destination LIKE ?';       $params[] = $q['destination'] . '%'; }
+  if (!empty($q['date_from']))   { $where[] = 'r.date_time >= ?';           $params[] = str_replace('T',' ',$q['date_from']); }
+  if (!empty($q['seats_min']))   { $where[] = 'r.seats >= ?';                $params[] = (int)$q['seats_min']; }
+  if (!empty($q['credits_max'])) { $where[] = 'r.price <= ?';                $params[] = (int)$q['credits_max']; }
+  if (!empty($q['duration_max'])){ $where[] = 'r.duration_minutes <= ?';     $params[] = (int)$q['duration_max']; }
+  if (!empty($q['rating_min']))  { $where[] = 'r.driver_rating >= ?';        $params[] = (int)$q['rating_min']; }
+
+  $sortByMap = [
+    'date'     => 'r.date_time',
+    'price'    => 'r.price',
+    'credits'  => 'r.price',
+    'seats'    => 'r.seats',
+    'duration' => 'r.duration_minutes',
+  ];
+  $sortBy = strtolower($q['sort_by'] ?? 'date');
+  $col    = $sortByMap[$sortBy] ?? 'r.date_time';
+
+  $order  = strtoupper($q['order'] ?? 'ASC');
+  $order  = ($order === 'DESC') ? 'DESC' : 'ASC';
+
+  $limit  = isset($q['limit']) ? max(1, min(200, (int)$q['limit'])) : 200;
+
+  $sql = 'SELECT
+            r.id, r.origin, r.destination,
+            DATE_FORMAT(r.date_time, "%Y-%m-%d %H:%i") AS date_time,
+            r.duration_minutes, r.driver_rating,
+            r.seats, r.price, r.vehicle_id,
+            v.brand AS vehicle_brand, v.model AS vehicle_model, v.plate AS vehicle_plate
+          FROM rides r
+          LEFT JOIN vehicles v ON v.id = r.vehicle_id';
+  if ($where) $sql .= ' WHERE ' . implode(' AND ', $where);
+  $sql .= " ORDER BY $col $order LIMIT $limit";
+
+  try {
+    $pdo  = Db::pdo();
+    $st   = $pdo->prepare($sql);
+    $st->execute($params);
+    $rows = $st->fetchAll();
+    foreach ($rows as &$r) {
+      $r['credits'] = (int)$r['price'];
+      $r['seats']   = (int)$r['seats'];
+    }
+    $res->getBody()->write(json_encode($rows));
+    return $res->withHeader('Content-Type','application/json');
+  } catch (\Throwable $e) {
+    $res->getBody()->write(json_encode(['error'=>'Database unavailable']));
+    return $res->withHeader('Content-Type','application/json')->withStatus(500);
+  }
+});
+
+/* GET /api/rides/{id} */
+$app->get('/api/rides/{id}', function ($req, $res, $args) {
+  $id = (int)($args['id'] ?? 0);
+  if ($id <= 0) {
+    $res->getBody()->write(json_encode(['error'=>'Invalid id']));
+    return $res->withHeader('Content-Type','application/json')->withStatus(422);
+  }
+
+  $sql = 'SELECT
+            r.id, r.origin, r.destination,
+            DATE_FORMAT(r.date_time, "%Y-%m-%d %H:%i") AS date_time,
+            r.duration_minutes, r.driver_rating,
+            r.seats, r.price AS credits, r.vehicle_id,
+            v.brand AS vehicle_brand, v.model AS vehicle_model, v.plate AS vehicle_plate
+          FROM rides r
+          LEFT JOIN vehicles v ON v.id = r.vehicle_id
+          WHERE r.id = ?
+          LIMIT 1';
+
+  try {
+    $pdo = Db::pdo();
+    $st  = $pdo->prepare($sql);
+    $st->execute([$id]);
+    $row = $st->fetch();
+
+    if (!$row) {
+      $res->getBody()->write(json_encode(['error'=>'Ride not found']));
+      return $res->withHeader('Content-Type','application/json')->withStatus(404);
+    }
+
+    $row['seats']   = (int)$row['seats'];
+    $row['credits'] = (int)$row['credits'];
+
+    $res->getBody()->write(json_encode($row));
+    return $res->withHeader('Content-Type','application/json');
+  } catch (\Throwable $e) {
+    $res->getBody()->write(json_encode(['error'=>'Database unavailable']));
+    return $res->withHeader('Content-Type','application/json')->withStatus(500);
+  }
+});
+
+/* POST /api/rides */
+$app->post('/api/rides', function ($req, $res) {
+  $d = (array)($req->getParsedBody() ?? []);
+
+  $origin      = trim($d['origin']       ?? '');
+  $destination = trim($d['destination']  ?? '');
+  $dateTimeRaw = trim($d['date_time']    ?? '');
+  $duration    = isset($d['duration_minutes']) ? max(0, (int)$d['duration_minutes']) : 0;
+  $vehicleId   = isset($d['vehicle_id']) ? (int)$d['vehicle_id'] : 0;
+
+  $price = isset($d['price']) ? (int)$d['price'] : (isset($d['credits']) ? (int)$d['credits'] : 0);
+
+  $dateTime = str_replace('T', ' ', $dateTimeRaw);
+  $dtOk = \DateTime::createFromFormat('Y-m-d H:i', substr($dateTime, 0, 16)) !== false;
+
+  $seats = (int)($d['seats'] ?? 0);
+
+  $err = null;
+  if ($origin === '' || $destination === '' || $dateTime === '')                 $err = 'Missing fields';
+  elseif (!$dtOk)                                                                 $err = 'Invalid date_time format (use YYYY-MM-DD HH:MM)';
+  elseif ($price < 1 || $price > 1000)                                           $err = 'Invalid credits (1..1000)';
+  elseif (mb_strlen($origin) > 120 || mb_strlen($destination) > 120)              $err = 'Text too long (max 120)';
+  if ($err) {
+    $res->getBody()->write(json_encode(['error'=>$err]));
+    return $res->withHeader('Content-Type','application/json')->withStatus(422);
+  }
+
+  try {
+    $pdo = Db::pdo();
+
+    if ($vehicleId > 0) {
+      $stV = $pdo->prepare('SELECT seats FROM vehicles WHERE id = ?');
+      $stV->execute([$vehicleId]);
+      $veh = $stV->fetch();
+      if (!$veh) {
+        $res->getBody()->write(json_encode(['error'=>'Invalid vehicle']));
+        return $res->withHeader('Content-Type','application/json')->withStatus(422);
+      }
+      $seats = (int)$veh['seats'];
+    }
+
+    if ($vehicleId === 0 && ($seats < 1 || $seats > 7)) {
+      $res->getBody()->write(json_encode(['error'=>'Invalid seats (1..7)']));
+      return $res->withHeader('Content-Type','application/json')->withStatus(422);
+    }
+
+    $st = $pdo->prepare(
+      'INSERT INTO rides (origin, destination, date_time, duration_minutes, driver_rating, seats, price, vehicle_id)
+       VALUES (?, ?, ?, ?, 0, ?, ?, ?)'
+    );
+    $st->execute([$origin, $destination, $dateTime, $duration, $seats, $price, $vehicleId ?: null]);
+
+    $res->getBody()->write(json_encode(['id' => $pdo->lastInsertId()]));
+    return $res->withHeader('Content-Type','application/json')->withStatus(201);
+
+  } catch (\Throwable $e) {
+    error_log('CREATE RIDE ERROR: '.$e->getMessage());
+    $res->getBody()->write(json_encode(['error'=>'Database unavailable']));
+    return $res->withHeader('Content-Type','application/json')->withStatus(500);
+  }
+});
+
+/* ===================== BOOKINGS ===================== */
+
+/* POST /api/bookings */
 $app->post('/api/bookings', function ($req, $res) {
   $d      = (array)($req->getParsedBody() ?? []);
   $rideId = (int)($d['ride_id'] ?? 0);
@@ -236,10 +366,9 @@ $app->post('/api/bookings', function ($req, $res) {
   }
 
   try {
-    $pdo = \App\Db::pdo();
+    $pdo = Db::pdo();
     $pdo->beginTransaction();
 
-    // 1) Verrouille la ligne du trajet
     $st = $pdo->prepare('SELECT seats FROM rides WHERE id = ? FOR UPDATE');
     $st->execute([$rideId]);
     $row = $st->fetch();
@@ -256,49 +385,39 @@ $app->post('/api/bookings', function ($req, $res) {
       return $res->withHeader('Content-Type', 'application/json')->withStatus(409);
     }
 
-    // 2) Insertion de la réservation (protégée par l'unique (ride_id, user_email))
     try {
       $st = $pdo->prepare('INSERT INTO bookings(ride_id, user_name, user_email) VALUES(?, ?, ?)');
       $st->execute([$rideId, $name, $email]);
     } catch (\PDOException $e) {
-      // Doublon sur l'unique (ride_id, user_email)
       if ($e->getCode() === '23000') {
         $pdo->rollBack();
         $res->getBody()->write(json_encode(['error' => 'Already booked']));
         return $res->withHeader('Content-Type', 'application/json')->withStatus(409);
       }
-      throw $e; // autres erreurs SQL -> catch global (500)
+      throw $e;
     }
 
-    // 3) Décrément atomique : ne descend JAMAIS sous 0
     $st = $pdo->prepare('UPDATE rides SET seats = seats - 1 WHERE id = ? AND seats > 0');
     $st->execute([$rideId]);
 
     if ($st->rowCount() === 0) {
-      // Personne n'a été mis à jour -> plus de place entre-temps
       $pdo->rollBack();
       $res->getBody()->write(json_encode(['error' => 'Ride full']));
       return $res->withHeader('Content-Type', 'application/json')->withStatus(409);
     }
 
-    // 4) OK
     $pdo->commit();
     $res->getBody()->write(json_encode(['message' => 'Booking created', 'id' => $pdo->lastInsertId()]));
     return $res->withHeader('Content-Type', 'application/json')->withStatus(201);
 
   } catch (\Throwable $e) {
-    // Catch global PROPRE
     try { if (isset($pdo) && $pdo->inTransaction()) { $pdo->rollBack(); } } catch (\Throwable $ignore) {}
-    // (optionnel) log interne :
-    // error_log('BOOKING ERROR: '.$e->getMessage());
     $res->getBody()->write(json_encode(['error' => 'Database unavailable']));
     return $res->withHeader('Content-Type', 'application/json')->withStatus(500);
   }
 });
 
-
-
-// GET /api/bookings?ride_id=1  (ou sans param => tout)
+/* GET /api/bookings?ride_id=1 */
 $app->get('/api/bookings', function ($req, $res) {
   try {
     $pdo = Db::pdo();
@@ -320,6 +439,5 @@ $app->get('/api/bookings', function ($req, $res) {
     return $res->withHeader('Content-Type','application/json')->withStatus(500);
   }
 });
-
 
 $app->run();

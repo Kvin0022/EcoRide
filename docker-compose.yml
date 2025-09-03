@@ -9,6 +9,9 @@ services:
       - "8080:80"
     depends_on:
       - db
+    environment:
+      - CORS_ALLOW_ORIGIN=https://golden-medovik-8f81e4.netlify.app
+
 
   db:
     image: mysql:8

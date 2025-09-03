@@ -35,7 +35,7 @@
     <section class="reset-container">
       <h1>Réinitialisez votre mot de passe</h1>
 
-      <form action="/reset-password" method="POST" class="reset-form">
+      <form id="forgot-form" action="/reset-password" method="POST" class="reset-form">
         <div class="form-field">
           <label for="email">
             <span class="icon">✉️</span>
@@ -43,14 +43,15 @@
           <input type="email" id="email" name="email" placeholder="Email" required>
         </div>
 
-        <p class="timeout-info">
-          Un lien valable 1 heure vous sera envoyé.
-        </p>
+        <p class="timeout-info">Un lien valable 1 heure vous sera envoyé.</p>
 
-        <button type="submit" class="btn-submit">
-          Envoyer un email de Réinitialisation
-        </button>
+        <button type="submit" class="btn-submit">Envoyer un email de Réinitialisation</button>
+
+        <!-- Ajouts pour les messages -->
+        <p id="forgot-ok" class="status" aria-live="polite"></p>
+        <p id="forgot-err" class="error" role="alert" aria-live="assertive"></p>
       </form>
+      
     </section>
   </main>
 

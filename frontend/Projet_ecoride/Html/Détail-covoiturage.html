@@ -35,6 +35,19 @@
 
     <h1>Détail du covoiturage</h1>
 
+    <section id="ride-detail" class="ride-detail">
+      <h1 id="rd-route">Trajet</h1>
+      <p id="rd-datetime"></p>
+      <p id="rd-vehicle"></p>
+      <p id="rd-seats-credits"></p>
+
+      <div class="actions">
+        <button id="rd-book" class="btn">Réserver</button>
+        <span id="rd-status" class="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+
     <!-- Section : Le trajet -->
     <section class="trajet">
       <h2>Le trajet</h2>
@@ -114,34 +127,49 @@
       <button class="btn-participer">Participer pour 8 crédits</button>
     </section>
 
-<!-- MODALE -->
-    <div id="modal-overlay" class="modal-overlay">
-      <div class="modal">
-        <button class="modal-close" aria-label="Fermer">&times;</button>
-        <h2>Valider votre participation</h2>
-        <p>Voyage organisé par Natasha, voulez-vous y participer ?</p>
+  <!-- MODALE -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" aria-label="Fermer">&times;</button>
+      <h2>Réserver ce covoiturage</h2>
 
+      <!-- (optionnel) résumé du trajet, rempli plus tard en JS si tu veux -->
       <div class="modal-trajet">
         <div>
           <h3>Départ</h3>
-          <p>123 rue de l’Écologie</p>
-          <p>Paris</p>
-          <p>12/06/2025 – 08:30</p>
+          <p id="modal-departure">—</p>
         </div>
         <div>
           <h3>Arrivée</h3>
-          <p>45 avenue Verte</p>
-          <p>Lyon</p>
-          <p>12/06/2025 – 10:15</p>
+          <p id="modal-arrival">—</p>
+        </div>
+        <div class="modal-meta">
+          <p id="modal-datetime">—</p>
+          <p id="modal-credits">—</p>
         </div>
       </div>
 
-      <div class="modal-actions">
-        <button id="btn-cancel" class="btn-cancel">Annuler</button>
-        <a href="../Html/Confirmation-de-réservation.html"><button class="btn-confirm">Réserver pour 8 crédits</button></a>
-      </div>
+      <!-- Formulaire branché sur POST /api/bookings -->
+      <form id="book-form" class="book-form">
+        <div class="form-row">
+          <label for="book_name">Votre nom</label>
+          <input type="text" id="book_name" required placeholder="Ex : Kevin">
+        </div>
+        <div class="form-row">
+          <label for="book_email">Votre email</label>
+          <input type="email" id="book_email" required placeholder="vous@mail.com">
+        </div>
+
+        <p id="book-status" class="status" aria-live="polite"></p>
+
+        <div class="modal-actions">
+          <button type="button" id="btn-cancel" class="btn-cancel">Annuler</button>
+          <button type="submit" id="btn-book-submit" class="btn-confirm">Confirmer la réservation</button>
+        </div>
+      </form>
     </div>
   </div>
+
 
     <!-- ===== MODALE AVIS ===== -->
   <div id="reviews-overlay" class="modal-overlay">
@@ -173,6 +201,9 @@
     </div>
   </div>
 
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="loader" class="loader hidden" aria-hidden="true"></div>
+
   </main>
 
 <!-- FOOTER -->
@@ -191,6 +222,7 @@
   <a href="#">CGU</a>
 </nav>
 </footer>
+<script src="../Js/Détail-covoiturage.js"></script>
 <script src="../Js/Détail-covoiturage.js"></script>
 </body>
 </html>

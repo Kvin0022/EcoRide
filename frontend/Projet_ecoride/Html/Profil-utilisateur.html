@@ -232,71 +232,59 @@
     <section id="tab-publish" class="tab-content">
       <h1>Publiez un trajet</h1>
 
-      <form action="/publish" method="POST" class="publish-form">
-        <!-- Date & durée -->
+      <form id="publish-form" class="publish-form" autocomplete="on">
+        <!-- Ligne 1 : villes -->
         <div class="form-row">
           <div class="form-group">
-            <label for="departure_datetime">Date et heure de départ</label>
-            <input type="datetime-local" id="departure_datetime" name="departure_datetime" placeholder="Date et heure de départ" required />
+            <label for="publish_origin">Départ</label>
+            <input type="text" id="publish_origin" placeholder="Ex : Metz" required>
           </div>
           <div class="form-group">
-            <label for="duration">Durée du trajet</label>
-            <input type="number" id="duration" name="duration" placeholder="Durée du trajet" required />
+            <label for="publish_destination">Destination</label>
+            <input type="text" id="publish_destination" placeholder="Ex : Nancy" required>
           </div>
         </div>
 
-        <!-- Adresses de départ & d'arrivée -->
+        <!-- Ligne 2 : date/heure, durée, places, crédits -->
         <div class="form-row">
           <div class="form-group">
-            <label for="departure_address">Ville et adresse de départ</label>
-            <input type="text" id="departure_address" name="departure_address" placeholder="Ville et adress de départ" required />
+            <label for="publish_date_time">Date & heure</label>
+            <input type="datetime-local" id="publish_date_time" required>
           </div>
+
           <div class="form-group">
-            <label for="arrival_address">Ville et adresse d’arrivée</label>
-            <input type="text" id="arrival_address" name="arrival_address" placeholder="Ville et adresse d’arrivée" required />
+            <label for="publish_duration">Durée (minutes)</label>
+            <input type="number" id="publish_duration" min="0" step="5" placeholder="90">
+          </div>
+
+          <div class="form-group">
+            <label for="publish_seats">Places</label>
+            <input type="number" id="publish_seats" min="1" value="3" required>
+          </div>
+
+          <div class="form-group">
+            <label for="publish_credits">Crédits par passager</label>
+            <input type="number" id="publish_credits" step="1" min="1" value="5" required>
           </div>
         </div>
 
-        <!-- Sélection du véhicule & crédits -->
         <div class="form-row">
           <div class="form-group">
-            <label for="vehicle_select">Véhicule</label>
-            <select id="vehicle_select" name="vehicle_id" required>
-              <option value="" disabled selected>Véhicule</option>
-              <!-- Remplir dynamiquement avec les véhicules de l’utilisateur -->
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="credits_per_passenger">Crédits par passager</label>
-            <select id="credits_per_passenger" name="credits_per_passenger" required>
-              <option value="" disabled selected>Crédits par passager</option>
-              <option value="1">2</option>
-              <option value="2">4</option>
-              <option value="3">6</option>
-              <option value="4">8</option>
-              <option value="5">10</option>
-              <option value="6">12</option>
-              <option value="7">13</option>
-              <option value="8">14</option>
-              <option value="9">15</option>
-              <option value="10">16</option>
-              <option value="11">18</option>
-              <option value="12">20</option>
+            <label for="publish_vehicle">Véhicule</label>
+            <select id="publish_vehicle">
+              <option value="">Sans véhicule</option>
+              <!-- Les options seront remplies depuis l’API -->
             </select>
           </div>
         </div>
 
-        <!-- Note sur les crédits plateforme -->
-        <div class="form-group info-text">
-          2 crédits seront prélevés par la plateforme pour assurer son fonctionnement.
-        </div>
-
-        <!-- Bouton d’envoi -->
-        <div class="form-actions">
-          <button type="submit" class="btn-secondary">Ajouter un covoiturage</button>
-        </div>
+        <button type="submit" class="btn-secondary">Ajouter un covoiturage</button>
+        <p id="publish-status" class="status" aria-live="polite"></p>
+        <p id="publish-error" class="error" role="alert" aria-live="assertive"></p>
       </form>
     </section>
+
+
 
 <!-- SECTION onglet 4 : Historique des trajets -->
     <section id="tab-history" class="tab-content">
@@ -353,6 +341,7 @@
   <a href="#">CGU</a>
 </nav>
 </footer>
+<script src="../Js/PublierTrajets.js"></script>
 <script src="../Js/Profil-utilisateur.js"></script>
 </body>
 </html>
