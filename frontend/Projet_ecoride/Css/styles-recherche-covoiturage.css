@@ -786,6 +786,39 @@ Adaptations mobile (<850px)
 }
 
 
+/* Loader */
+
+.loader {
+    position: fixed;
+    inset: 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(0,0,0,.25);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+}
+
+.loader.hidden {
+    display: none;
+}
+
+.spinner {
+    width: 44px; height: 44px;
+    border: 4px solid rgba(255,255,255,0.6);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .9s linear infinite;
+}
+
+.body-lock {
+    overflow: hidden;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Toast */
 .toast {
   position: fixed;
@@ -813,51 +846,6 @@ Adaptations mobile (<850px)
 
 .toast.err {
   background: #c62828;
-}
-
-/* Loader */
-.loader {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.25);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 9998;
-}
-
-.loader {
-    position: fixed;
-    inset: 0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background: rgba(0,0,0,.25);
-    backdrop-filter: blur(2px);
-    z-index: 999;
-}
-
-.loader.hidden {
-    display: none;
-}
-
-.body-lock {
-    overflow: hidden;
-}
-
-
-.loader.hidden {
-  display: none;
-}
-
-.loader::after {
-  content: "";
-  width: 48px; height: 48px;
-  border: 4px solid rgba(255,255,255,.6);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 /* Scroll-lock quand une modale est ouverte */
