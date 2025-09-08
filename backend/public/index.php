@@ -369,6 +369,7 @@ $app->post('/api/bookings', function ($req, $res) {
     $pdo = Db::pdo();
     $pdo->beginTransaction();
 
+    // Verrou et contrôle des places
     $st = $pdo->prepare('SELECT seats FROM rides WHERE id = ? FOR UPDATE');
     $st->execute([$rideId]);
     $row = $st->fetch();
@@ -385,6 +386,7 @@ $app->post('/api/bookings', function ($req, $res) {
       return $res->withHeader('Content-Type', 'application/json')->withStatus(409);
     }
 
+    // Insertion réservation (protégée par UNIQUE(ride_id, user_email))
     try {
       $st = $pdo->prepare('INSERT INTO bookings(ride_id, user_name, user_email) VALUES(?, ?, ?)');
       $st->execute([$rideId, $name, $email]);
@@ -397,6 +399,16 @@ $app->post('/api/bookings', function ($req, $res) {
       throw $e;
     }
 
+    // ID de la réservation
+    $bookingId = (int)$pdo->lastInsertId();
+    if ($bookingId === 0) {
+      // Fallback (au cas où lastInsertId() renverrait 0)
+      $st = $pdo->prepare('SELECT id FROM bookings WHERE ride_id = ? AND user_email = ? ORDER BY id DESC LIMIT 1');
+      $st->execute([$rideId, $email]);
+      $bookingId = (int)($st->fetchColumn() ?: 0);
+    }
+
+    // Décrément des places (jamais sous 0)
     $st = $pdo->prepare('UPDATE rides SET seats = seats - 1 WHERE id = ? AND seats > 0');
     $st->execute([$rideId]);
 
@@ -406,8 +418,20 @@ $app->post('/api/bookings', function ($req, $res) {
       return $res->withHeader('Content-Type', 'application/json')->withStatus(409);
     }
 
+    // Places restantes
+    $st = $pdo->prepare('SELECT seats FROM rides WHERE id = ?');
+    $st->execute([$rideId]);
+    $seatsLeft = (int)$st->fetchColumn();
+
     $pdo->commit();
-    $res->getBody()->write(json_encode(['message' => 'Booking created', 'id' => $pdo->lastInsertId()]));
+
+    $res->getBody()->write(json_encode([
+      'message'     => 'Booking created',
+      'id'          => $bookingId,
+      'ride_id'     => $rideId,
+      'user_email'  => $email,
+      'seats_left'  => $seatsLeft
+    ]));
     return $res->withHeader('Content-Type', 'application/json')->withStatus(201);
 
   } catch (\Throwable $e) {
@@ -416,6 +440,7 @@ $app->post('/api/bookings', function ($req, $res) {
     return $res->withHeader('Content-Type', 'application/json')->withStatus(500);
   }
 });
+
 
 /* GET /api/bookings?ride_id=1 */
 $app->get('/api/bookings', function ($req, $res) {
@@ -439,5 +464,6 @@ $app->get('/api/bookings', function ($req, $res) {
     return $res->withHeader('Content-Type','application/json')->withStatus(500);
   }
 });
+
 
 $app->run();
