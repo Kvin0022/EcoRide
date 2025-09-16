@@ -661,6 +661,10 @@ Onglet “Publiez un trajet”
   background: #5a6629;
 }
 
+.status{ margin-top:.5rem; color:#607744; font-weight:600; }
+
+.error{  margin-top:.5rem; color:#c62828; font-weight:600; }
+
 /* ============================
 Onglet “Historique des trajets”
 ============================ */

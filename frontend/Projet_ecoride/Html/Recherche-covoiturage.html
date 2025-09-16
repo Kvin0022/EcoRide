@@ -85,109 +85,57 @@
       </label>
       <input type="range" id="rating-range" min="0" max="5" value="0">
 
+      <!-- Départ / Arrivée -->
+      <label for="filter-origin">Départ</label>
+      <input id="filter-origin" type="text" placeholder="Ville de départ">
+
+      <label for="filter-destination">Arrivée</label>
+      <input id="filter-destination" type="text" placeholder="Ville d'arrivée">
+
+      <!-- Date à partir de -->
+      <label for="filter-date">Date (à partir de)</label>
+      <input id="filter-date" type="date">
+
+      <!-- Places mini -->
+      <label for="filter-seats-min">Places minimales</label>
+      <input id="filter-seats-min" type="number" min="1" step="1" placeholder="ex: 2">
+
+      <!-- Bouton Appliquer -->
+      <button id="filter-apply" class="btn">Appliquer</button>
+
+
       <button id="filter-reset">Réinitialiser les filtres</button>
     </div>
   </aside>
 
-<!-- Résultats -->
-<section class="results">
-    <div class="ride-card">
-      <div class="card-left">
-        <div class="avatar">
-          <img src="../assets/Natasha.webp" alt="Avatar de Natasha">
-        </div>
-        <div class="details">
-          <h2 class="driver-name">Natasha</h2>
-          <div class="rating">★ ★ ★ ★ ☆</div>
-          <p class="route">Départ → Destination</p>
-          <p class="datetime">Heure et date du trajet</p>
-        </div>
-      </div>
-      <div class="card-right">
-        <p class="price">Prix (Crédits)</p>
-        <p class="seats">Places disponible</p>
-        <p class="vehicle">Voiture (écologique !)</p>
+<section class="rides">
+  <h1>Trajets disponibles</h1>
 
-        <!-- wrapper pour le lien et le bouton -->
-        <div class="action-row">
-          <button class="btn-reserve">Réserver</button>
-          <a href="../Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
-        </div>
-      </div>
-    </div>
+  <div class="sort-bar">
+    <label for="sort-by">Trier par</label>
+    <select id="sort-by">
+      <option value="date" selected>Date</option>
+      <option value="price">Crédits</option>
+      <option value="seats">Places</option>
+      <option value="duration">Durée</option>
+    </select>
 
-    <div class="ride-card">
-      <div class="card-left">
-        <div class="avatar">
-          <img src="../assets/Pierre.webp" alt="Avatar de Pierre">
-        </div>
-        <div class="details">
-          <h2 class="driver-name">Pierre</h2>
-          <div class="rating">★ ★ ★ ★ ☆</div>
-          <p class="route">Départ → Destination</p>
-          <p class="datetime">Heure et date du trajet</p>
-        </div>
-      </div>
-      <div class="card-right">
-        <p class="price">Prix (Crédits)</p>
-        <p class="seats">Places disponible</p>
-        <p class="vehicle">Voiture (non écologique)</p>
+    <select id="sort-order" aria-label="Ordre">
+      <option value="ASC" selected>Croissant</option>
+      <option value="DESC">Décroissant</option>
+    </select>
+  </div>
+  <!-- /BARRE DE TRI -->
 
-        <div class="action-row">
-          <button class="btn-reserve">Réserver</button>
-          <a href="../Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="ride-card">
-      <div class="card-left">
-        <div class="avatar">
-          <img src="../assets/Nadia.webp" alt="Avatar de Nadia">
-        </div>
-        <div class="details">
-          <h2 class="driver-name">Nadia</h2>
-          <div class="rating">★ ★ ★ ☆ ☆</div>
-          <p class="route">Départ → Destination</p>
-          <p class="datetime">Heure et date du trajet</p>
-        </div>
-      </div>
-      <div class="card-right">
-        <p class="price">Prix (Crédits)</p>
-        <p class="seats">Places disponible</p>
-        <p class="vehicle">Voiture (non écologique)</p>
-
-        <div class="action-row">
-          <button class="btn-reserve">Réserver</button>
-          <a href="../Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="ride-card">
-      <div class="card-left">
-        <div class="avatar">
-          <img src="../assets/benjamin.webp" alt="Avatar de Benjamin">
-        </div>
-        <div class="details">
-          <h2 class="driver-name">Benjamin</h2>
-          <div class="rating">★ ★ ★ ★ ☆</div>
-          <p class="route">Départ → Destination</p>
-          <p class="datetime">Heure et date du trajet</p>
-        </div>
-      </div>
-      <div class="card-right">
-        <p class="price">Prix (Crédits)</p>
-        <p class="seats">Places disponible</p>
-        <p class="vehicle">Voiture (écologique !)</p>
-        
-        <div class="action-row">
-          <button class="btn-reserve">Réserver</button>
-          <a href="../Html/Détail-covoiturage.html" class="details-link">détails du conducteur</a>
-        </div>
-      </div>
-    </div>
+  <p id="rides-status" class="status" aria-live="polite"></p>
+  <ul id="rides-list" class="rides-list"></ul>
 </section>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="loader" class="loader hidden" aria-hidden="true">
+  <div class="spinner" role="status" aria-label="Chargement"></div>
+</div>
+
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -205,6 +153,7 @@
   <a href="#">CGU</a>
 </nav>
 </footer>
+<script src="./config.js"></script>
 <script src="../Js/Recherche-covoiturage.js"></script>
 </body>
 </html>

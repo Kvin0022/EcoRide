@@ -4,21 +4,27 @@ services:
     volumes:
       - ./backend/public:/var/www/html
       - ./backend/vendor:/var/www/vendor
+      - ./backend/src:/var/www/src
     ports:
       - "8080:80"
     depends_on:
       - db
+    environment:
+      - CORS_ALLOW_ORIGIN=https://golden-medovik-8f81e4.netlify.app
+
 
   db:
     image: mysql:8
+    command: --log-bin-trust-function-creators=1
     environment:
       - MYSQL_DATABASE=ecoride
       - MYSQL_USER=ecoride
       - MYSQL_PASSWORD=ecoride
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=yourRootPwd
     volumes:
       - db_data:/var/lib/mysql
       - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql:ro
+      - ./backend/db/seed.sql:/docker-entrypoint-initdb.d/2-seed.sql:ro 
     ports:
       - "3306:3306"
 

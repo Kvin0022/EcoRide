@@ -199,7 +199,17 @@ main.login-page {
 
 .form-field .icon {
     font-size: 1.2rem;
+    position: absolute;
+    left: 0.5rem;
+    bottom: -20%;
+    top: 60%;
+    transform: translateY(-50%);
 }
+
+/* cache tout le texte du label, garde l'icône avec sa propre taille */
+.form-field label{ font-size:0; line-height:0; }
+.form-field label .icon{ font-size:1.2rem; line-height:1; }
+
 
 .form-field input {
     width: 100%;
@@ -227,6 +237,26 @@ main.login-page {
 .btn-submit:hover {
     background: #5a6629;
 }
+
+/* --- Ajouts pour les messages de la page Connexion --- */
+.status {
+  margin: 0.75rem 0 0.25rem;
+  color: #607744;         /* vert déjà utilisé dans ta palette */
+  font-weight: 600;
+}
+
+.error {
+  margin-top: 0.5rem;
+  color: #d33;            /* rouge lisible pour l'erreur */
+  font-weight: 600;
+}
+
+/* Optionnel : cacher les paragraphes vides pour éviter les “trous” */
+#login-status:empty,
+#login-error:empty {
+  display: none;
+}
+
 
 /*==================================
 =            Footer               =
