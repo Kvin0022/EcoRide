@@ -81,6 +81,52 @@ overlay?.addEventListener('click', closeFilter);
   const selSortBy  = document.getElementById('sort-by');    // date | price | seats | duration
   const selSortOrd = document.getElementById('sort-order'); // ASC | DESC
 
+// --- URL <-> UI (helpers unifiés) ---
+function writeParamsToURL(params, replace = false) {
+  const url = new URL(window.location.href);
+  // nettoie d’abord les clés connues
+  ['origin','destination','date_from','seats_min','credits_max','duration_max','rating_min','sort_by','order']
+    .forEach(k => url.searchParams.delete(k));
+
+  // écrit uniquement les valeurs non vides
+  Object.entries(params).forEach(([k, v]) => {
+    if (v != null && String(v).trim() !== '') url.searchParams.set(k, v);
+  });
+
+  const newUrl = url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : '') + url.hash;
+  (replace ? history.replaceState : history.pushState).call(history, null, '', newUrl);
+}
+
+// Remplit les champs depuis l’URL et renvoie les params à utiliser
+function readParamsFromURL() {
+  const sp = new URLSearchParams(location.search);
+
+  if (inpOrigin)       inpOrigin.value       = sp.get('origin')      || '';
+  if (inpDestination)  inpDestination.value  = sp.get('destination') || '';
+  if (inpDate)         inpDate.value         = sp.get('date_from')   || '';
+  if (inpSeatsMin)     inpSeatsMin.value     = sp.get('seats_min')   || '';
+
+  if (inpCreditsMax) {
+    inpCreditsMax.value = sp.get('credits_max') || '0';
+    if (priceValue) priceValue.textContent = inpCreditsMax.value;
+  }
+  if (inpDurationMax) {
+    inpDurationMax.value = sp.get('duration_max') || '0';
+    if (durValue) durValue.textContent = inpDurationMax.value;
+  }
+  if (inpRatingMin) {
+    inpRatingMin.value = sp.get('rating_min') || '0';
+    if (rateValue) rateValue.textContent = inpRatingMin.value;
+  }
+
+  if (selSortBy)  selSortBy.value  = sp.get('sort_by') || 'date';
+  if (selSortOrd) selSortOrd.value = sp.get('order')   || 'ASC';
+
+  return getCurrentParams();
+}
+
+
+
   // Construit les paramètres actuels (filtres + tri)
   function getCurrentParams() {
     return {
@@ -133,7 +179,7 @@ overlay?.addEventListener('click', closeFilter);
               <div class="right">
                 <div class="price">${Number(r.credits ?? r.price).toFixed(0)} crédits</div>
                 <div class="actions">
-                  <a class="btn secondary" href="../Html/Détail-covoiturage.html?id=${r.id}">Détails</a>
+                  <a class="btn secondary" href="../Html/Detail-covoiturage.html?id=${r.id}">Détails</a>
                   <button class="btn" data-ride="${r.id}" ${disabled}>${label}</button>
                 </div>
               </div>
@@ -192,23 +238,29 @@ overlay?.addEventListener('click', closeFilter);
   });
 
   // --- Appliquer les filtres ---
-  btnApply?.addEventListener('click', async () => {
-    await loadRides(getCurrentParams());
+btnApply?.addEventListener('click', async () => {
+    const params = getCurrentParams();
+    writeParamsToURL(params);          // <-- maj URL
+    await loadRides(params);
     closeFilter();
-  });
+});
 
   // --- Réinitialiser filtres (et MAJ affichage sliders) ---
-  btnReset?.addEventListener('click', async () => {
-    if (inpOrigin)      inpOrigin.value = '';
-    if (inpDestination) inpDestination.value = '';
-    if (inpDate)        inpDate.value = '';
-    if (inpSeatsMin)    inpSeatsMin.value = '';
-    if (inpCreditsMax)  { inpCreditsMax.value = '0'; if (priceValue) priceValue.textContent = '0'; }
-    if (inpDurationMax) { inpDurationMax.value = '0'; if (durValue)  durValue.textContent  = '0'; }
-    if (inpRatingMin)   { inpRatingMin.value   = '0'; if (rateValue) rateValue.textContent = '0'; }
-    await loadRides(getCurrentParams()); // garde le tri choisi
-    closeFilter();
-  });
+btnReset?.addEventListener('click', async () => {
+  if (inpOrigin)      inpOrigin.value = '';
+  if (inpDestination) inpDestination.value = '';
+  if (inpDate)        inpDate.value = '';
+  if (inpSeatsMin)    inpSeatsMin.value = '';
+  if (inpCreditsMax)  { inpCreditsMax.value = '0'; if (priceValue) priceValue.textContent = '0'; }
+  if (inpDurationMax) { inpDurationMax.value = '0'; if (durValue)  durValue.textContent  = '0'; }
+  if (inpRatingMin)   { inpRatingMin.value   = '0'; if (rateValue) rateValue.textContent = '0'; }
+
+  const params = getCurrentParams(); // ne garde que tri si présent
+  writeParamsToURL(params);          // <-- maj URL
+  await loadRides(params);
+  closeFilter();
+});
+
 
   // --- helpers sliders (prix/durée/note) ---
   function bindRange(rangeId, outId) {
@@ -228,14 +280,31 @@ overlay?.addEventListener('click', closeFilter);
   });
 
   // --- Changement de tri : recharge immédiate
-  const applyCurrentFilters = () => loadRides(getCurrentParams());
-  selSortBy?.addEventListener('change', applyCurrentFilters);
-  selSortOrd?.addEventListener('change', applyCurrentFilters);
+const applyCurrentFilters = () => {
+  const params = getCurrentParams();
+  writeParamsToURL(params);          // <-- maj URL
+  loadRides(params);
+};
+selSortBy?.addEventListener('change', applyCurrentFilters);
+selSortOrd?.addEventListener('change', applyCurrentFilters);
 
-  // 1er chargement : tri par date croissant par défaut
-  document.addEventListener('DOMContentLoaded', () => {
-    if (selSortBy && !selSortBy.value)  selSortBy.value  = 'date';
-    if (selSortOrd && !selSortOrd.value) selSortOrd.value = 'ASC';
-    loadRides(getCurrentParams());
-  });
+
+// Initialisation : on lit l’URL, on complète les champs, défauts de tri si manquants
+document.addEventListener('DOMContentLoaded', () => {
+  const p = readParamsFromURL();
+
+  if (selSortBy && !p.sort_by)  selSortBy.value  = 'date';
+  if (selSortOrd && !p.order)   selSortOrd.value = 'ASC';
+
+  // on réécrit l’URL (clean) puis on charge
+  writeParamsToURL(getCurrentParams(), true);  // true = replaceState (pas d’historique en plus)
+  loadRides(getCurrentParams());
+});
+
+// Support bouton “précédent/suivant” du navigateur
+window.addEventListener('popstate', () => {
+  readParamsFromURL();
+  loadRides(getCurrentParams());
+});
+
 })();

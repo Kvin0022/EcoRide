@@ -44,6 +44,13 @@ docker run --rm -v "$PWD/backend:/app" -w /app composer:2 install --no-dev
 3.2 Démarrer la stack
 docker compose up -d
 
+Lancer en local (Docker)
+
+```bash
+docker compose up -d --build
+# API accessible: http://localhost:8080
+# Ping:            http://localhost:8080/
+
 
 API : http://localhost:8080
  → doit afficher 🚀 API EcoRide en ligne !
@@ -307,7 +314,6 @@ Port déjà utilisé (8080/3306)
 
 Netlify (front) ne voit pas l’API
 → En prod, utiliser l’URL publique du back et limiter CORS à ce domaine.
-
 
 13) Licence
 

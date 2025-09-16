@@ -809,3 +809,51 @@ header {
     font-size: 1rem;
 }
 
+/* =========================
+   Mini utilitaires génériques
+   ========================= */
+
+/* cacher proprement un élément */
+.hidden {
+  display: none !important;
+}
+
+/* accessibilité : visible pour les lecteurs d’écran seulement */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  border: 0; padding: 0; margin: -1px;
+}
+
+/* messages d’état (utilisés par #rd-status, #book-status) */
+.status {
+  min-height: 1.25rem;           /* réserve la place même à vide */
+  margin-top: .5rem;
+  font-size: .95rem;
+  color: #2F3A36;
+}
+.status.ok  { color: #2e7d32; }  /* succès */
+.status.err { color: #c62828; }  /* erreur */
+.status.warn{ color: #b07d00; }  /* optionnel: avertissement */
+
+/* pastille arrondie “pill” (pour crédits, tags, etc.) */
+.pill {
+  display: inline-block;
+  padding: .35rem .75rem;
+  border-radius: 999px;
+  background: #ADD4A7;
+  color: #2F3A36;
+  font-size: .9rem;
+}
+
+/* état désactivé des boutons (réservations quand complet) */
+button[disabled],
+.btn[disabled] {
+  opacity: .6;
+  cursor: not-allowed !important;
+  filter: grayscale(.2);
+}
+

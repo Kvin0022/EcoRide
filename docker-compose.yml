@@ -15,11 +15,12 @@ services:
 
   db:
     image: mysql:8
+    command: --log-bin-trust-function-creators=1
     environment:
       - MYSQL_DATABASE=ecoride
       - MYSQL_USER=ecoride
       - MYSQL_PASSWORD=ecoride
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=yourRootPwd
     volumes:
       - db_data:/var/lib/mysql
       - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql:ro
