@@ -1,16 +1,12 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const burger = document.querySelector('.menu-hamburger');
-    const nav = document.querySelector('.nav-links');
-    if (!burger || !nav) {
-        console.error('Impossible de trouver .menu-hamburger ou .nav-links');
-        return;
-    }
-    burger.addEventListener('click', function() {
-        nav.classList.toggle('mobile-menu');
-    });
+// Burger menu (inchangé)
+document.addEventListener('DOMContentLoaded', function () {
+  const burger = document.querySelector('.menu-hamburger');
+  const nav = document.querySelector('.nav-links');
+  if (!burger || !nav) return;
+  burger.addEventListener('click', () => nav.classList.toggle('mobile-menu'));
 });
 
-// === LOGIN (à coller sous ton code burger) ===
+// === LOGIN ===
 document.addEventListener('DOMContentLoaded', function () {
   const API_BASE_URL = window.API_BASE_URL ?? 'http://localhost:8080';
 
@@ -21,22 +17,28 @@ document.addEventListener('DOMContentLoaded', function () {
   const errorEl  = document.querySelector('#login-error');
   const btn      = document.querySelector('#login-submit');
 
-  if (!form) return; // pas sur cette page
+  if (!form) return;
+
+  const STORAGE_KEY = (window.EcoAuth && window.EcoAuth.KEY) || 'ecoride.session';
+  const setStatus = (msg) => { if (statusEl) { statusEl.textContent = msg || ''; statusEl.className = 'status'; } };
+  const setError  = (msg) => { if (errorEl)  { errorEl.textContent  = msg || ''; errorEl.className  = 'error'; } };
+
+  const isValidEmail = (v='') => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
   form.addEventListener('submit', async (e) => {
-    e.preventDefault(); // on bloque l'envoi natif vers /connexion
+    e.preventDefault();
 
     const email = (emailEl?.value || '').trim();
-    const password = (passEl?.value || '').trim();
+    const password = passEl?.value || '';
 
-    if (!email || !password) {
-      if (errorEl) errorEl.textContent = 'Merci de remplir tous les champs.';
-      return;
-    }
+    // validations rapides
+    if (!email || !password)      { setError('Merci de renseigner email et mot de passe.'); setStatus(''); return; }
+    if (!isValidEmail(email))     { setError('Email invalide.'); setStatus(''); return; }
+    if (password.length < 6)      { setError('Mot de passe : 6 caractères minimum.'); setStatus(''); return; }
 
+    setError('');
+    setStatus('Connexion en cours…');
     if (btn) btn.disabled = true;
-    if (statusEl) statusEl.textContent = 'Connexion en cours...';
-    if (errorEl) errorEl.textContent = '';
 
     try {
       const res = await fetch(`${API_BASE_URL}/api/login`, {
@@ -47,18 +49,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const data = await res.json().catch(() => ({}));
 
-      if (res.ok) {
-        localStorage.setItem('token', data.token);
-        if (statusEl) statusEl.textContent = 'Connecté ✅';
-        // Option : rediriger après un court délai
-        // setTimeout(() => window.location.href = '../Html/Accueil.html', 700);
+      if (res.ok && data?.token) {
+        const session = { token: data.token, role: data.role || 'user', email };
+        // stocke via EcoAuth si dispo, sinon fallback localStorage
+        if (window.EcoAuth && typeof window.EcoAuth.setSession === 'function') {
+          window.EcoAuth.setSession(session);
+          // met la navbar à jour si le script est déjà chargé
+          if (typeof window.EcoAuth.refreshNavbar === 'function') window.EcoAuth.refreshNavbar();
+        } else {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(session)); } catch {}
+          // avertit les autres onglets
+          window.dispatchEvent(new CustomEvent('ecoride:session'));
+        }
+
+        setStatus('Connexion réussie ✅');
+        setError('');
+        if (passEl) passEl.value = '';
+
+        // Redirection vers la recherche
+        setTimeout(() => {
+          window.location.href = '../Html/Recherche-covoiturage.html';
+        }, 300);
+
+      } else if (res.status === 401) {
+        setError('Identifiants invalides.');
+        setStatus('');
       } else {
-        if (errorEl) errorEl.textContent = data.error || 'Erreur de connexion';
-        if (statusEl) statusEl.textContent = '';
+        setError(data?.error || 'Erreur de connexion.');
+        setStatus('');
       }
-    } catch (err) {
-      if (errorEl) errorEl.textContent = 'Serveur indisponible';
-      if (statusEl) statusEl.textContent = '';
+
+    } catch (_) {
+      setError('Serveur indisponible.');
+      setStatus('');
     } finally {
       if (btn) btn.disabled = false;
     }

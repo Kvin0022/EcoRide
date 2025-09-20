@@ -229,6 +229,23 @@ main.reset-password-page {
     color: #c62828;
     font-weight: 600
 }
+
+.guest-only {
+    display: inline-block;
+}
+
+.auth-only  {
+    display: none;
+}
+
+.is-auth .guest-only {
+    display: none;
+}
+
+.is-auth .auth-only  {
+    display: inline-block;
+}
+
 /*==================================
 =            Footer               =
 ==================================*/

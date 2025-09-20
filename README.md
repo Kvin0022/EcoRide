@@ -76,6 +76,24 @@ Invoke-RestMethod "http://localhost:8080/api/register" -Method Post -ContentType
 # Rides (liste mock)
 Invoke-RestMethod "http://localhost:8080/api/rides" -Method Get
 
+3.4 Config front (local/prod)
+
+Le front lit `window.API_BASE_URL`. Fichier `Html/config.js` :
+
+```html
+<script>
+  window.API_BASE_URL = (
+    location.hostname.endsWith('netlify.app')
+      ? 'https://TON-HOTE-API'
+      : 'http://localhost:8080'
+  );
+</script>
+
+Côté API, définissez CORS_ALLOW_ORIGIN sur le domaine Netlify dans votre docker-compose.yml (ou variables d’env.) :
+
+environment:
+  CORS_ALLOW_ORIGIN: https://golden-medovik-8f81e4.netlify.app
+
 4) Endpoints exposés (démo)
 
 GET / → ping ("🚀 API EcoRide en ligne !")
@@ -318,6 +336,29 @@ Netlify (front) ne voit pas l’API
 13) Licence
 
 Ce projet est sous licence MIT. Voir LICENSE pour plus de détails.
+
+
+14) Check-list de validation
+
+ Html/config.js chargé avant Recherche-covoiturage.js / Detail-covoiturage.js
+
+ CORS_ALLOW_ORIGIN pointe vers https://golden-medovik-8f81e4.netlify.app
+
+ docker compose up -d --build exécuté
+
+ Tests manuels depuis Netlify :
+
+ Page Recherche → la liste remonte (onglet Réseau : requêtes vers votre HÔTE API, status 200)
+
+ Page Détail → chargement + réservation OK
+
+ Réservations pleines → 409 bien géré (toast/état UI)
+
+
+15) Commit suggéré
+git add frontend/Projet_ecoride/Html/config.js docker-compose.yml README.md
+git commit -m "Prod ready: API_BASE_URL front config + CORS_ALLOW_ORIGIN"
+git push
 
 Date : 22 mai 2025
 

@@ -111,7 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const rdDepartDT   = $('#rd-depart-datetime');
   const rdArrCity    = $('#rd-arrivee-city');
 
-  // Chauffeur
+  // Chauffeur (facultatif selon API)
+  const driverBlock   = document.getElementById('driver-block'); // conteneur optionnel pour cacher si vide
   const rdDriverAvatar = $('#rd-driver-avatar');
   const rdDriverName   = $('#driver-name');
   const rdDriverRating = $('#driver-rating');
@@ -133,9 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return '★'.repeat(full) + '☆'.repeat(5 - full);
   }
 
-  function setCtaState(seats) {
+  function setCtaState(seatsLeft) {
     if (!ctaBtn) return;
-    if (seats <= 0) {
+    if (seatsLeft <= 0) {
       ctaBtn.disabled = true;
       ctaBtn.textContent = 'Complet';
     } else {
@@ -152,9 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) throw new Error(r.error || 'Erreur');
 
       const price = Number(r.credits ?? r.price ?? 0);
+      const seatsLeft = Number.isFinite(r.seats_left) ? r.seats_left : Number(r.seats ?? 0);
 
       // --------- En-tête ----------
-      if (rdRoute) rdRoute.textContent = `${r.origin} → ${r.destination}`;
+      if (rdRoute) rdRoute.textContent = `${r.origin ?? '—'} → ${r.destination ?? '—'}`;
 
       // --------- Le trajet ----------
       if (rdDepartCity) rdDepartCity.textContent = r.origin || '—';
@@ -162,40 +164,48 @@ document.addEventListener('DOMContentLoaded', () => {
       if (rdArrCity)    rdArrCity.textContent    = r.destination || '—';
 
       // --------- Chauffeur ----------
-      const name = r.driver_name || 'Conducteur';
-      if (rdDriverName)   rdDriverName.textContent   = name;
-      if (rdDriverRating) rdDriverRating.textContent = Number.isFinite(r.driver_rating) ? makeStars(r.driver_rating) : '—';
-      if (rdDriverNote)   rdDriverNote.textContent   = Number.isFinite(r.driver_rating) ? `Note : ${r.driver_rating}/5` : '';
+      // L'API ne renvoie pas de driver_name/avatar actuellement → on masque si on n’a rien
+      const hasDriverData = Number.isFinite(r.driver_rating);
+      if (rdDriverName)   rdDriverName.textContent   = r.driver_name || '';
+      if (rdDriverRating) rdDriverRating.textContent = hasDriverData ? makeStars(r.driver_rating) : '—';
+      if (rdDriverNote)   rdDriverNote.textContent   = hasDriverData ? `Note : ${r.driver_rating}/5` : '';
       if (rdDriverAvatar && r.driver_avatar_url) rdDriverAvatar.src = r.driver_avatar_url;
       if (typeof window.__ecoRide_setReviewsTitle === 'function') {
-        window.__ecoRide_setReviewsTitle(name);
+        window.__ecoRide_setReviewsTitle(r.driver_name || '');
+      }
+      if (driverBlock && !hasDriverData && !r.driver_name && !r.driver_avatar_url) {
+        driverBlock.style.display = 'none';
       }
 
       // --------- Véhicule ----------
-      if (vehTitle) vehTitle.textContent = r.vehicle_brand ? `${r.vehicle_brand} ${r.vehicle_model || ''}${r.vehicle_plate ? ` (${r.vehicle_plate})` : ''}` : '—';
+      const fullTitle = r.vehicle_brand
+        ? `${r.vehicle_brand} ${r.vehicle_model || ''}${r.vehicle_plate ? ` (${r.vehicle_plate})` : ''}`
+        : '—';
+      if (vehTitle) vehTitle.textContent = fullTitle;
       if (vehPhoto && r.vehicle_photo_url) vehPhoto.src = r.vehicle_photo_url;
       if (vehEco) {
-        if (r.vehicle_is_eco === 1 || r.vehicle_is_eco === true) {
-          vehEco.textContent = 'Voyage écologique !';
-        } else if (r.vehicle_is_eco === 0) {
-          vehEco.textContent = 'Véhicule non écologique';
+        if (r.energy === 'electric') {
+          vehEco.textContent = 'Voyage écologique 🌱';
+        } else if (r.energy) {
+          vehEco.textContent = '';
         } else {
           vehEco.textContent = '';
         }
       }
 
       // --------- Places / CTA ----------
-      if (placesTxt)  placesTxt.textContent  = `${r.seats} place${r.seats > 1 ? 's' : ''}`;
-      if (placesCout) placesCout.textContent = `Coût ${price.toFixed(0)} crédits par passager`;
-      setCtaState(Number(r.seats));
+      if (placesTxt)  placesTxt.textContent  = `${seatsLeft} place${seatsLeft > 1 ? 's' : ''}`;
+      if (placesCout) placesCout.textContent = `Coût ${Number.isFinite(price) ? price.toFixed(0) : '-'} crédits par passager`;
+      setCtaState(seatsLeft);
 
       // --------- Résumé modale ----------
       if (mdDep) mdDep.textContent = r.origin || '—';
       if (mdArr) mdArr.textContent = r.destination || '—';
       if (mdDT)  mdDT.textContent  = r.date_time || '—';
-      if (mdCr)  mdCr.textContent  = `${price.toFixed(0)} crédits`;
+      if (mdCr)  mdCr.textContent  = `${Number.isFinite(price) ? price.toFixed(0) : '-'} crédits`;
 
     } catch (e) {
+      console.error(e);
       showToast('Impossible de charger ce trajet', 'err');
     } finally {
       showLoader(false);
@@ -251,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           form.reset();
           setTimeout(() => { try { closeModal(); } catch(_){} }, 350);
-        } else if (res.status === 409 && data.error === 'Ride full') {
+        } else if (res.status === 409 && (data.error === 'Ride full' || data.error === 'Ride Full')) {
           showInline('Trajet complet', 'err');
           if (typeof window.__ecoRide_loadRide === 'function') await window.__ecoRide_loadRide();
         } else if (res.status === 409 && data.error === 'Already booked') {

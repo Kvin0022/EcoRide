@@ -20,8 +20,9 @@
           <div class="nav-links">
               <ul>
                   <li><a href="../Html/index.html">Accueil</a></li>
-                  <li class="active"><a href="../Html/inscription.html">S'inscrire</a></li>
-                  <li><a href="../Html/Connexion.html">Connexion</a></li>
+                  <li class="guest-only"><a id="login-link"  href="../Html/Connexion.html">Connexion</a></li>
+                  <li class="guest-only"><a href="../Html/inscription.html">S'inscrire</a></li>
+                  <li class="auth-only"><a id="logout-link" href="../Html/Connexion.html">Se déconnecter</a></li>
                   <li><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
                   <li><a href="#">Contact</a></li>
               </ul>
@@ -33,43 +34,49 @@
   <main class="signup-page">
     <section class="signup-container">
       <h1>Inscription</h1>
+      <p id="signup-status" class="status" aria-live="polite"></p>
       <p class="subtext">
         déjà membre du club? <a href="../Html/Connexion.html">Connexion</a>
       </p>
 
-      <form class="signup-form" action="/inscription" method="POST">
+      <form id="signup-form" class="signup-form" action="/inscription" method="POST" novalidate autocomplete="on"></form>
         <!-- Email -->
         <div class="form-field">
           <label for="email">
-            <span class="icon">✉️</span>
+            <span class="icon" aria-hidden="true">✉️</span>
+            <span class="sr-only">Email</span>
           </label>
-          <input type="email" id="email" name="email" placeholder="Email" required>
+          <input type="email" id="email" name="email" placeholder="Email" required autocomplete="email">
         </div>
 
         <!-- Pseudo -->
         <div class="form-field">
           <label for="username">
-            <span class="icon">👤</span>
+            <span class="icon" aria-hidden="true">👤</span>
+            <span class="sr-only">Pseudo</span>
           </label>
-          <input type="text" id="username" name="username" placeholder="Pseudo" required>
+          <input type="text" id="username" name="username" placeholder="Pseudo" required autocomplete="username">
         </div>
 
         <!-- Mot de passe -->
         <div class="form-field">
           <label for="password">
-            <span class="icon">❓</span>
+            <span class="icon" aria-hidden="true">❓</span>
+            <span class="sr-only">Mot de passe</span>
           </label>
-          <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+          <input type="password" id="password" name="password" placeholder="Mot de passe" required minlength="6" autocomplete="new-password">
         </div>
 
         <!-- Confirmation mot de passe -->
         <div class="form-field">
           <label for="password_confirm">
-            <span class="icon">🔄</span>
+            <span class="icon" aria-hidden="true">🔄</span>
+            <span class="sr-only">Confirmer le mot de passe</span>
           </label>
-          <input type="password" id="password_confirm" name="password_confirm" placeholder="Confirmer le mot de passe" required>
+          <input type="password" id="password_confirm" name="password_confirm" placeholder="Confirmer le mot de passe" required minlength="6" autocomplete="new-password">
         </div>
 
+        
         <!-- Conditions générales -->
         <div class="form-field checkbox-field">
           <label for="terms">
@@ -79,8 +86,13 @@
         </div>
 
         <!-- Bouton de validation -->
-        <a href="#"></a><button type="submit" class="btn-submit">Valider votre inscription</button>
+        <a href="#"></a><button type="submit" class="btn-submit" id="signup-submit">Valider votre inscription</button>
+
+        <!-- Zone d'erreur -->
+        <p id="signup-error" class="error" role="alert" aria-live="assertive"></p>
+
       </form>
+
 
       <p class="help-text">
         En cas de problème <a href="#">Contactez-nous</a>
@@ -104,6 +116,8 @@
   <a href="#">CGU</a>
 </nav>
 </footer>
-<script src="../Js/Inscription.js"></script>
+<script src="./config.js"></script>
+<script src="../Js/navbar-auth.js"></script>
+<script src="../Js/inscription.js"></script>
 </body>
 </html>

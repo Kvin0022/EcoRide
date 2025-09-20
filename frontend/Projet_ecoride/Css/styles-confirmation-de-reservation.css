@@ -394,6 +394,21 @@ header {
     background: #5a6629;
 }
 
+.guest-only {
+    display: inline-block;
+}
+
+.auth-only  {
+    display: none;
+}
+
+.is-auth .guest-only {
+    display: none;
+}
+
+.is-auth .auth-only  {
+    display: inline-block;
+}
 
 /*==================================
 =            Footer               =

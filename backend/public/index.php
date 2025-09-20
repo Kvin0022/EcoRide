@@ -60,13 +60,14 @@ $app->get('/favicon.ico', fn($req, $res) => $res->withStatus(204));
 
 /* ===================== AUTH ===================== */
 
-/* POST /api/register  {email,password} */
+/* POST /api/register  {pseudo,email,password} */
 $app->post('/api/register', function ($req, $res) {
   $data = (array)($req->getParsedBody() ?? []);
-  $email = trim($data['email'] ?? '');
+  $pseudo   = trim($data['pseudo'] ?? '');
+  $email    = trim($data['email'] ?? '');
   $password = (string)($data['password'] ?? '');
 
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
+  if ($pseudo === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
     $res->getBody()->write(json_encode(['error'=>'Invalid input']));
     return $res->withHeader('Content-Type','application/json')->withStatus(422);
   }
@@ -80,8 +81,9 @@ $app->post('/api/register', function ($req, $res) {
       return $res->withHeader('Content-Type','application/json')->withStatus(409);
     }
     $hash = password_hash($password, PASSWORD_BCRYPT);
-    $st = $pdo->prepare('INSERT INTO users(email, password_hash) VALUES(?, ?)');
-    $st->execute([$email, $hash]);
+    $st = $pdo->prepare('INSERT INTO users(pseudo, email, password_hash) VALUES(?, ?, ?)');
+    $st->execute([$pseudo, $email, $hash]);
+
     $res->getBody()->write(json_encode(['message'=>'User created']));
     return $res->withHeader('Content-Type','application/json')->withStatus(201);
   } catch (\Throwable $e) {
@@ -98,23 +100,24 @@ $app->post('/api/login', function ($req, $res) {
 
   try {
     $pdo = Db::pdo();
-    $st = $pdo->prepare('SELECT id, password_hash, role FROM users WHERE email = ?');
+    $st = $pdo->prepare('SELECT id, pseudo, email, credits, role, password_hash FROM users WHERE email = ?');
     $st->execute([$email]);
     $user = $st->fetch();
 
     if ($user && !empty($user['password_hash']) && password_verify($password, $user['password_hash'])) {
-      $payload = ['token'=>bin2hex(random_bytes(16)), 'role'=>$user['role'] ?? 'user'];
+      $payload = [
+        'id'      => (int)$user['id'],
+        'pseudo'  => $user['pseudo'],
+        'email'   => $user['email'],
+        'credits' => (int)($user['credits'] ?? 0),
+        'role'    => $user['role'] ?? 'user',
+        'token'   => bin2hex(random_bytes(16))
+      ];
       $res->getBody()->write(json_encode($payload));
       return $res->withHeader('Content-Type','application/json');
     }
   } catch (\Throwable $e) {
-    // fallback démo si DB down
-  }
-
-  if ($email === 'admin@example.com' && $password === 'motdepasse') {
-    $payload = ['token'=>bin2hex(random_bytes(16)), 'role'=>'admin'];
-    $res->getBody()->write(json_encode($payload));
-    return $res->withHeader('Content-Type','application/json');
+    // pas de fallback silencieux ici : on renvoie 401 comme prévu
   }
 
   $res->getBody()->write(json_encode(['error'=>'Invalid credentials']));
@@ -152,9 +155,10 @@ $app->get('/api/vehicles', function ($req, $res) {
   }
   try {
     $pdo = Db::pdo();
-    $st  = $pdo->prepare('SELECT id, brand, model, seats, plate FROM vehicles WHERE owner_email = ? ORDER BY created_at DESC');
+    $st  = $pdo->prepare('SELECT id, brand, model, seats, plate, energy FROM vehicles WHERE owner_email = ? ORDER BY created_at DESC');
     $st->execute([$email]);
     $rows = $st->fetchAll();
+    foreach ($rows as &$r) { $r['seats'] = (int)$r['seats']; }
     $res->getBody()->write(json_encode($rows));
     return $res->withHeader('Content-Type','application/json');
   } catch (\Throwable $e) {
@@ -190,20 +194,21 @@ $app->post('/api/vehicles', function ($req, $res) {
 
 /* ===================== RIDES ===================== */
 
-/* GET /api/rides  (filtres + tri) */
+/* GET /api/rides  (filtres + tri + seats_left + écolo) */
 $app->get('/api/rides', function ($req, $res) {
   $q = $req->getQueryParams();
-
   $where  = [];
   $params = [];
 
   if (!empty($q['origin']))      { $where[] = 'r.origin LIKE ?';            $params[] = $q['origin'] . '%'; }
   if (!empty($q['destination'])) { $where[] = 'r.destination LIKE ?';       $params[] = $q['destination'] . '%'; }
+  if (!empty($q['date']))        { $where[] = 'DATE(r.date_time) = ?';      $params[] = $q['date']; }
   if (!empty($q['date_from']))   { $where[] = 'r.date_time >= ?';           $params[] = str_replace('T',' ',$q['date_from']); }
-  if (!empty($q['seats_min']))   { $where[] = 'r.seats >= ?';                $params[] = (int)$q['seats_min']; }
-  if (!empty($q['credits_max'])) { $where[] = 'r.price <= ?';                $params[] = (int)$q['credits_max']; }
-  if (!empty($q['duration_max'])){ $where[] = 'r.duration_minutes <= ?';     $params[] = (int)$q['duration_max']; }
-  if (!empty($q['rating_min']))  { $where[] = 'r.driver_rating >= ?';        $params[] = (int)$q['rating_min']; }
+  if (!empty($q['seats_min']))   { $where[] = 'r.seats >= ?';               $params[] = (int)$q['seats_min']; }
+  if (!empty($q['credits_max'])) { $where[] = 'r.price <= ?';               $params[] = (int)$q['credits_max']; }
+  if (!empty($q['duration_max'])){ $where[] = 'r.duration_minutes <= ?';    $params[] = (int)$q['duration_max']; }
+  if (!empty($q['rating_min']))  { $where[] = 'r.driver_rating >= ?';       $params[] = (int)$q['rating_min']; }
+  if (isset($q['eco']))          { $where[] = "v.energy = 'electric'"; }
 
   $sortByMap = [
     'date'     => 'r.date_time',
@@ -212,12 +217,8 @@ $app->get('/api/rides', function ($req, $res) {
     'seats'    => 'r.seats',
     'duration' => 'r.duration_minutes',
   ];
-  $sortBy = strtolower($q['sort_by'] ?? 'date');
-  $col    = $sortByMap[$sortBy] ?? 'r.date_time';
-
-  $order  = strtoupper($q['order'] ?? 'ASC');
-  $order  = ($order === 'DESC') ? 'DESC' : 'ASC';
-
+  $col    = $sortByMap[strtolower($q['sort_by'] ?? 'date')] ?? 'r.date_time';
+  $order  = strtoupper($q['order'] ?? 'ASC'); $order = ($order === 'DESC') ? 'DESC' : 'ASC';
   $limit  = isset($q['limit']) ? max(1, min(200, (int)$q['limit'])) : 200;
 
   $sql = 'SELECT
@@ -225,7 +226,8 @@ $app->get('/api/rides', function ($req, $res) {
             DATE_FORMAT(r.date_time, "%Y-%m-%d %H:%i") AS date_time,
             r.duration_minutes, r.driver_rating,
             r.seats, r.price, r.vehicle_id,
-            v.brand AS vehicle_brand, v.model AS vehicle_model, v.plate AS vehicle_plate
+            v.brand AS vehicle_brand, v.model AS vehicle_model, v.plate AS vehicle_plate, v.energy,
+            (r.seats - (SELECT COUNT(*) FROM bookings b WHERE b.ride_id = r.id)) AS seats_left
           FROM rides r
           LEFT JOIN vehicles v ON v.id = r.vehicle_id';
   if ($where) $sql .= ' WHERE ' . implode(' AND ', $where);
@@ -237,8 +239,9 @@ $app->get('/api/rides', function ($req, $res) {
     $st->execute($params);
     $rows = $st->fetchAll();
     foreach ($rows as &$r) {
-      $r['credits'] = (int)$r['price'];
-      $r['seats']   = (int)$r['seats'];
+      $r['credits']   = (int)$r['price'];
+      $r['seats']     = (int)$r['seats'];
+      $r['seats_left']= (int)$r['seats_left'];
     }
     $res->getBody()->write(json_encode($rows));
     return $res->withHeader('Content-Type','application/json');
@@ -261,7 +264,8 @@ $app->get('/api/rides/{id}', function ($req, $res, $args) {
             DATE_FORMAT(r.date_time, "%Y-%m-%d %H:%i") AS date_time,
             r.duration_minutes, r.driver_rating,
             r.seats, r.price AS credits, r.vehicle_id,
-            v.brand AS vehicle_brand, v.model AS vehicle_model, v.plate AS vehicle_plate
+            v.brand AS vehicle_brand, v.model AS vehicle_model, v.plate AS vehicle_plate, v.energy,
+            (r.seats - (SELECT COUNT(*) FROM bookings b WHERE b.ride_id = r.id)) AS seats_left
           FROM rides r
           LEFT JOIN vehicles v ON v.id = r.vehicle_id
           WHERE r.id = ?
@@ -278,8 +282,9 @@ $app->get('/api/rides/{id}', function ($req, $res, $args) {
       return $res->withHeader('Content-Type','application/json')->withStatus(404);
     }
 
-    $row['seats']   = (int)$row['seats'];
-    $row['credits'] = (int)$row['credits'];
+    $row['seats']      = (int)$row['seats'];
+    $row['credits']    = (int)$row['credits'];
+    $row['seats_left'] = (int)$row['seats_left'];
 
     $res->getBody()->write(json_encode($row));
     return $res->withHeader('Content-Type','application/json');
@@ -353,7 +358,7 @@ $app->post('/api/rides', function ($req, $res) {
 
 /* ===================== BOOKINGS ===================== */
 
-/* POST /api/bookings */
+/* POST /api/bookings {ride_id, name, email} */
 $app->post('/api/bookings', function ($req, $res) {
   $d      = (array)($req->getParsedBody() ?? []);
   $rideId = (int)($d['ride_id'] ?? 0);
@@ -402,7 +407,6 @@ $app->post('/api/bookings', function ($req, $res) {
     // ID de la réservation
     $bookingId = (int)$pdo->lastInsertId();
     if ($bookingId === 0) {
-      // Fallback (au cas où lastInsertId() renverrait 0)
       $st = $pdo->prepare('SELECT id FROM bookings WHERE ride_id = ? AND user_email = ? ORDER BY id DESC LIMIT 1');
       $st->execute([$rideId, $email]);
       $bookingId = (int)($st->fetchColumn() ?: 0);
@@ -441,7 +445,6 @@ $app->post('/api/bookings', function ($req, $res) {
   }
 });
 
-
 /* GET /api/bookings?ride_id=1 */
 $app->get('/api/bookings', function ($req, $res) {
   try {
@@ -449,13 +452,13 @@ $app->get('/api/bookings', function ($req, $res) {
     $rideId = (int)($req->getQueryParams()['ride_id'] ?? 0);
 
     if ($rideId > 0) {
-      $st = $pdo->prepare('SELECT id, ride_id, user_name, user_email, booked_at
-                           FROM bookings WHERE ride_id = ? ORDER BY booked_at DESC');
+      $st = $pdo->prepare('SELECT id, ride_id, user_name, user_email, created_at
+                           FROM bookings WHERE ride_id = ? ORDER BY created_at DESC');
       $st->execute([$rideId]);
       $rows = $st->fetchAll();
     } else {
-      $rows = $pdo->query('SELECT id, ride_id, user_name, user_email, booked_at
-                           FROM bookings ORDER BY booked_at DESC')->fetchAll();
+      $rows = $pdo->query('SELECT id, ride_id, user_name, user_email, created_at
+                           FROM bookings ORDER BY created_at DESC')->fetchAll();
     }
     $res->getBody()->write(json_encode($rows));
     return $res->withHeader('Content-Type','application/json');
@@ -464,6 +467,5 @@ $app->get('/api/bookings', function ($req, $res) {
     return $res->withHeader('Content-Type','application/json')->withStatus(500);
   }
 });
-
 
 $app->run();

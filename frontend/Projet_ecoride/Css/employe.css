@@ -200,10 +200,39 @@ th {
     margin-right:0.5rem;
 }
 
-.btn-validate { background:#077A13; color:#fff; }
-.btn-validate:hover { background:#065f10; }
-.btn-reject { background:#D64545; color:#fff; }
-.btn-reject:hover { background:#a53337; }
+.btn-validate {
+    background:#077A13;
+    color:#fff;
+}
+
+.btn-validate:hover {
+    background:#065f10;
+}
+
+.btn-reject {
+    background:#D64545;
+    color:#fff;
+}
+
+.btn-reject:hover {
+    background:#a53337;
+}
+
+.guest-only {
+    display: inline-block;
+}
+
+.auth-only  {
+    display: none;
+}
+
+.is-auth .guest-only {
+    display: none;
+}
+
+.is-auth .auth-only  {
+    display: inline-block;
+}
 
 
 /*==================================

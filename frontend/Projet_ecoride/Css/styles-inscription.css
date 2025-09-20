@@ -341,3 +341,19 @@ Responsive Ajustements
         padding-left: 2.5rem;
     }
 }
+
+.guest-only {
+    display: inline-block;
+}
+
+.auth-only  {
+    display: none;
+}
+
+.is-auth .guest-only {
+    display: none;
+}
+
+.is-auth .auth-only  {
+    display: inline-block;
+}
