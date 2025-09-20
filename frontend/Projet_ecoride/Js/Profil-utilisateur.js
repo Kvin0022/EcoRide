@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', function() {
     nav.classList.toggle('mobile-menu');
   });
 
+  document.addEventListener('DOMContentLoaded', () => {
+  if (!window.EcoAuth?.requireAuth()) return; // redirige si non connecté
+});
+
+
   // On récupère tous les boutons “btn-aside”
   const tabsBtns = document.querySelectorAll('.sidebar-nav .btn-aside');
 

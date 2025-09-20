@@ -575,7 +575,7 @@ Adaptations mobile (<850px)
 }
 
 /* Bouton “écologique” */
-.btn-eco {
+.filter-eco {
     display: block;
     width: 100%;
     padding: 0.6rem 1rem;
@@ -589,10 +589,16 @@ Adaptations mobile (<850px)
     transition: background 0.2s, color 0.2s;
 }
 
-.btn-eco:hover {
+.filter-eco:hover {
     background: #077A13;
     color: #FFF;
 }
+
+.filter-eco.active {
+    outline: 2px solid #198754;
+    background:#eaffea;
+}
+
 
 /* Chaque groupe de filtres (label + contrôle) */
 .filter-group {
@@ -853,6 +859,21 @@ Adaptations mobile (<850px)
   overflow: hidden;
 }
 
+.guest-only {
+    display: inline-block;
+}
+
+.auth-only  {
+    display: none;
+}
+
+.is-auth .guest-only {
+    display: none;
+}
+
+.is-auth .auth-only  {
+    display: inline-block;
+}
 
 
 /*==================================

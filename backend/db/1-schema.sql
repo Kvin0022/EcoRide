@@ -42,3 +42,38 @@ CREATE TABLE bookings (
   CONSTRAINT fk_bookings_ride FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE,
   UNIQUE KEY uniq_booking (ride_id, user_email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/* === 1) Comptes + crédits pour login / réservations ====================== */
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  pseudo VARCHAR(100) NOT NULL,
+  email  VARCHAR(190) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  credits INT NOT NULL DEFAULT 20,
+  role ENUM('user','employee','admin') NOT NULL DEFAULT 'user',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/* === 2) Flag écolo pour les filtres (US4) ================================ */
+
+ALTER TABLE vehicles
+  ADD COLUMN energy ENUM('electric','hybrid','diesel','petrol') NULL;
+
+UPDATE vehicles
+  SET energy = 'petrol'
+  WHERE energy IS NULL;
+
+ALTER TABLE vehicles
+  MODIFY COLUMN energy ENUM('electric','hybrid','diesel','petrol') NOT NULL DEFAULT 'petrol';
+
+
+/* (optionnel mais pratique) visibilité rapide sur les places restantes */
+DROP VIEW IF EXISTS rides_with_seats_left;
+CREATE VIEW rides_with_seats_left AS
+SELECT
+  r.*,
+  COALESCE(r.seats - COUNT(b.id), r.seats) AS seats_left
+FROM rides r
+LEFT JOIN bookings b ON b.ride_id = r.id
+GROUP BY r.id;

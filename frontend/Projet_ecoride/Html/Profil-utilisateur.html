@@ -21,9 +21,11 @@
               <ul>
                   <li><a href="../Html/index.html">Accueil</a></li>
                   <li class="active"><a href="../Html/Profil-utilisateur.html">Profil</a></li>
+                  <li class="guest-only"><a id="login-link"  href="../Html/Connexion.html">Connexion</a></li>
+                  <li class="guest-only"><a href="../Html/inscription.html">S'inscrire</a></li>
+                  <li class="auth-only"><a id="logout-link" href="../Html/Connexion.html">Se déconnecter</a></li>
                   <li><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
                   <li><a href="#">Contact</a></li>
-                  <li><a href="../Html/Connexion.html">Se déconnecter</a></li>
               </ul>
           </div>
       </nav>
@@ -341,6 +343,8 @@
   <a href="#">CGU</a>
 </nav>
 </footer>
+<script src="./config.js"></script>
+<script src="../Js/navbar-auth.js"></script>
 <script src="../Js/PublierTrajets.js"></script>
 <script src="../Js/Profil-utilisateur.js"></script>
 </body>

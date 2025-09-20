@@ -8,9 +8,14 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - CORS_ALLOW_ORIGIN=https://golden-medovik-8f81e4.netlify.app
+      - DB_HOST=db
+      - DB_NAME=ecoride
+      - DB_USER=ecoride
+      - DB_PASS=ecoride
 
 
   db:
@@ -23,10 +28,13 @@ services:
       - MYSQL_ROOT_PASSWORD=yourRootPwd
     volumes:
       - db_data:/var/lib/mysql
-      - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql:ro
-      - ./backend/db/seed.sql:/docker-entrypoint-initdb.d/2-seed.sql:ro 
+      - ./backend/db:/docker-entrypoint-initdb.d:ro 
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 20
 
   adminer:
     image: adminer

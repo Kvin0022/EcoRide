@@ -28,13 +28,11 @@ const btnReset  = document.getElementById('filter-reset');
 function openFilter() {
   panel?.classList.add('open');
   overlay?.classList.add('open');
-  // C.2 : scroll-lock du body
   document.body.classList.add('body-lock');
 }
 function closeFilter() {
   panel?.classList.remove('open');
   overlay?.classList.remove('open');
-  // C.2 : retire le scroll-lock
   document.body.classList.remove('body-lock');
 }
 
@@ -51,7 +49,7 @@ overlay?.addEventListener('click', closeFilter);
   const toast  = document.querySelector('#toast');
   if (!list) return;
 
-  const esc = s => String(s).replace(/[&<>"']/g, m =>
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, m =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])
   );
 
@@ -65,80 +63,117 @@ overlay?.addEventListener('click', closeFilter);
   // --- Sélecteurs filtres ---
   const inpOrigin      = document.getElementById('filter-origin');
   const inpDestination = document.getElementById('filter-destination');
-  const inpDate        = document.getElementById('filter-date');
+  const inpDate        = document.getElementById('filter-date');      // YYYY-MM-DD (→ API: date_from)
   const inpSeatsMin    = document.getElementById('filter-seats-min');
-  const inpDurationMax = document.getElementById('duration-range'); // minutes
-  const inpRatingMin   = document.getElementById('rating-range');   // étoiles 0..5
+  const inpDurationMax = document.getElementById('duration-range');   // minutes
+  const inpRatingMin   = document.getElementById('rating-range');     // étoiles 0..5
   const durValue       = document.getElementById('duration-value');
   const rateValue      = document.getElementById('rating-value');
 
-  // On réutilise le slider prix comme "credits_max"
+  // slider prix = "credits_max"
   const inpCreditsMax  = document.getElementById('price-range');
   const priceValue     = document.getElementById('price-value');
   const btnApply       = document.getElementById('filter-apply');
+
+  // écolo : peut être un input[type=checkbox] OU un bouton
+  const ecoBtn = document.getElementById('filter-eco');
 
   // --- Tri ---
   const selSortBy  = document.getElementById('sort-by');    // date | price | seats | duration
   const selSortOrd = document.getElementById('sort-order'); // ASC | DESC
 
-// --- URL <-> UI (helpers unifiés) ---
-function writeParamsToURL(params, replace = false) {
-  const url = new URL(window.location.href);
-  // nettoie d’abord les clés connues
-  ['origin','destination','date_from','seats_min','credits_max','duration_max','rating_min','sort_by','order']
-    .forEach(k => url.searchParams.delete(k));
+  /* =========== ECO helpers (support bouton OU checkbox) =========== */
+  let ecoOn = false; // état interne unique
 
-  // écrit uniquement les valeurs non vides
-  Object.entries(params).forEach(([k, v]) => {
-    if (v != null && String(v).trim() !== '') url.searchParams.set(k, v);
+  function isCheckbox(el) {
+    return !!el && el.tagName === 'INPUT' && el.type === 'checkbox';
+  }
+
+  function setEcoUI(on) {
+    ecoOn = !!on;
+    // bouton (classe active + aria-pressed)
+    ecoBtn?.classList.toggle('active', ecoOn);
+    ecoBtn?.setAttribute('aria-pressed', ecoOn ? 'true' : 'false');
+    // checkbox (si c'en est une)
+    if (isCheckbox(ecoBtn)) ecoBtn.checked = ecoOn;
+  }
+
+  function ecoState() {
+    // si c'est une checkbox, on suit sa valeur ; sinon l'état interne
+    return isCheckbox(ecoBtn) ? !!ecoBtn.checked : ecoOn;
+  }
+
+  // si checkbox → garder l'état en phase quand on (dé)coche, sans fetch
+  if (isCheckbox(ecoBtn)) {
+    ecoBtn.addEventListener('change', () => setEcoUI(!!ecoBtn.checked));
+  }
+
+  // si bouton → bascule visuelle sans fetch
+  ecoBtn && !isCheckbox(ecoBtn) && ecoBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    setEcoUI(!ecoOn);
   });
 
-  const newUrl = url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : '') + url.hash;
-  (replace ? history.replaceState : history.pushState).call(history, null, '', newUrl);
-}
+  // --- URL <-> UI (helpers unifiés) ---
+  function writeParamsToURL(params, replace = false) {
+    const url = new URL(window.location.href);
+    // nettoie d’abord les clés connues
+    ['origin','destination','date_from','seats_min','credits_max','duration_max','rating_min','sort_by','order','eco']
+      .forEach(k => url.searchParams.delete(k));
 
-// Remplit les champs depuis l’URL et renvoie les params à utiliser
-function readParamsFromURL() {
-  const sp = new URLSearchParams(location.search);
+    // écrit uniquement les valeurs non vides
+    Object.entries(params).forEach(([k, v]) => {
+      if (v != null && String(v).trim() !== '') url.searchParams.set(k, v);
+    });
 
-  if (inpOrigin)       inpOrigin.value       = sp.get('origin')      || '';
-  if (inpDestination)  inpDestination.value  = sp.get('destination') || '';
-  if (inpDate)         inpDate.value         = sp.get('date_from')   || '';
-  if (inpSeatsMin)     inpSeatsMin.value     = sp.get('seats_min')   || '';
-
-  if (inpCreditsMax) {
-    inpCreditsMax.value = sp.get('credits_max') || '0';
-    if (priceValue) priceValue.textContent = inpCreditsMax.value;
-  }
-  if (inpDurationMax) {
-    inpDurationMax.value = sp.get('duration_max') || '0';
-    if (durValue) durValue.textContent = inpDurationMax.value;
-  }
-  if (inpRatingMin) {
-    inpRatingMin.value = sp.get('rating_min') || '0';
-    if (rateValue) rateValue.textContent = inpRatingMin.value;
+    const newUrl = url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : '') + url.hash;
+    (replace ? history.replaceState : history.pushState).call(history, null, '', newUrl);
   }
 
-  if (selSortBy)  selSortBy.value  = sp.get('sort_by') || 'date';
-  if (selSortOrd) selSortOrd.value = sp.get('order')   || 'ASC';
+  // Remplit les champs depuis l’URL et renvoie les params à utiliser
+  function readParamsFromURL() {
+    const sp = new URLSearchParams(location.search);
 
-  return getCurrentParams();
-}
+    if (inpOrigin)       inpOrigin.value       = sp.get('origin')      || '';
+    if (inpDestination)  inpDestination.value  = sp.get('destination') || '';
+    if (inpDate)         inpDate.value         = sp.get('date_from')   || '';
+    if (inpSeatsMin)     inpSeatsMin.value     = sp.get('seats_min')   || '';
 
+    if (inpCreditsMax) {
+      inpCreditsMax.value = sp.get('credits_max') || '0';
+      if (priceValue) priceValue.textContent = inpCreditsMax.value;
+    }
+    if (inpDurationMax) {
+      inpDurationMax.value = sp.get('duration_max') || '0';
+      if (durValue) durValue.textContent = inpDurationMax.value;
+    }
+    if (inpRatingMin) {
+      inpRatingMin.value = sp.get('rating_min') || '0';
+      if (rateValue) rateValue.textContent = inpRatingMin.value;
+    }
 
+    if (selSortBy)  selSortBy.value  = sp.get('sort_by') || 'date';
+    if (selSortOrd) selSortOrd.value = sp.get('order')   || 'ASC';
+
+    // sync eco visuel depuis l’URL
+    setEcoUI(sp.get('eco') === '1' || sp.get('eco') === 'true');
+
+    return getCurrentParams();
+  }
 
   // Construit les paramètres actuels (filtres + tri)
   function getCurrentParams() {
     return {
       origin:       inpOrigin?.value,
       destination:  inpDestination?.value,
-      date_from:    inpDate?.value,
+      date_from:    inpDate?.value, // l’API supporte date_from
       seats_min:    inpSeatsMin?.value,
       credits_max:  (inpCreditsMax && Number(inpCreditsMax.value) > 0) ? inpCreditsMax.value : undefined,
       duration_max: (inpDurationMax && Number(inpDurationMax.value) > 0) ? inpDurationMax.value : undefined,
       rating_min:   (inpRatingMin && Number(inpRatingMin.value)   > 0) ? inpRatingMin.value   : undefined,
       sort_by:      selSortBy?.value || 'date',
-      order:        selSortOrd?.value || 'ASC'
+      order:        selSortOrd?.value || 'ASC',
+      eco:          ecoState() ? 1 : undefined, // ← état écolo combiné
     };
   }
 
@@ -163,21 +198,26 @@ function readParamsFromURL() {
         list.innerHTML = '<li>Aucun trajet pour le moment.</li>';
       } else {
         list.innerHTML = rides.map(r => {
-          const disabled = r.seats <= 0 ? 'disabled' : '';
-          const label    = r.seats <= 0 ? 'Complet'   : 'Réserver';
+          const seatsLeft = Number.isFinite(r.seats_left) ? r.seats_left : r.seats; // fallback
+          const disabled  = seatsLeft <= 0 ? 'disabled' : '';
+          const label     = seatsLeft <= 0 ? 'Complet'   : 'Réserver';
+          const price     = Number(r.credits ?? r.price);
+          const brand     = r.vehicle_brand ? `${esc(r.vehicle_brand)} ${esc(r.vehicle_model || '')}` : '';
+
           return `
             <li class="ride">
               <div class="left">
                 <div class="route"><strong>${esc(r.origin)} → ${esc(r.destination)}</strong></div>
                 <div class="meta">
-                  ${esc(r.date_time)} • ${r.seats} place${r.seats>1?'s':''}
+                  ${esc(r.date_time)} • ${seatsLeft} place${seatsLeft>1?'s':''}
                   ${r.duration_minutes ? ` • ${r.duration_minutes} min` : ''}
                   ${Number.isInteger(r.driver_rating) ? ` • ★${r.driver_rating}` : ''}
-                  ${r.vehicle_brand ? ` • ${esc(r.vehicle_brand)} ${esc(r.vehicle_model || '')}` : ''}
+                  ${brand ? ` • ${brand}` : ''}
+                  ${r.energy === 'electric' ? ' • 🌱' : ''}
                 </div>
               </div>
               <div class="right">
-                <div class="price">${Number(r.credits ?? r.price).toFixed(0)} crédits</div>
+                <div class="price">${Number.isFinite(price) ? price.toFixed(0) : '-'} crédits</div>
                 <div class="actions">
                   <a class="btn secondary" href="../Html/Detail-covoiturage.html?id=${r.id}">Détails</a>
                   <button class="btn" data-ride="${r.id}" ${disabled}>${label}</button>
@@ -217,7 +257,7 @@ function readParamsFromURL() {
       if (res.ok) {
         showToast('Réservation enregistrée ✅', 'ok');
         await loadRides(getCurrentParams()); // refresh en conservant filtres/tri
-      } else if (res.status === 409 && data.error === 'Ride full') {
+      } else if (res.status === 409 && (data.error === 'Ride full' || data.error === 'Ride Full')) {
         showToast('Trajet complet', 'err');
         await loadRides(getCurrentParams());
       } else if (res.status === 409 && data.error === 'Already booked') {
@@ -238,29 +278,30 @@ function readParamsFromURL() {
   });
 
   // --- Appliquer les filtres ---
-btnApply?.addEventListener('click', async () => {
+  btnApply?.addEventListener('click', async () => {
     const params = getCurrentParams();
     writeParamsToURL(params);          // <-- maj URL
     await loadRides(params);
     closeFilter();
-});
+  });
 
   // --- Réinitialiser filtres (et MAJ affichage sliders) ---
-btnReset?.addEventListener('click', async () => {
-  if (inpOrigin)      inpOrigin.value = '';
-  if (inpDestination) inpDestination.value = '';
-  if (inpDate)        inpDate.value = '';
-  if (inpSeatsMin)    inpSeatsMin.value = '';
-  if (inpCreditsMax)  { inpCreditsMax.value = '0'; if (priceValue) priceValue.textContent = '0'; }
-  if (inpDurationMax) { inpDurationMax.value = '0'; if (durValue)  durValue.textContent  = '0'; }
-  if (inpRatingMin)   { inpRatingMin.value   = '0'; if (rateValue) rateValue.textContent = '0'; }
+  btnReset?.addEventListener('click', async () => {
+    if (inpOrigin)      inpOrigin.value = '';
+    if (inpDestination) inpDestination.value = '';
+    if (inpDate)        inpDate.value = '';
+    if (inpSeatsMin)    inpSeatsMin.value = '';
+    if (inpCreditsMax)  { inpCreditsMax.value = '0'; if (priceValue) priceValue.textContent = '0'; }
+    if (inpDurationMax) { inpDurationMax.value = '0'; if (durValue)  durValue.textContent  = '0'; }
+    if (inpRatingMin)   { inpRatingMin.value   = '0'; if (rateValue) rateValue.textContent = '0'; }
 
-  const params = getCurrentParams(); // ne garde que tri si présent
-  writeParamsToURL(params);          // <-- maj URL
-  await loadRides(params);
-  closeFilter();
-});
+    setEcoUI(false); // ← OFF pour le bouton/checkbox écolo
 
+    const params = getCurrentParams(); // ne garde que tri si présent
+    writeParamsToURL(params);          // <-- maj URL
+    await loadRides(params);
+    closeFilter();
+  });
 
   // --- helpers sliders (prix/durée/note) ---
   function bindRange(rangeId, outId) {
@@ -280,31 +321,29 @@ btnReset?.addEventListener('click', async () => {
   });
 
   // --- Changement de tri : recharge immédiate
-const applyCurrentFilters = () => {
-  const params = getCurrentParams();
-  writeParamsToURL(params);          // <-- maj URL
-  loadRides(params);
-};
-selSortBy?.addEventListener('change', applyCurrentFilters);
-selSortOrd?.addEventListener('change', applyCurrentFilters);
+  const applyCurrentFilters = () => {
+    const params = getCurrentParams();
+    writeParamsToURL(params);          // <-- maj URL
+    loadRides(params);
+  };
+  selSortBy?.addEventListener('change', applyCurrentFilters);
+  selSortOrd?.addEventListener('change', applyCurrentFilters);
 
+  // Initialisation : on lit l’URL, on complète les champs, défauts de tri si manquants
+  document.addEventListener('DOMContentLoaded', () => {
+    const p = readParamsFromURL();
 
-// Initialisation : on lit l’URL, on complète les champs, défauts de tri si manquants
-document.addEventListener('DOMContentLoaded', () => {
-  const p = readParamsFromURL();
+    if (selSortBy && !p.sort_by)  selSortBy.value  = 'date';
+    if (selSortOrd && !p.order)   selSortOrd.value = 'ASC';
 
-  if (selSortBy && !p.sort_by)  selSortBy.value  = 'date';
-  if (selSortOrd && !p.order)   selSortOrd.value = 'ASC';
+    writeParamsToURL(getCurrentParams(), true);  // true = replaceState (pas d’historique en plus)
+    loadRides(getCurrentParams());
+  });
 
-  // on réécrit l’URL (clean) puis on charge
-  writeParamsToURL(getCurrentParams(), true);  // true = replaceState (pas d’historique en plus)
-  loadRides(getCurrentParams());
-});
-
-// Support bouton “précédent/suivant” du navigateur
-window.addEventListener('popstate', () => {
-  readParamsFromURL();
-  loadRides(getCurrentParams());
-});
+  // Support bouton “précédent/suivant” du navigateur
+  window.addEventListener('popstate', () => {
+    readParamsFromURL();
+    loadRides(getCurrentParams());
+  });
 
 })();

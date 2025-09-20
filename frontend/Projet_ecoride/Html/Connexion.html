@@ -20,8 +20,9 @@
           <div class="nav-links">
               <ul>
                   <li><a href="../Html/index.html">Accueil</a></li>
-                  <li><a href="../Html/inscription.html">S'inscrire</a></li>
-                  <li class="active"><a href="../Html/Connexion.html">Connexion</a></li>
+                  <li class="active" class="guest-only"><a id="login-link" href="../Html/Connexion.html">Connexion</a></li>
+                  <li class="guest-only"><a href="../Html/inscription.html">S'inscrire</a></li>
+                  <li class="auth-only"><a id="logout-link" href="../Html/Connexion.html">Se déconnecter</a></li>
                   <li><a href="../Html/Recherche-covoiturage.html">Covoiturages</a></li>
                   <li><a href="#">Contact</a></li>
               </ul>
@@ -38,7 +39,7 @@
     <p id="login-status" class="status" aria-live="polite"></p>
 
     <p class="subtext">
-      Pas encore membre du club ? <a href="../Html/Inscription.html">Inscrivez-vous</a>
+      Pas encore membre du club ? <a href="../Html/inscription.html">Inscrivez-vous</a>
     </p>
 
     <!-- JS intercepte le submit pour faire un fetch -->
@@ -88,6 +89,8 @@
   <a href="#">CGU</a>
 </nav>
 </footer>
+<script src="./config.js"></script>
+<script src="../Js/navbar-auth.js"></script>
 <script src="../Js/Connexion.js"></script>
 </body>
 </html>

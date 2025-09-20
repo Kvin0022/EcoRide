@@ -194,6 +194,23 @@ section h2 {
     border-radius:1rem;
 }
 
+.guest-only {
+    display: inline-block;
+}
+
+.auth-only  {
+    display: none;
+}
+
+.is-auth .guest-only {
+    display: none;
+}
+
+.is-auth .auth-only  {
+    display: inline-block;
+}
+
+
 /*==================================
 =            Footer               =
 ==================================*/
