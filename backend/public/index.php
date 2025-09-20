@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../src/Db.php';
+require __DIR__ . '/../src/index.php';
 
 use Slim\Factory\AppFactory;
 use App\Db;
@@ -48,6 +49,13 @@ $errorMiddleware->setErrorHandler(HttpNotFoundException::class, function (Reques
 });
 
 /* ------------ Routes utilitaires ------------ */
+
+/* GET / (ping) */
+if ($uri === '/' && $_SERVER['REQUEST_METHOD']==='GET') {
+  echo "🚀 API EcoRide en ligne !";
+  exit;
+}
+
 
 // Ping racine
 $app->get('/', function ($req, $res) {
