@@ -1,55 +1,66 @@
-EcoRide — Frontend & API (Docker)
-0) Informations clés
+# EcoRide — Frontend & API (Docker)
 
-Lien GitHub : https://github.com/Kvin0022/EcoRide
+![status](https://img.shields.io/badge/status-in%20progress-yellow)
+![docker](https://img.shields.io/badge/Docker-ready-blue)
+![netlify](https://img.shields.io/badge/Netlify-deployed-brightgreen)
 
-Trello (gestion de projet) : https://trello.com/invite/b/682f09bccc7341e94578586c/ATTI8d775d61b34a67816b963717bc327d21B268FA60/ecoride-dev
+> 📌 **Livrables inclus**
+> - ✅ Code source complet (frontend + backend)
+> - ✅ Déploiement front (Netlify)
+> - 🔜 Déploiement back (Railway/Render) – cf. section 6.2
+> - ✅ Documentation technique (MCD, use cases, séquence, classes)
+> - ✅ Manuel utilisateur (PDF)
+> - ✅ Charte graphique (PDF)
+> - ✅ Trello (gestion de projet)
+> - ✅ README avec instructions de déploiement
 
-Déploiement Front : https://golden-medovik-8f81e4.netlify.app/
+---
 
-Identifiants démo : admin@example.com / motdepasse
+## 0) Informations clés
 
-1) Prérequis
+- **GitHub** : [EcoRide](https://github.com/Kvin0022/EcoRide)
+- **Trello** : [Board Trello](https://trello.com/invite/b/682f09bccc7341e94578586c/ATTI8d775d61b34a67816b963717bc327d21B268FA60/ecoride-dev)
+- **Déploiement front** : [Netlify](https://golden-medovik-8f81e4.netlify.app/)
+- **Identifiants démo** : `admin@example.com` / `motdepasse`
 
-Docker Desktop (avec WSL2 activé sur Windows)
+---
 
-Git
+## 1) Prérequis
 
-Navigateur moderne (Chrome, Firefox, Edge, Safari)
+- Docker Desktop (avec WSL2 activé sur Windows)
+- Git
+- Navigateur moderne (Chrome, Firefox, Edge, Safari)
+- (Optionnel) Node.js si vous utilisez des outils front supplémentaires
 
-(Optionnel) Node.js si vous utilisez des outils front supplémentaires
+---
 
-2) Cloner le dépôt
+## 2) Cloner le dépôt
+
+bash
 git clone https://github.com/Kvin0022/EcoRide.git
 cd EcoRide
 
 
-Ce dépôt est monolithique (frontend + backend). Le front est sous frontend/Projet_ecoride.
+Ce dépôt est monolithique (frontend + backend).
+Le front est sous frontend/Projet_ecoride.
 
-3) Lancement rapide (API + Front) — en 3 commandes
+3) Lancement rapide (API + Front)
 
-Rien à installer localement pour PHP, on utilise Composer dans Docker.
+Rien à installer localement pour PHP : on utilise Composer dans Docker.
 
 3.1 Installer les dépendances PHP (via image Composer)
 
-Windows (PowerShell)
+Windows (PowerShell) :
 
 docker run --rm -v "${PWD}/backend:/app" -w /app composer:2 install --no-dev
 
 
-macOS / Linux
+macOS / Linux :
 
 docker run --rm -v "$PWD/backend:/app" -w /app composer:2 install --no-dev
 
 3.2 Démarrer la stack
-docker compose up -d
-
-Lancer en local (Docker)
-
-```bash
 docker compose up -d --build
-# API accessible: http://localhost:8080
-# Ping:            http://localhost:8080/
 
 
 API : http://localhost:8080
@@ -65,22 +76,21 @@ DB : ecoride
 
 3.3 Tester les endpoints
 
-PowerShell (recommandé)
+PowerShell :
 
-# Login (retourne un token)
+# Login
 Invoke-RestMethod "http://localhost:8080/api/login" -Method Post -ContentType "application/json" -Body '{"email":"admin@example.com","password":"motdepasse"}'
 
-# Register (démo 201)
+# Register
 Invoke-RestMethod "http://localhost:8080/api/register" -Method Post -ContentType "application/json" -Body '{"email":"john@doe.com","password":"secret"}'
 
-# Rides (liste mock)
+# Rides
 Invoke-RestMethod "http://localhost:8080/api/rides" -Method Get
 
 3.4 Config front (local/prod)
 
-Le front lit `window.API_BASE_URL`. Fichier `Html/config.js` :
+Dans Html/config.js :
 
-```html
 <script>
   window.API_BASE_URL = (
     location.hostname.endsWith('netlify.app')
@@ -89,42 +99,46 @@ Le front lit `window.API_BASE_URL`. Fichier `Html/config.js` :
   );
 </script>
 
-Côté API, définissez CORS_ALLOW_ORIGIN sur le domaine Netlify dans votre docker-compose.yml (ou variables d’env.) :
+
+Côté API (docker-compose.yml) :
 
 environment:
   CORS_ALLOW_ORIGIN: https://golden-medovik-8f81e4.netlify.app
 
-4) Endpoints exposés (démo)
+4) Fonctionnalités principales
 
-GET / → ping ("🚀 API EcoRide en ligne !")
+🔑 Authentification (login / register)
 
-POST /api/login → { email, password } → { token, role }
+🔍 Recherche de covoiturages avec filtres dynamiques
 
-POST /api/register → 201 (mock)
+📅 Détail d’un trajet (infos conducteur, véhicule, avis)
 
-GET /api/rides → liste de trajets (mock)
+🛒 Réservation avec contrôle des places en temps réel
 
-5) Frontend (HTML/CSS/JS)
+👤 Profil utilisateur (infos, véhicules, historique)
 
-Pages : frontend/Projet_ecoride/Html/
+👥 Rôles : utilisateur, employé (modération avis), admin (gestion)
 
-Connexion : Js/Connexion.js intercepte le formulaire et appelle POST /api/login en fetch (mise à jour du DOM sans rechargement).
+🖥 Responsive design (desktop / mobile)
 
-Recherche covoiturage : Js/Recherche.js appelle GET /api/rides et injecte la liste dynamiquement.
+5) Frontend
 
-Lancer juste le front en local (serveur statique)
+Les pages HTML sont dans frontend/Projet_ecoride/Html/.
+JS : Js/Connexion.js, Js/Recherche.js, Js/Detail-covoiturage.js, Js/navbar-auth.js.
+
+Pour tester uniquement le front en local :
+
 cd frontend/Projet_ecoride/Html
 python -m http.server 8000
-# puis ouvrez http://localhost:8000
 
 
-L’API est attendue par défaut sur http://localhost:8080.
-Vous pouvez définir window.API_BASE_URL si besoin.
+Puis ouvrir http://localhost:8000
+.
 
 6) Déploiement
 6.1 Front (Netlify)
 
-Créez netlify.toml à la racine :
+Créer un netlify.toml à la racine :
 
 [build]
   command = ""
@@ -141,13 +155,27 @@ git commit -m "Ajout config Netlify"
 git push origin main
 
 
-Sur Netlify : New site from Git → Kvin0022/EcoRide@main.
+Sur Netlify : New site from Git → sélectionner main.
 
 6.2 Back (API)
 
-Options possibles : Railway / Render / Fly.io (gratuit/low-cost) ou VPS Docker.
-Exposez le service PHP sur un port public et mettez l’URL dans votre front (API_BASE_URL).
-Documentez CORS (autorisez uniquement votre domaine Netlify en production).
+Déploiement recommandé : Railway (gratuit)
+
+railway init
+railway up
+
+
+Configurer les variables d’environnement sur Railway :
+
+DB_HOST, DB_NAME, DB_USER, DB_PASS
+
+CORS_ALLOW_ORIGIN=https://golden-medovik-8f81e4.netlify.app
+
+Puis mettre à jour Html/config.js :
+
+<script>
+  window.API_BASE_URL = 'https://ecoride-api-production.up.railway.app';
+</script>
 
 7) Diagrammes (Mermaid)
 7.1 Use Case
@@ -174,7 +202,21 @@ sequenceDiagram
   U->>F: Submit email/mdp
   F->>API: POST /api/login (JSON)
   API-->>F: 200 {token}
-  F-->>U: "Connecté ✅" (mise à jour DOM)
+  F-->>U: "Connecté ✅"
+
+✅ Checklist de validation
+
+ Html/config.js chargé avant Recherche-covoiturage.js / Detail-covoiturage.js
+
+ CORS_ALLOW_ORIGIN pointe vers Netlify
+
+ docker compose up -d --build fonctionne
+
+ Recherche covoiturage → liste OK
+
+ Détail + réservation OK
+
+ Réservation refusée quand complet (409)
 
 8) Sécurité (bases mises en place / à documenter)
 
