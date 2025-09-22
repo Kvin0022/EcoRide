@@ -432,6 +432,10 @@ environment:
 
 Ce projet est sous licence MIT. Voir LICENSE pour plus de détails.
 
+15) Contributeurs
+- **Kévin** – Développeur full-stack (frontend + backend + Docker + déploiement)
+
+
 
 Date : 22 Septembre 2025
 
