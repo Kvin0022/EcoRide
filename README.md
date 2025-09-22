@@ -265,12 +265,15 @@ Page pour la recherche de covoiturage avec application de filtres
 
 détail covoiturage
 
-Page de détail des informations d'un covoiturage avec accès aux avis du conducteur et possibilité de réserver
+Page de détail des informations d'un covoiturage avec accès aux avis du conducteur et possibilité de réserver (recherche avec filtres)
 
-![détail-covoiturage (3)](https://github.com/user-attachments/assets/51715e61-7dfa-434f-918e-dbb3de949b15)
-![détail-covoiturage (4)](https://github.com/user-attachments/assets/59bcaad8-9649-421a-9eee-3a2f7d412580)
-![détail-avis (2)](https://github.com/user-attachments/assets/6acfd977-2100-4dae-88f3-56be9dcbd9d4)
-![détail-réservation (2)](https://github.com/user-attachments/assets/df5915e0-c113-4583-8743-690676b71108)
+<img width="1029" height="1040" alt="Capture d'écran 2025-09-22 204551" src="https://github.com/user-attachments/assets/94a6ff4f-6b97-4cfe-9887-2c3de48d22e4" />
+<img width="595" height="344" alt="Capture d'écran 2025-09-22 204540" src="https://github.com/user-attachments/assets/1b59f232-aa7a-43e0-bf19-c75b230a849a" />
+<img width="975" height="1070" alt="Capture d'écran 2025-09-22 204502" src="https://github.com/user-attachments/assets/8bb52691-23b1-4048-a70c-a27865be3239" />
+<img width="2544" height="335" alt="Capture d'écran 2025-09-22 204355" src="https://github.com/user-attachments/assets/9a7d47b7-6d9c-4c98-a970-b322345905aa" />
+<img width="309" height="966" alt="Capture d'écran 2025-09-22 204341" src="https://github.com/user-attachments/assets/baa9fa0e-72ca-4099-8bb1-f9d963a263e3" />
+<img width="2539" height="521" alt="Capture d'écran 2025-09-22 204319" src="https://github.com/user-attachments/assets/35937f96-319e-4faf-873c-252b67cc7c21" />
+<img width="842" height="220" alt="Capture d'écran 2025-09-22 204639" src="https://github.com/user-attachments/assets/ff95e885-ee9d-4c1f-ada7-e60801c1ef9a" />
 
 
 Profil
@@ -291,9 +294,12 @@ Page profil version mobile
 
 Connexion
 
-Page de connexion 
+Page de connexion (connexion réussie, navbar avec possibilité de se déconnecter)
 
-![connexion](https://github.com/user-attachments/assets/3206d184-4f0f-4844-ae9d-e0e157bc767b)
+<img width="680" height="675" alt="Capture d'écran 2025-09-22 203342" src="https://github.com/user-attachments/assets/68258bc8-8200-48c7-94d0-d4b93dec1ec3" />
+<img width="2332" height="1190" alt="Capture d'écran 2025-09-22 203221" src="https://github.com/user-attachments/assets/f22e3337-6631-4048-8b77-d2c927ad5bcd" />
+<img width="879" height="101" alt="Capture d'écran 2025-09-22 204301" src="https://github.com/user-attachments/assets/fc7955bf-9c47-4043-a011-432203c00913" />
+<img width="919" height="555" alt="Capture d'écran 2025-09-22 204201" src="https://github.com/user-attachments/assets/345d2e78-a60e-4483-a130-292c1d8842f6" />
 
 
 espace employé
@@ -314,14 +320,26 @@ Page avec modal de la navbar
 
 ![modal-navbar-mobile](https://github.com/user-attachments/assets/49a97432-5d35-4d3d-a872-dd81eef6361f)
 
-modal filtres
+Réservation complet
 
-Page ouverture du modal "filtres"
+<img width="2535" height="131" alt="Capture d'écran 2025-09-22 204733" src="https://github.com/user-attachments/assets/a81a8fcf-151b-443e-9a1b-1eae1c02982d" />
+<img width="1082" height="197" alt="Capture d'écran 2025-09-22 205340" src="https://github.com/user-attachments/assets/f2343354-26ac-45ee-b2cb-daa2d43f53a9" />
 
-![modal-filtres](https://github.com/user-attachments/assets/57b5590c-827f-4370-b95e-694e171766d8)
+booking coté API
 
+<img width="1113" height="226" alt="Capture d'écran 2025-09-22 205251" src="https://github.com/user-attachments/assets/5624b378-a776-44eb-afb9-cd576f52cf74" />
 
+réservation déjà éffectué
 
+<img width="1112" height="198" alt="Capture d'écran 2025-09-22 205320" src="https://github.com/user-attachments/assets/8c42c601-1f98-4216-9cd0-381bd8fb5493" />
+
+Ping et API/rides
+
+<img width="741" height="447" alt="Capture d'écran 2025-09-22 205434" src="https://github.com/user-attachments/assets/caffe1b1-a8aa-42a5-89a5-a67e18d181f3" />
+
+Création d'un login
+
+<img width="1097" height="222" alt="Capture d'écran 2025-09-22 205513" src="https://github.com/user-attachments/assets/5f20a786-311b-4e0a-9d27-125ed7082743" />
 
 ---
 
@@ -344,76 +362,76 @@ Elle documente :
 ---
 
 11) Structure du projet
+
 ecoride/
 ├─ backend/                     # API PHP (Slim) + SQL
-│  ├─ public/
-│  │  ├─ index.php
-│  │  └─ .htaccess
-│  ├─ db/
-│  │  └─ schema.sql
-│  └─ composer.json
+│  ├─ public/                   # Fichiers exposés publiquement
+│  │  ├─ index.php              # Point d'entrée principal de l'API
+│  │  ├─ ping.php               # Endpoint de test de disponibilité
+│  │  └─ .htaccess              # Réécriture des URL (Slim)
+│  ├─ db/                       # Scripts SQL
+│  │  ├─ 1-schema.sql           # Création de la base
+│  │  ├─ 2-seed.sql             # Données initiales
+│  │  └─ seed_demo.sql          # Données de démonstration (tests)
+│  ├─ composer.json             # Dépendances PHP
+│  └─ composer.lock
 ├─ docker/
 │  └─ php/
-│     ├─ Dockerfile
-│     └─ vhost.conf
-├─ docker-compose.yml
+│     ├─ Dockerfile             # Image PHP + Apache
+│     └─ vhost.conf             # Configuration Apache
+├─ docker-compose.yml           # Définition de la stack (API + DB)
 └─ frontend/                    # Front-end statique
    └─ Projet_ecoride/
       ├─ Css/                   # Feuilles de style
-      ├─ Html/                  # Pages HTML (+ `_redirects` si utilisé)
-      ├─ Js/                    # Scripts JavaScript
-      └─ assets/                # Images, icônes
-         └─ screenshots/        # Captures d’écran
-         └─ charte-graphique-ecoride.pdf
-         └─ documentation technique
-         └─ gestion_projet
+      ├─ Html/                  # Pages HTML (+ config.js)
+      ├─ Js/                    # Scripts JavaScript (Connexion, Recherche, etc.)
+      └─ assets/                # Images, icônes et ressources
+         ├─ screenshots/        # Captures d’écran pour la doc
+         ├─ charte-graphique-ecoride.pdf
+         ├─ documentation technique
+         ├─ gestion_projet      # Export Trello / Gantt / etc.
          └─ manuel_d'utilisation
 
-12) Dépannage (FAQ)
+ 13) Dépannage (FAQ)
 
-vendor/autoload.php introuvable
-→ (Re)générez les deps :
+### vendor/autoload.php introuvable
+(Re)générez les dépendances PHP :
+`bash
 docker run --rm -v "${PWD}/backend:/app" -w /app composer:2 install --no-dev
-puis docker compose restart php.
-
+docker compose restart php
 Erreur 740 / WSL2
-→ Ouvrir PowerShell en admin puis :
+Ouvrir PowerShell en mode administrateur et exécuter :
+
+bash
+Copier le code
 dism /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all
 dism /online /enable-feature /featurename:VirtualMachinePlatform /all
-Redémarrer, puis wsl --set-default-version 2.
+Puis redémarrer et activer WSL2 par défaut :
 
+bash
+Copier le code
+wsl --set-default-version 2
 Port déjà utilisé (8080/3306)
-→ Modifier les ports dans docker-compose.yml (ex. 8082:80).
+Modifier les ports dans docker-compose.yml, par exemple :
 
+yaml
+Copier le code
+services:
+  php:
+    ports:
+      - "8082:80"
 Netlify (front) ne voit pas l’API
-→ En prod, utiliser l’URL publique du back et limiter CORS à ce domaine.
+En production, utiliser l’URL publique du back et limiter CORS à ce domaine :
 
-13) Licence
+yaml
+Copier le code
+environment:
+  CORS_ALLOW_ORIGIN: https://golden-medovik-8f81e4.netlify.app
+
+14) Licence
 
 Ce projet est sous licence MIT. Voir LICENSE pour plus de détails.
 
 
-14) Check-list de validation
-
- Html/config.js chargé avant Recherche-covoiturage.js / Detail-covoiturage.js
-
- CORS_ALLOW_ORIGIN pointe vers https://golden-medovik-8f81e4.netlify.app
-
- docker compose up -d --build exécuté
-
- Tests manuels depuis Netlify :
-
- Page Recherche → la liste remonte (onglet Réseau : requêtes vers votre HÔTE API, status 200)
-
- Page Détail → chargement + réservation OK
-
- Réservations pleines → 409 bien géré (toast/état UI)
-
-
-15) Commit suggéré
-git add frontend/Projet_ecoride/Html/config.js docker-compose.yml README.md
-git commit -m "Prod ready: API_BASE_URL front config + CORS_ALLOW_ORIGIN"
-git push
-
-Date : 22 mai 2025
+Date : 22 Septembre 2025
 
