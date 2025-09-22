@@ -1,5 +1,8 @@
 # EcoRide — Frontend & API (Docker)
 
+![railway](https://img.shields.io/badge/Railway-deployed-purple)
+
+
 ![status](https://img.shields.io/badge/status-ready-brightgreen)
 ![docker](https://img.shields.io/badge/Docker-ready-blue)
 ![netlify](https://img.shields.io/badge/Netlify-deployed-success)
