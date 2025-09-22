@@ -12,16 +12,22 @@ $app = AppFactory::create();
 
 /* ------------ Middlewares globaux ------------ */
 
-// public/index.php (near the top, after app creation)
-$app->get('/__health/db', function($req, $res){
-  try {
-    $pdo = \App\Db::pdo();
-    $ok = $pdo->query('SELECT 1')->fetchColumn();
-    return $res->withJson(['db' => $ok ? 'ok' : 'fail']);
-  } catch (\Throwable $e) {
-    return $res->withJson(['db'=>'fail','msg'=>$e->getMessage()], 500);
-  }
-});
+// --- CORS ---
+$allowed = getenv('CORS_ALLOW_ORIGIN') ?: '';
+if ($allowed) {
+  header("Access-Control-Allow-Origin: $allowed");
+  header("Vary: Origin");
+}
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+  http_response_code(204);
+  exit;
+}
+// --- /CORS ---
+
 
 // Body parsing (JSON, form, etc.)
 $app->addBodyParsingMiddleware();
