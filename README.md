@@ -1,18 +1,18 @@
 # EcoRide — Frontend & API (Docker)
 
-![status](https://img.shields.io/badge/status-in%20progress-yellow)
+![status](https://img.shields.io/badge/status-ready-brightgreen)
 ![docker](https://img.shields.io/badge/Docker-ready-blue)
-![netlify](https://img.shields.io/badge/Netlify-deployed-brightgreen)
+![netlify](https://img.shields.io/badge/Netlify-deployed-success)
 
 > 📌 **Livrables inclus**
 > - ✅ Code source complet (frontend + backend)
 > - ✅ Déploiement front (Netlify)
-> - 🔜 Déploiement back (Railway/Render) – cf. section 6.2
+> - ✅ Déploiement back (Railway – PHP 8.2 + MySQL)
 > - ✅ Documentation technique (MCD, use cases, séquence, classes)
 > - ✅ Manuel utilisateur (PDF)
 > - ✅ Charte graphique (PDF)
 > - ✅ Trello (gestion de projet)
-> - ✅ README avec instructions de déploiement
+> - ✅ README avec instructions de déploiement et check-list finale
 
 ---
 
@@ -20,8 +20,12 @@
 
 - **GitHub** : [EcoRide](https://github.com/Kvin0022/EcoRide)
 - **Trello** : [Board Trello](https://trello.com/invite/b/682f09bccc7341e94578586c/ATTI8d775d61b34a67816b963717bc327d21B268FA60/ecoride-dev)
-- **Déploiement front** : [Netlify](https://golden-medovik-8f81e4.netlify.app/)
-- **Identifiants démo** : `admin@example.com` / `motdepasse`
+- **Front (Netlify)** : [https://golden-medovik-8f81e4.netlify.app](https://golden-medovik-8f81e4.netlify.app)
+- **API (Railway)** : [https://ecoride-production-0838.up.railway.app](https://ecoride-production-0838.up.railway.app)
+
+### Comptes de démonstration
+- **Admin** : `admin2@example.com` / `motdepasse`
+- (optionnel) **Utilisateur simple** : à créer via `/api/register`
 
 ---
 
@@ -31,6 +35,7 @@
 - Git
 - Navigateur moderne (Chrome, Firefox, Edge, Safari)
 - (Optionnel) Node.js si vous utilisez des outils front supplémentaires
+- Accès Railway (ou autre provider) pour MySQL + hébergement API
 
 ---
 
@@ -39,7 +44,6 @@
 bash
 git clone https://github.com/Kvin0022/EcoRide.git
 cd EcoRide
-
 
 Ce dépôt est monolithique (frontend + backend).
 Le front est sous frontend/Projet_ecoride.
@@ -74,54 +78,62 @@ User/Pass : ecoride / ecoride
 
 DB : ecoride
 
-3.3 Tester les endpoints
+3.3 Variables d’environnement
 
-PowerShell :
+Dans docker-compose.yml ou via Railway/Render :
 
-# Login
-Invoke-RestMethod "http://localhost:8080/api/login" -Method Post -ContentType "application/json" -Body '{"email":"admin@example.com","password":"motdepasse"}'
+Variable	Exemple
+DB_HOST	mysql.railway.internal (ou crossover.proxy.rlwy.net)
+DB_PORT	3306 / 44040
+DB_NAME	railway (ou ecoride)
+DB_USER	root
+DB_PASS	mot de passe Railway MySQL
+CORS_ALLOW_ORIGIN	https://golden-medovik-8f81e4.netlify.app
 
-# Register
-Invoke-RestMethod "http://localhost:8080/api/register" -Method Post -ContentType "application/json" -Body '{"email":"john@doe.com","password":"secret"}'
+4) Base de données (prod/démo)
 
-# Rides
-Invoke-RestMethod "http://localhost:8080/api/rides" -Method Get
+Les fichiers SQL sont dans backend/db/ :
 
-3.4 Config front (local/prod)
+schema.sql : création des tables (users, rides, bookings, vehicles)
+
+seed.sql : jeux de données de démo (trajets, véhicules, etc.)
+
+Importer sur Railway (depuis PowerShell) :
+
+mysql -h crossover.proxy.rlwy.net -P 44040 -u root -p railway < backend/db/schema.sql
+mysql -h crossover.proxy.rlwy.net -P 44040 -u root -p railway < backend/db/seed.sql
+
+5) Config front (local/prod)
 
 Dans Html/config.js :
 
 <script>
   window.API_BASE_URL = (
     location.hostname.endsWith('netlify.app')
-      ? 'https://TON-HOTE-API'
+      ? 'https://ecoride-production-0838.up.railway.app'
       : 'http://localhost:8080'
   );
 </script>
 
+6) Fonctionnalités principales
 
-Côté API (docker-compose.yml) :
+🔑 Authentification (register / login / logout)
 
-environment:
-  CORS_ALLOW_ORIGIN: https://golden-medovik-8f81e4.netlify.app
+🔍 Recherche de covoiturages avec filtres dynamiques (origine, destination, date, sièges, tri, éco)
 
-4) Fonctionnalités principales
+📅 Détail d’un trajet (infos conducteur, véhicule, note)
 
-🔑 Authentification (login / register)
-
-🔍 Recherche de covoiturages avec filtres dynamiques
-
-📅 Détail d’un trajet (infos conducteur, véhicule, avis)
-
-🛒 Réservation avec contrôle des places en temps réel
+🛒 Réservation avec décrémentation des sièges + gestion des erreurs (409 complet, 409 déjà réservé, 404 inexistant)
 
 👤 Profil utilisateur (infos, véhicules, historique)
 
-👥 Rôles : utilisateur, employé (modération avis), admin (gestion)
+👥 Gestion rôles : utilisateur / employé / admin
 
-🖥 Responsive design (desktop / mobile)
+🖥 Responsive design (desktop & mobile)
 
-5) Frontend
+♿ Accessibilité : aria-live, focus visible, loader et toasts
+
+7) Frontend
 
 Les pages HTML sont dans frontend/Projet_ecoride/Html/.
 JS : Js/Connexion.js, Js/Recherche.js, Js/Detail-covoiturage.js, Js/navbar-auth.js.
@@ -135,17 +147,14 @@ python -m http.server 8000
 Puis ouvrir http://localhost:8000
 .
 
-6) Déploiement
-6.1 Front (Netlify)
+8) Déploiement prod
+8.1 Front (Netlify)
 
-Créer un netlify.toml à la racine :
+Créer netlify.toml à la racine :
 
 [build]
   command = ""
   publish = "frontend/Projet_ecoride/Html"
-
-[context.production.environment]
-  GIT_SUBMODULE_STRATEGY = "none"
 
 
 Puis :
@@ -155,30 +164,18 @@ git commit -m "Ajout config Netlify"
 git push origin main
 
 
-Sur Netlify : New site from Git → sélectionner main.
+Déployer depuis l’interface Netlify (New site from Git).
 
-6.2 Back (API)
+8.2 API (Railway)
 
-Déploiement recommandé : Railway (gratuit)
+Créer un nouveau projet Railway (service Docker)
 
-railway init
-railway up
+Ajouter les variables d’environnement listées plus haut
 
+Vérifier que /ping et /api/rides renvoient bien des données avant de brancher le front.
 
-Configurer les variables d’environnement sur Railway :
-
-DB_HOST, DB_NAME, DB_USER, DB_PASS
-
-CORS_ALLOW_ORIGIN=https://golden-medovik-8f81e4.netlify.app
-
-Puis mettre à jour Html/config.js :
-
-<script>
-  window.API_BASE_URL = 'https://ecoride-api-production.up.railway.app';
-</script>
-
-7) Diagrammes (Mermaid)
-7.1 Use Case
+9) Diagrammes (Mermaid)
+9.1 Use Case
 usecaseDiagram
   actor Membre as "Membre"
   actor Employe as "Employé"
@@ -188,13 +185,13 @@ usecaseDiagram
   Membre --> (Réserver un trajet)
   Employe --> (Modérer avis)
 
-7.2 Classes
+9.2 Classes
 classDiagram
   class User {+id:int; +email:string; +password_hash:string; +role:enum; +created_at:datetime}
   class Ride {+id:int; +driver_id:int; +origin:string; +destination:string; +date_time:datetime; +seats:int; +price:decimal}
   User "1" --> "0..*" Ride : conduit
 
-7.3 Séquence — Login
+9.3 Séquence — Login
 sequenceDiagram
   participant U as Utilisateur
   participant F as Front (Connexion.js)
@@ -204,7 +201,7 @@ sequenceDiagram
   API-->>F: 200 {token}
   F-->>U: "Connecté ✅"
 
-✅ Checklist de validation
+10)Checklist de validation ✅
 
  Html/config.js chargé avant Recherche-covoiturage.js / Detail-covoiturage.js
 
@@ -218,20 +215,33 @@ sequenceDiagram
 
  Réservation refusée quand complet (409)
 
-8) Sécurité (bases mises en place / à documenter)
+11) Sécurité & bonnes pratiques
 
-Hash mots de passe : password_hash() / password_verify() (à brancher quand la BDD sera branchée).
+Hashage : password_hash() / password_verify()
 
-Requêtes SQL : PDO + requêtes préparées.
+PDO + requêtes préparées pour toutes les opérations
 
-CORS : ouvert en dev, limité au domaine Netlify en prod.
+Validation côté serveur (emails, longueurs, champs obligatoires)
 
-Validation serveur : ex. filter_var($email, FILTER_VALIDATE_EMAIL), longueurs, champs requis.
+CORS restreint au domaine Netlify en prod
 
-Token : stocké côté front (localStorage) pour la démo.
+Pas de stack trace en prod, messages propres en JSON
 
+12) Endpoints API (prod)
 
-9) Captures d’écran
+GET /ping → santé API
+
+POST /api/register → inscription (pseudo,email,password)
+
+POST /api/login → login (retourne token + rôle + crédits)
+
+GET /api/rides (filtres & tri)
+
+GET /api/rides/:id
+
+POST /api/bookings (gère 404/409/422)
+
+13) Captures d’écran
 
 Voici quelques captures d’écran des vues desktop clés :
 
@@ -249,8 +259,9 @@ Recherche covoiturage
 
 Page pour la recherche de covoiturage avec application de filtres
 
-![recherche-covoiturage (9)](https://github.com/user-attachments/assets/b201d866-4eba-49f8-9887-9433857026e0)
-![recherche-covoiturage (3)](https://github.com/user-attachments/assets/dbd8416d-4e28-44bd-bd5a-c2c7c2bc1329)
+<img width="879" height="101" alt="Image" src="https://github.com/user-attachments/assets/05f31b8d-cbab-4a3e-a2bb-d0f91f2ccc95" />
+<img width="2539" height="521" alt="Image" src="https://github.com/user-attachments/assets/56c34e00-683b-4359-8450-bbdf0b1c47d4" />
+
 
 détail covoiturage
 
@@ -308,6 +319,8 @@ modal filtres
 Page ouverture du modal "filtres"
 
 ![modal-filtres](https://github.com/user-attachments/assets/57b5590c-827f-4370-b95e-694e171766d8)
+
+
 
 
 ---
