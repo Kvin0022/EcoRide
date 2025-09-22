@@ -1,3 +1,5 @@
+console.log("connexion.js chargé");
+
 // Burger menu (inchangé)
 document.addEventListener('DOMContentLoaded', function () {
   const burger = document.querySelector('.menu-hamburger');
@@ -8,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // === LOGIN ===
 document.addEventListener('DOMContentLoaded', function () {
-  const API_BASE_URL = window.API_BASE_URL ?? 'http://localhost:8080';
+  const API_BASE_URL = (window.API_BASE_URL ?? 'https://ecoride-production-0838.up.railway.app').replace(/\/+$/,'');
 
   const form     = document.querySelector('#login-form') || document.querySelector('.login-form');
   const emailEl  = document.querySelector('#email');
@@ -20,8 +22,20 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!form) return;
 
   const STORAGE_KEY = (window.EcoAuth && window.EcoAuth.KEY) || 'ecoride.session';
-  const setStatus = (msg) => { if (statusEl) { statusEl.textContent = msg || ''; statusEl.className = 'status'; } };
-  const setError  = (msg) => { if (errorEl)  { errorEl.textContent  = msg || ''; errorEl.className  = 'error'; } };
+  const setStatus = (msg) => {
+    if (statusEl) {
+      statusEl.textContent = msg || '';
+      statusEl.className = 'status';
+      statusEl.setAttribute('aria-live', 'polite');
+    }
+  };
+  const setError  = (msg) => {
+    if (errorEl)  {
+      errorEl.textContent  = msg || '';
+      errorEl.className  = 'error';
+      errorEl.setAttribute('aria-live', 'assertive');
+    }
+  };
 
   const isValidEmail = (v='') => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
@@ -51,25 +65,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (res.ok && data?.token) {
         const session = { token: data.token, role: data.role || 'user', email };
+
         // stocke via EcoAuth si dispo, sinon fallback localStorage
         if (window.EcoAuth && typeof window.EcoAuth.setSession === 'function') {
           window.EcoAuth.setSession(session);
-          // met la navbar à jour si le script est déjà chargé
           if (typeof window.EcoAuth.refreshNavbar === 'function') window.EcoAuth.refreshNavbar();
         } else {
           try { localStorage.setItem(STORAGE_KEY, JSON.stringify(session)); } catch {}
-          // avertit les autres onglets
           window.dispatchEvent(new CustomEvent('ecoride:session'));
         }
 
-        setStatus('Connexion réussie ✅');
+        // Message visible avant redirection
+        if (statusEl) {
+          statusEl.textContent = 'Connexion réussie ✅';
+          statusEl.classList.add('ok');           // -> pense à styliser .status.ok dans ton CSS
+          statusEl.setAttribute('aria-live', 'polite');
+        }
         setError('');
         if (passEl) passEl.value = '';
 
-        // Redirection vers la recherche
-        setTimeout(() => {
-          window.location.href = '../Html/Recherche-covoiturage.html';
-        }, 300);
+        // Laisse le temps de voir le message (1,2 s), puis redirige
+        await new Promise(r => setTimeout(r, 1200));
+        window.location.href = '../Html/Recherche-covoiturage.html';
+        return;
 
       } else if (res.status === 401) {
         setError('Identifiants invalides.');

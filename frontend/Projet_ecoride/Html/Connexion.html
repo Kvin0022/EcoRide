@@ -43,7 +43,7 @@
     </p>
 
     <!-- JS intercepte le submit pour faire un fetch -->
-    <form id="login-form" action="/connexion" method="POST" class="login-form" novalidate autocomplete="on">
+    <form id="login-form" action="#" method="POST" class="login-form" novalidate autocomplete="on">
       <div class="form-field">
         <label for="email">
           <span class="icon" aria-hidden="true">✉️</span>
@@ -89,8 +89,12 @@
   <a href="#">CGU</a>
 </nav>
 </footer>
-<script src="./config.js"></script>
-<script src="../Js/navbar-auth.js"></script>
-<script src="../Js/Connexion.js"></script>
+
+<script>
+  window.API_BASE_URL = 'https://ecoride-production-0838.up.railway.app';
+</script>
+<script src="./config.js defer"></script>
+<script src="../Js/navbar-auth.js" defer></script>
+<script src="../Js/Connexion.js" defer></script>
 </body>
 </html>

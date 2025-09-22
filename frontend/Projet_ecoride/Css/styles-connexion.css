@@ -273,6 +273,10 @@ main.login-page {
     display: inline-block;
 }
 
+.status.ok { 
+    color:#0a7;
+    font-weight:600; 
+}
 
 /*==================================
 =            Footer               =

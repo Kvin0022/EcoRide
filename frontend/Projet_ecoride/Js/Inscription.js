@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // === INSCRIPTION ===
 document.addEventListener('DOMContentLoaded', function () {
-  const API_BASE_URL = window.API_BASE_URL ?? 'http://localhost:8080';
+  const API_BASE_URL = window.API_BASE_URL ?? 'https://ecoride-production-0838.up.railway.app';
 
   const form     = document.getElementById('signup-form') || document.querySelector('.signup-form');
   const emailEl  = document.getElementById('email');

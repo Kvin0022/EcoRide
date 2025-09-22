@@ -42,7 +42,8 @@ overlay?.addEventListener('click', closeFilter);
 
 // --- App Rides ---
 (() => {
-  const API_BASE_URL = window.API_BASE_URL ?? 'http://localhost:8080';
+  const API_BASE_URL = window.API_BASE_URL ?? 'https://ecoride-production-0838.up.railway.app';
+
 
   const list   = document.querySelector('#rides-list');
   const status = document.querySelector('#rides-status');
