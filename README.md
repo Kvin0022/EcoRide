@@ -106,6 +106,38 @@ Importer sur Railway (depuis PowerShell) :
 mysql -h crossover.proxy.rlwy.net -P 44040 -u root -p railway < backend/db/schema.sql
 mysql -h crossover.proxy.rlwy.net -P 44040 -u root -p railway < backend/db/seed.sql
 
+4 bis) Utilisation — Reset & Seed DB (Windows/Linux)
+
+1. Rendre exécutable (Linux/macOS) :
+
+bash:
+chmod +x scripts/reset-and-seed.sh
+
+2. Importer sans recréer la base :
+
+bash:
+./scripts/reset-and-seed.sh
+
+3. Recréer la base (DROP/CREATE via root), puis importer :
+
+bash:
+./scripts/reset-and-seed.sh --recreate-db
+
+4. Personnaliser si besoin :
+
+bash:
+./scripts/reset-and-seed.sh \
+  --db-name ecoride \
+  --db-user ecoride \
+  --db-pass ecoride \
+  --root-user root \
+  --root-pass root \
+  --schema backend/db/1-schema.sql \
+  --seed backend/db/seed_demo.sql
+
+👉 Windows : utiliser reset-and-seed.ps1 (PowerShell)
+👉 Linux/macOS : utiliser reset-and-seed.sh (Bash)
+
 5) Config front (local/prod)
 
 Dans Html/config.js :
@@ -204,7 +236,7 @@ sequenceDiagram
   API-->>F: 200 {token}
   F-->>U: "Connecté ✅"
 
-10)Checklist de validation ✅
+10) Checklist de validation ✅
 
  Html/config.js chargé avant Recherche-covoiturage.js / Detail-covoiturage.js
 
@@ -244,7 +276,35 @@ GET /api/rides/:id
 
 POST /api/bookings (gère 404/409/422)
 
-13) Captures d’écran
+13) Tests automatiques (Smoke-tests)
+
+Pour valider rapidement l’API (login, véhicules, trajets, réservations), deux scripts sont fournis :
+
+Sous Linux / macOS
+# Rendre exécutable
+chmod +x scripts/test-api.sh
+
+# Lancer en pointant vers l’API locale
+./scripts/test-api.sh
+
+# Ou en pointant vers Railway (prod)
+API_BASE_URL="https://ecoride-production-0838.up.railway.app" ./scripts/test-api.sh
+
+
+Dépendances : curl et jq (installables via apt, dnf, pacman, brew, …).
+⚠️ Sur macOS, installer coreutils et remplacer date par gdate dans le script.
+
+Sous Windows (PowerShell)
+# Exécuter les tests en local
+.\scripts\test-api.ps1
+
+# Ou vers Railway (prod)
+$env:API_BASE_URL="https://ecoride-production-0838.up.railway.app"; .\scripts\test-api.ps1
+
+
+⚠️ Il faut exécuter PowerShell avec une policy permettant les scripts (Set-ExecutionPolicy RemoteSigned si besoin).
+
+14) Captures d’écran
 
 Voici quelques captures d’écran des vues desktop clés :
 
@@ -346,7 +406,7 @@ Création d'un login
 
 ---
 
-10) Charte graphique
+15) Charte graphique
 
 
 La charte graphique est disponible :
@@ -364,7 +424,7 @@ Elle documente :
 
 ---
 
-11) Structure du projet
+16) Structure du projet
 
 ecoride/
 ├─ backend/                     # API PHP (Slim) + SQL
@@ -395,7 +455,7 @@ ecoride/
          ├─ gestion_projet      # Export Trello / Gantt / etc.
          └─ manuel_d'utilisation
 
- 13) Dépannage (FAQ)
+ 17) Dépannage (FAQ)
 
 ### vendor/autoload.php introuvable
 (Re)générez les dépendances PHP :
@@ -431,11 +491,11 @@ Copier le code
 environment:
   CORS_ALLOW_ORIGIN: https://golden-medovik-8f81e4.netlify.app
 
-14) Licence
+18) Licence
 
 Ce projet est sous licence MIT. Voir LICENSE pour plus de détails.
 
-15) Contributeurs
+19) Contributeurs
 - **Kévin** – Développeur full-stack (frontend + backend + Docker + déploiement)
 
 
