@@ -51,7 +51,7 @@ cd EcoRide
 Ce dépôt est monolithique (frontend + backend).
 Le front est sous frontend/Projet_ecoride.
 
-3) Lancement rapide (API + Front)
+## 3) Lancement rapide (API + Front)
 
 Rien à installer localement pour PHP : on utilise Composer dans Docker.
 
@@ -100,7 +100,7 @@ MONGO_URI=mongodb://mongo:27017
 MONGO_DB=ecoride
 CORS_ALLOW_ORIGIN=https://golden-medovik-8f81e4.netlify.app
 
-4) Base de données (local/prod)
+## 4) Base de données (local/prod)
 
 Les scripts SQL sont dans backend/db/ :
 
@@ -168,7 +168,7 @@ bash:
 👉 Windows : utiliser reset-and-seed.ps1 (PowerShell)
 👉 Linux/macOS : utiliser reset-and-seed.sh (Bash)
 
-5) Config front (local/prod)
+## 5) Config front (local/prod)
 
 Dans Html/config.js :
 
@@ -180,7 +180,7 @@ Dans Html/config.js :
   );
 </script>
 
-6) Fonctionnalités principales
+## 6) Fonctionnalités principales
 
 🔑 Authentification (register / login / logout)
 
@@ -198,7 +198,7 @@ Dans Html/config.js :
 
 ♿ Accessibilité : aria-live, focus visible, loader et toasts
 
-7) Backend — Endpoints
+## 7) Backend — Endpoints
 
 7.1 Santé
 
@@ -242,7 +242,7 @@ DELETE /api/reviews/{id}
 
 Choix NoSQL : reviews = schéma flexible (texte, évolutions), volumétrie potentielle, accès direct par ride_id sans jointures.
 
-8) Tests rapides (PowerShell)
+## 8) Tests rapides (PowerShell)
 
 # Pings
 Invoke-RestMethod http://localhost:8080/api/ping/sql
@@ -273,7 +273,7 @@ $revPatch = @{rating=4;comment="Finalement 4 étoiles"}|ConvertTo-Json
 Invoke-RestMethod "http://localhost:8080/api/reviews/$revId" -Method Put -ContentType "application/json" -Body $revPatch
 Invoke-RestMethod "http://localhost:8080/api/reviews/$revId" -Method Delete
 
-9) Frontend
+## 9) Frontend
 
 Les pages HTML sont dans frontend/Projet_ecoride/Html/.
 JS : Js/Connexion.js, Js/Recherche.js, Js/Detail-covoiturage.js, Js/navbar-auth.js.
@@ -287,7 +287,7 @@ python -m http.server 8000
 Puis ouvrir http://localhost:8000
 .
 
-10) Déploiement prod
+## 10) Déploiement prod
 10.1 Front (Netlify)
 
 Créer netlify.toml à la racine :
@@ -314,7 +314,8 @@ Ajouter les variables d’environnement listées plus haut
 
 Vérifier que /ping et /api/rides renvoient bien des données avant de brancher le front.
 
-11) Diagrammes (Mermaid)
+## 11) Diagrammes (Mermaid)
+
 11.1 Use Case
 usecaseDiagram
   actor Membre as "Membre"
@@ -341,7 +342,7 @@ sequenceDiagram
   API-->>F: 200 {token}
   F-->>U: "Connecté ✅"
 
-12) Checklist de validation ✅
+## 12) Checklist de validation ✅
 
  Html/config.js chargé avant Recherche-covoiturage.js / Detail-covoiturage.js
  
@@ -359,7 +360,7 @@ sequenceDiagram
  
  Santé : /api/ping/sql et /api/ping/mongo OK
 
-13) Sécurité & bonnes pratiques
+## 13) Sécurité & bonnes pratiques
 
 Hashage : password_hash() / password_verify()
 
@@ -371,7 +372,7 @@ CORS restreint au domaine Netlify en prod
 
 Pas de stack trace en prod, messages propres en JSON
 
-14) Endpoints API (prod)
+## 14) Endpoints API (prod)
 
  GET /ping → santé API
  
@@ -385,7 +386,7 @@ Pas de stack trace en prod, messages propres en JSON
  
  CRUD /api/reviews (Mongo)
 
-15) Tests automatiques (Smoke-tests)
+## 15) Tests automatiques (Smoke-tests)
 
 Pour valider rapidement l’API (login, véhicules, trajets, réservations), deux scripts sont fournis :
 
@@ -413,7 +414,7 @@ $env:API_BASE_URL="https://ecoride-production-0838.up.railway.app"; .\scripts\te
 
 ⚠️ Il faut exécuter PowerShell avec une policy permettant les scripts (Set-ExecutionPolicy RemoteSigned si besoin).
 
-16) Captures d’écran
+## 16) Captures d’écran
 
 Voici quelques captures d’écran des vues desktop clés :
 
@@ -515,7 +516,7 @@ Création d'un login
 
 ---
 
-17) Charte graphique
+## 17) Charte graphique
 
 
 La charte graphique est disponible :
@@ -533,7 +534,7 @@ Elle documente :
 
 ---
 
-18) Structure du projet
+## 18) Structure du projet
 
 ecoride/
 ├─ backend/                     # API PHP (Slim) + SQL
@@ -569,7 +570,7 @@ ecoride/
          ├─ gestion_projet      # Export Trello / Gantt / etc.
          └─ manuel_d'utilisation
 
-19) Dépannage (FAQ)
+## 19) Dépannage (FAQ)
 
 ### vendor/autoload.php introuvable
 (Re)générez les dépendances PHP :
@@ -614,11 +615,11 @@ Dockerfile : pecl install mongodb-1.21.2 && docker-php-ext-enable mongodb
 Composer (dans le conteneur) : composer require mongodb/mongodb:^1.21
 Puis docker compose build --no-cache php && docker compose up -d.
 
-20) Licence
+## 20) Licence
 
 Ce projet est sous licence MIT. Voir LICENSE pour plus de détails.
 
-21) Contributeurs
+## 21) Contributeurs
 - **Kévin** – Développeur full-stack (frontend + backend + Docker + déploiement)
 
 
