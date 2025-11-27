@@ -1,10 +1,11 @@
 {
   "require": {
     "php": "8.2",
-    "slim/slim": "^4.0",
-    "slim/psr7": "^1.6",
     "ext-pdo": "*",
-    "ext-pdo_mysql": "*" 
+    "ext-pdo_mysql": "*",
+    "mongodb/mongodb": "^1.21",
+    "slim/psr7": "^1.6",
+    "slim/slim": "^4.0"
   },
   "config": {
     "platform": { "php": "8.2.0" },

@@ -67,13 +67,31 @@ UPDATE vehicles
 ALTER TABLE vehicles
   MODIFY COLUMN energy ENUM('electric','hybrid','diesel','petrol') NOT NULL DEFAULT 'petrol';
 
+ALTER TABLE rides
+  MODIFY duration_minutes INT NOT NULL DEFAULT 0;
+
 
 /* (optionnel mais pratique) visibilité rapide sur les places restantes */
 DROP VIEW IF EXISTS rides_with_seats_left;
 CREATE VIEW rides_with_seats_left AS
 SELECT
   r.*,
-  COALESCE(r.seats - COUNT(b.id), r.seats) AS seats_left
+  (r.seats - COALESCE(b.cnt, 0)) AS seats_left
 FROM rides r
-LEFT JOIN bookings b ON b.ride_id = r.id
-GROUP BY r.id;
+LEFT JOIN (
+  SELECT ride_id, COUNT(*) AS cnt
+  FROM bookings
+  GROUP BY ride_id
+) b ON b.ride_id = r.id;
+
+
+/*Donnée demo*/
+
+INSERT INTO vehicles (owner_email, brand, model, seats, plate, energy) VALUES
+('demo@ecoride.app','Renault','Clio',4,'AB-123-CD','petrol'),
+('demo@ecoride.app','Tesla','Model 3',5,'EV-2025-OK','electric')
+ON DUPLICATE KEY UPDATE model=VALUES(model);
+
+INSERT INTO rides (origin, destination, date_time, seats, price, duration_minutes, driver_rating, vehicle_id) VALUES
+('Metz','Nancy','2025-12-01 14:00:00',3,8,60,4,1),
+('Metz','Strasbourg','2025-12-01 16:00:00',4,12,90,5,2);

@@ -2,22 +2,26 @@
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../src/Db.php';
 
+/* Ajouts pour Mongo (on require directement les fichiers) */
+require __DIR__ . '/../src/Mongo.php';
+require __DIR__ . '/../src/ReviewRepositoryMongo.php';
 
 use Slim\Factory\AppFactory;
 use App\Db;
 use Slim\Exception\HttpNotFoundException;
 use Psr\Http\Message\ServerRequestInterface as Request;
+/* Namespaces des classes ajoutées */
+use EcoRide\Mongo as MongoWrapper;
+use EcoRide\ReviewRepositoryMongo;
 
 $app = AppFactory::create();
 
 /* ------------ Middlewares globaux ------------ */
 
-
-
 // Body parsing (JSON, form, etc.)
 $app->addBodyParsingMiddleware();
 
-// CORS DEV/PROD
+// CORS DEV/PROD (on ajoute PUT/DELETE)
 $app->add(function ($req, $handler) {
   $allowedProd = getenv('CORS_ALLOW_ORIGIN') ?: 'https://golden-medovik-8f81e4.netlify.app';
   $origin = $req->getHeaderLine('Origin');
@@ -30,7 +34,7 @@ $app->add(function ($req, $handler) {
     ->withHeader('Access-Control-Allow-Origin', $allowOrigin)
     ->withHeader('Vary', 'Origin')
     ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 });
 $app->options('/{routes:.+}', fn($req, $res) => $res);
 
@@ -67,6 +71,20 @@ $app->get('/ping', function ($req, $res) {
   return $res->withHeader('Content-Type', 'application/json');
 });
 
+/* ====== PING SQL / MONGO ====== */
+$app->get('/api/ping/sql', function ($req, $res) {
+  $pdo = Db::pdo();
+  $pdo->query('SELECT 1');
+  $res->getBody()->write(json_encode(['sql'=>'ok']));
+  return $res->withHeader('Content-Type','application/json');
+});
+
+$app->get('/api/ping/mongo', function ($req, $res) {
+  $mongo = new MongoWrapper(getenv('MONGO_URI') ?: 'mongodb://mongo:27017', getenv('MONGO_DB') ?: 'ecoride');
+  $mongo->collection('health')->insertOne(['ok'=>true, 't'=>new \MongoDB\BSON\UTCDateTime()]);
+  $res->getBody()->write(json_encode(['mongo'=>'ok']));
+  return $res->withHeader('Content-Type','application/json');
+});
 
 /* ===================== AUTH ===================== */
 
@@ -126,9 +144,7 @@ $app->post('/api/login', function ($req, $res) {
       $res->getBody()->write(json_encode($payload));
       return $res->withHeader('Content-Type','application/json');
     }
-  } catch (\Throwable $e) {
-    // pas de fallback silencieux ici : on renvoie 401 comme prévu
-  }
+  } catch (\Throwable $e) {}
 
   $res->getBody()->write(json_encode(['error'=>'Invalid credentials']));
   return $res->withHeader('Content-Type','application/json')->withStatus(401);
@@ -202,7 +218,7 @@ $app->post('/api/vehicles', function ($req, $res) {
   }
 });
 
-/* ===================== RIDES ===================== */
+/* ===================== RIDES (LIST/GET/CREATE existants) ===================== */
 
 /* GET /api/rides  (filtres + tri + seats_left + écolo) */
 $app->get('/api/rides', function ($req, $res) {
@@ -366,6 +382,67 @@ $app->post('/api/rides', function ($req, $res) {
   }
 });
 
+/* ====== (Nouveaux) PUT & DELETE /api/rides/{id} pour CRUD complet ====== */
+$app->put('/api/rides/{id}', function ($req, $res, $args) {
+  $id = (int)$args['id'];
+  $d = (array)($req->getParsedBody() ?? []);
+
+  if ($id <= 0) {
+    $res->getBody()->write(json_encode(['error'=>'Invalid id']));
+    return $res->withHeader('Content-Type','application/json')->withStatus(422);
+  }
+
+  $origin      = trim($d['origin']       ?? '');
+  $destination = trim($d['destination']  ?? '');
+  $dateTimeRaw = trim($d['date_time']    ?? '');
+  $duration    = isset($d['duration_minutes']) ? max(0, (int)$d['duration_minutes']) : 0;
+  $seats       = isset($d['seats']) ? (int)$d['seats'] : null;
+  $price       = isset($d['price']) ? (int)$d['price'] : (isset($d['credits']) ? (int)$d['credits'] : 0);
+
+  $dateTime = str_replace('T', ' ', $dateTimeRaw);
+  $dtOk = \DateTime::createFromFormat('Y-m-d H:i', substr($dateTime, 0, 16)) !== false;
+
+  if ($origin === '' || $destination === '' || $dateTime === '' || !$dtOk) {
+    $res->getBody()->write(json_encode(['error'=>'Invalid input']));
+    return $res->withHeader('Content-Type','application/json')->withStatus(422);
+  }
+
+  try {
+    $pdo = Db::pdo();
+    $st = $pdo->prepare('UPDATE rides SET origin=?, destination=?, date_time=?, duration_minutes=?, seats=?, price=? WHERE id=?');
+    $st->execute([$origin, $destination, $dateTime, $duration, $seats, $price, $id]);
+    if ($st->rowCount() === 0) {
+      $res->getBody()->write(json_encode(['error'=>'Ride not found']));
+      return $res->withHeader('Content-Type','application/json')->withStatus(404);
+    }
+    return $res->withStatus(204);
+  } catch (\Throwable $e) {
+    $res->getBody()->write(json_encode(['error'=>'Database unavailable']));
+    return $res->withHeader('Content-Type','application/json')->withStatus(500);
+  }
+});
+
+$app->delete('/api/rides/{id}', function ($req, $res, $args) {
+  $id = (int)$args['id'];
+  if ($id <= 0) {
+    $res->getBody()->write(json_encode(['error'=>'Invalid id']));
+    return $res->withHeader('Content-Type','application/json')->withStatus(422);
+  }
+  try {
+    $pdo = Db::pdo();
+    $st = $pdo->prepare('DELETE FROM rides WHERE id=?');
+    $st->execute([$id]);
+    if ($st->rowCount() === 0) {
+      $res->getBody()->write(json_encode(['error'=>'Ride not found']));
+      return $res->withHeader('Content-Type','application/json')->withStatus(404);
+    }
+    return $res->withStatus(204);
+  } catch (\Throwable $e) {
+    $res->getBody()->write(json_encode(['error'=>'Database unavailable']));
+    return $res->withHeader('Content-Type','application/json')->withStatus(500);
+  }
+});
+
 /* ===================== BOOKINGS ===================== */
 
 /* POST /api/bookings {ride_id, name, email} */
@@ -476,6 +553,63 @@ $app->get('/api/bookings', function ($req, $res) {
     $res->getBody()->write(json_encode(['error'=>'Database unavailable']));
     return $res->withHeader('Content-Type','application/json')->withStatus(500);
   }
+});
+
+/* ===================== REVIEWS (Mongo CRUD) ===================== */
+$app->group('/api/reviews', function(\Slim\Routing\RouteCollectorProxy $g) {
+  // CREATE
+  $g->post('', function(Request $req, \Psr\Http\Message\ResponseInterface $res) {
+      $body = (array)($req->getParsedBody() ?? []);
+      $repo = new ReviewRepositoryMongo(new MongoWrapper(getenv('MONGO_URI') ?: 'mongodb://mongo:27017', getenv('MONGO_DB') ?: 'ecoride'));
+      $id = $repo->create($body);
+      $res->getBody()->write(json_encode(['id' => $id]));
+      return $res->withHeader('Content-Type', 'application/json')->withStatus(201);
+  });
+
+  // READ (par ride ?ride_id=)
+  $g->get('', function(Request $req, \Psr\Http\Message\ResponseInterface $res) {
+      $rideId = (int)($req->getQueryParams()['ride_id'] ?? 0);
+      $repo = new ReviewRepositoryMongo(new MongoWrapper(getenv('MONGO_URI') ?: 'mongodb://mongo:27017', getenv('MONGO_DB') ?: 'ecoride'));
+      $docs = $repo->findAllByRide($rideId);
+      $out = array_map(function($d){
+          $d = $d->getArrayCopy();
+          $d['_id'] = (string)$d['_id'];
+          if (isset($d['created_at'])) $d['created_at'] = $d['created_at']->toDateTime()->format(DATE_ATOM);
+          if (isset($d['updated_at'])) $d['updated_at'] = $d['updated_at']->toDateTime()->format(DATE_ATOM);
+          return $d;
+      }, $docs);
+      $res->getBody()->write(json_encode($out));
+      return $res->withHeader('Content-Type', 'application/json');
+  });
+
+  // READ by id
+  $g->get('/{id}', function(Request $req, \Psr\Http\Message\ResponseInterface $res, array $args) {
+      $repo = new ReviewRepositoryMongo(new MongoWrapper(getenv('MONGO_URI') ?: 'mongodb://mongo:27017', getenv('MONGO_DB') ?: 'ecoride'));
+      $doc = $repo->findById($args['id']);
+      if (!$doc) return $res->withStatus(404);
+      $doc['_id'] = (string)$doc['_id'];
+      if (isset($doc['created_at'])) $doc['created_at'] = $doc['created_at']->toDateTime()->format(DATE_ATOM);
+      if (isset($doc['updated_at'])) $doc['updated_at'] = $doc['updated_at']->toDateTime()->format(DATE_ATOM);
+      $res->getBody()->write(json_encode($doc));
+      return $res->withHeader('Content-Type', 'application/json');
+  });
+
+  // UPDATE
+  $g->put('/{id}', function(Request $req, \Psr\Http\Message\ResponseInterface $res, array $args) {
+      $patch = (array)($req->getParsedBody() ?? []);
+      $repo = new ReviewRepositoryMongo(new MongoWrapper(getenv('MONGO_URI') ?: 'mongodb://mongo:27017', getenv('MONGO_DB') ?: 'ecoride'));
+      $n = $repo->update($args['id'], $patch);
+      if ($n === 0) return $res->withStatus(404);
+      return $res->withStatus(204);
+  });
+
+  // DELETE
+  $g->delete('/{id}', function(Request $req, \Psr\Http\Message\ResponseInterface $res, array $args) {
+      $repo = new ReviewRepositoryMongo(new MongoWrapper(getenv('MONGO_URI') ?: 'mongodb://mongo:27017', getenv('MONGO_DB') ?: 'ecoride'));
+      $n = $repo->delete($args['id']);
+      if ($n === 0) return $res->withStatus(404);
+      return $res->withStatus(204);
+  });
 });
 
 $app->run();
