@@ -1,34 +1,56 @@
 services:
+
+  mongo:
+    image: mongo:6
+    container_name: ecoride_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: ecoride
+    volumes:
+      - mongo_data:/data/db
+
+  mongo-express:
+    image: mongo-express:1
+    restart: unless-stopped
+    ports:
+      - "8082:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+
   php:
     build: ./docker/php
     volumes:
-      - ./backend/public:/var/www/html
-      - ./backend/vendor:/var/www/vendor
-      - ./backend/src:/var/www/src
+      - ./backend:/var/www/html
     ports:
       - "8080:80"
     depends_on:
       db:
         condition: service_healthy
     environment:
-      - CORS_ALLOW_ORIGIN=https://golden-medovik-8f81e4.netlify.app
-      - DB_HOST=db
-      - DB_NAME=ecoride
-      - DB_USER=ecoride
-      - DB_PASS=ecoride
-
+      CORS_ALLOW_ORIGIN: "https://golden-medovik-8f81e4.netlify.app"
+      DB_HOST: db
+      DB_NAME: ecoride
+      DB_USER: ecoride
+      DB_PASS: ecoride
+      MONGO_URI: "mongodb://mongo:27017"
+      MONGO_DB: ecoride
 
   db:
     image: mysql:8
     command: --log-bin-trust-function-creators=1
     environment:
-      - MYSQL_DATABASE=ecoride
-      - MYSQL_USER=ecoride
-      - MYSQL_PASSWORD=ecoride
-      - MYSQL_ROOT_PASSWORD=yourRootPwd
+      MYSQL_DATABASE: ecoride
+      MYSQL_USER: ecoride
+      MYSQL_PASSWORD: ecoride
+      MYSQL_ROOT_PASSWORD: yourRootPwd
     volumes:
       - db_data:/var/lib/mysql
-      - ./backend/db:/docker-entrypoint-initdb.d:ro 
+      - ./backend/db:/docker-entrypoint-initdb.d:ro
     ports:
       - "3306:3306"
     healthcheck:
@@ -45,3 +67,4 @@ services:
 
 volumes:
   db_data:
+  mongo_data:
