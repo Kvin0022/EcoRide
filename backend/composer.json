@@ -4,7 +4,7 @@
     "ext-pdo": "*",
     "ext-pdo_mysql": "*",
     "ext-mongodb": "*",
-    "mongodb/mongodb": "^1.21",
+    "mongodb/mongodb": "^2.0",
     "slim/psr7": "^1.6",
     "slim/slim": "^4.0"
   },
