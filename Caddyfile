@@ -1,9 +1,9 @@
 :8080 {
 	root * /app
 
-	file_server
+	# Définir explicitement les fichiers d'index
+	try_files {path} {path}/index.php /index.php
 
-	php_server {
-		index index.php
-	}
+	# Activer le serveur PHP
+	php_server
 }

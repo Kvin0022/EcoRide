@@ -26,10 +26,12 @@ CORS_ALLOW_ORIGIN=https://golden-medovik-8f81e4.netlify.app
 ## Structure du déploiement
 
 Le projet utilise FrankenPHP avec Caddy :
-- `Caddyfile` à la racine configure le serveur web
+- `Caddyfile` à la racine configure le serveur web avec `try_files` pour router vers index.php
 - `nixpacks.toml` configure Nixpacks pour utiliser FrankenPHP
 - L'`index.php` à la racine redirige vers `backend/public/index.php`
 - Toutes les requêtes sont traitées par PHP
+
+**IMPORTANT** : Le Caddyfile utilise `try_files` pour forcer le routing vers index.php car Caddy ne reconnaît pas index.php comme fichier d'index par défaut.
 
 ## Initialisation de la base de données
 
@@ -57,5 +59,8 @@ Si vous avez une erreur 500, vérifiez :
 
 Si vous avez une erreur 404, vérifiez :
 1. Les fichiers `nixpacks.toml` et `Caddyfile` sont bien à la racine
-2. Le déploiement a bien été redémarré après les modifications
-3. **IMPORTANT** : Supprimez les variables `NIXPACKS_PHP_ROOT_DIR` et `NIXPACKS_PHP_FALLBACK_PATH` des variables d'environnement Railway (elles ne sont plus nécessaires)
+2. Le Caddyfile contient bien la directive `try_files`
+3. Le déploiement a bien été redémarré après les modifications
+4. **IMPORTANT** : Supprimez les variables `NIXPACKS_PHP_ROOT_DIR` et `NIXPACKS_PHP_FALLBACK_PATH` des variables d'environnement Railway (elles ne sont plus nécessaires)
+5. Vérifiez que `index.php` existe bien à la racine du projet
+6. Consultez `RAILWAY_DEBUG.md` pour des solutions alternatives
