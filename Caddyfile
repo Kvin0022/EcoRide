@@ -1,13 +1,21 @@
 {
     auto_https off
     admin off
-    persist_config off
 }
 
 :8080 {
     root * /app
 
-    php_server
+    # Traiter tous les fichiers .php
+    php_server {
+        resolve_root_symlink
+    }
+
+    # Redirection vers index.php pour les routes qui n'existent pas
+    @notStatic {
+        not file
+    }
+    rewrite @notStatic /index.php
 
     file_server
 }
