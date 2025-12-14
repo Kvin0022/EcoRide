@@ -2,4 +2,4 @@
 nixPkgs = ["php82", "php82Extensions.pdo", "php82Extensions.pdo_mysql", "php82Extensions.mongodb"]
 
 [start]
-cmd = "frankenphp run --config /app/Caddyfile"
+cmd = "frankenphp php-server --listen :8080 --root /app"
