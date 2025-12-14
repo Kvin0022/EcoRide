@@ -25,10 +25,11 @@ CORS_ALLOW_ORIGIN=https://golden-medovik-8f81e4.netlify.app
 
 ## Structure du déploiement
 
-Le fichier `nixpacks.toml` à la racine configure Railway pour :
-- Utiliser `/app` comme racine PHP
-- Rediriger toutes les requêtes vers `/index.php`
+Le projet utilise FrankenPHP avec Caddy :
+- `Caddyfile` à la racine configure le serveur web
+- `nixpacks.toml` configure Nixpacks pour utiliser FrankenPHP
 - L'`index.php` à la racine redirige vers `backend/public/index.php`
+- Toutes les requêtes sont traitées par PHP
 
 ## Initialisation de la base de données
 
@@ -55,5 +56,6 @@ Si vous avez une erreur 500, vérifiez :
 3. Les logs Railway pour voir l'erreur exacte
 
 Si vous avez une erreur 404, vérifiez :
-1. Le fichier `nixpacks.toml` est bien à la racine
+1. Les fichiers `nixpacks.toml` et `Caddyfile` sont bien à la racine
 2. Le déploiement a bien été redémarré après les modifications
+3. **IMPORTANT** : Supprimez les variables `NIXPACKS_PHP_ROOT_DIR` et `NIXPACKS_PHP_FALLBACK_PATH` des variables d'environnement Railway (elles ne sont plus nécessaires)

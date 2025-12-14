@@ -1,0 +1,13 @@
+{
+    auto_https off
+    admin off
+    persist_config off
+}
+
+:8080 {
+    root * /app
+
+    php_server
+
+    file_server
+}
