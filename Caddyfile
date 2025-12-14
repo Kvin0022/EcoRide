@@ -1,4 +1,9 @@
 :8080 {
 	root * /app
-	php_server
+
+	file_server
+
+	php_server {
+		index index.php
+	}
 }
