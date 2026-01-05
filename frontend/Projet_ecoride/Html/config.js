@@ -1,3 +1,3 @@
 <script>
-  window.API_BASE_URL = 'https://ecoride-production-0838.up.railway.app';
+  window.API_BASE_URL = 'https://ecoride-api57-296d8d84cbf5.herokuapp.com';
 </script>
