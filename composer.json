@@ -1,13 +1,12 @@
 {
   "require": {
-    "php": "8.2",
+    "php": "~8.2.0",
     "ext-pdo": "*",
     "ext-pdo_mysql": "*",
     "slim/psr7": "^1.6",
     "slim/slim": "^4.0"
   },
   "config": {
-    "platform": { "php": "8.2.0" },
     "sort-packages": true
   }
 }
