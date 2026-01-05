@@ -1,10 +1,8 @@
 {
   "require": {
-    "php": "^8.2",
+    "php": "8.2",
     "ext-pdo": "*",
     "ext-pdo_mysql": "*",
-    "ext-mongodb": "*",
-    "mongodb/mongodb": "^2.0",
     "slim/psr7": "^1.6",
     "slim/slim": "^4.0"
   },
